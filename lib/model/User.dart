@@ -41,6 +41,10 @@ class User {
     return this._access;
   }
 
+  String getRefresh() {
+    return this._refresh;
+  }
+
   Future<bool> isSessionAvalable() async {
     try {
       await loadToken();

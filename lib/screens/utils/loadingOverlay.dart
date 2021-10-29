@@ -16,7 +16,7 @@ class OverlayLoader implements Loader {
     if (!_isDialogShowing) {
       _isDialogShowing = true;
       showDialog(
-        barrierColor: Colors.transparent,
+        barrierColor: Colors.black45,
         context: context,
         useRootNavigator: false,
         barrierDismissible: false,

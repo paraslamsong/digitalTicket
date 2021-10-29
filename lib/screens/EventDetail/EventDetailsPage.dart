@@ -1,19 +1,22 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fahrenheit/constraints/constants.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/Gallery.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/Tickets.dart';
+import 'package:fahrenheit/screens/GalleryView/GalleryView.dart';
+import 'package:fahrenheit/screens/PayWithPage.dart';
 import 'package:fahrenheit/screens/TableBooking/TableBookingPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EventDetailsPage extends StatefulWidget {
-  int id;
-  EventDetailsPage({this.id});
+  final int id;
+  final String bgImage;
+  EventDetailsPage({this.id, this.bgImage});
   @override
   _ArtistDetailsPageState createState() => _ArtistDetailsPageState();
 }
@@ -46,78 +49,73 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0),
-        elevation: 0,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 25.0,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                size: 25.0,
-              ),
-              onPressed: () {})
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          key.currentState.build(context);
-          setState(() {});
-        },
-        child: FutureBuilder(
-            key: key,
-            future: fetchDetail(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError)
-                return Center(
-                    child: Text(
-                  'Error: ${snapshot.error}',
-                  style: TextStyle(color: Colors.red),
-                ));
-              else {
-                EventDetail event = snapshot.data;
-                print(event);
-                return Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(APIURL + event.image),
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              widget.bgImage != null
+                  ? CachedNetworkImage(
+                      width: double.infinity,
+                      height: double.infinity,
                       fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Colors.black,
-                        BlendMode.overlay,
-                      ),
-                    ),
+                      imageUrl: widget.bgImage,
+                    )
+                  : SizedBox(),
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 13.0, sigmaY: 13.0),
+                  child: Container(
+                    color: Colors.black54,
                   ),
-                  child: BackdropFilter(
-                    filter: new ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
-                    child: new ListView(
+                ),
+              ),
+            ],
+          ),
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(elevation: 0),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              key.currentState.build(context);
+              setState(() {});
+            },
+            child: FutureBuilder(
+                key: key,
+                future: fetchDetail(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError)
+                    return Center(
+                        child: Text(
+                      'Error: ${snapshot.error}',
+                      style: TextStyle(color: Colors.red),
+                    ));
+                  else {
+                    EventDetail event = snapshot.data;
+                    print(event);
+                    return ListView(
                       children: [
                         _eventTitle(event),
                         _eventDetail(event),
                         _eventBuyBox(event),
-                        _eventGuestArtist(event),
-                        _eventReservation(),
+                        SizedBox(height: 10),
+                        // _eventGuestArtist(event),
+                        // _eventReservation(),
                         _eventGallery(event.id),
                       ],
-                    ),
-                  ),
-                );
-              }
-            }),
-      ),
+                    );
+                  }
+                }),
+          ),
+        ),
+      ],
     );
   }
 
@@ -129,18 +127,21 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
         children: [
           Text(
             event.title,
-            style: TextStyle(color: Colors.white, fontSize: 23),
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           Text(
             CLUB_NAME + ", " + event.location,
-            style: TextStyle(color: Colors.white, fontSize: 13),
+            style:
+                TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13),
           ),
           SizedBox(height: 8),
           Text(
             DateFormat("MMM dd, yyyy, HH:mm").format(event.startDate) +
                 " - " +
                 DateFormat("MMM dd, yyyy, HH:mm").format(event.endDate),
-            style: TextStyle(color: Colors.white, fontSize: 11),
+            style:
+                TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 11),
           ),
         ],
       ),
@@ -154,7 +155,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
       child: Row(
         children: [
           CachedNetworkImage(
-            imageUrl: APIURL + event.image,
+            imageUrl: HTTP().getImageBase() + event.image,
             height: 220,
             width: 180,
             fit: BoxFit.cover,
@@ -214,9 +215,9 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
 
   Widget _eventBuyBox(EventDetail event) {
     return Container(
-      padding: EdgeInsets.only(right: 20),
+      padding: EdgeInsets.only(right: 20, top: 10),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: FutureBuilder(
@@ -225,15 +226,21 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Row(
                       children: [
-                        Container(
-                          width: 120,
-                          height: 95,
-                          child: Center(child: CircularProgressIndicator()),
+                        SizedBox(width: 20),
+                        Center(
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
-                        Container(
-                          width: 120,
-                          height: 95,
-                          child: Center(child: CircularProgressIndicator()),
+                        SizedBox(width: 60),
+                        Center(
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       ],
                     );
@@ -242,29 +249,31 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                   else {
                     var tickets = snapshot.data.tickets;
                     return Container(
-                      height: 95,
+                      height: 45,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: tickets.length,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         itemBuilder: (context, index) => Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Column(
                             children: [
+                              Spacer(),
                               Text(
                                 tickets[index].title,
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                ),
+                                    color: Colors.white, fontSize: 12),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 4),
                               Text(
                                 "रू " + tickets[index].rate,
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 21,
-                                ),
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
+                              Spacer(),
                             ],
                           ),
                         ),
@@ -273,13 +282,15 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                   }
                 }),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: 18),
           TextButton(
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xff2FBCA1)),
-                  padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 16))),
-              onPressed: () {},
+                backgroundColor: MaterialStateProperty.all(Color(0xff2FBCA1)),
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PayWithPage()));
+              },
               child: Text("Buy ticket", style: TextStyle(color: Colors.white))),
         ],
       ),
@@ -412,7 +423,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               "Event Images",
-              style: TextStyle(color: Colors.white),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: 15),
@@ -453,9 +465,25 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                       itemCount: gallery.length,
                       itemBuilder: (context, index) => Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: CachedNetworkImage(
-                          height: 95,
-                          imageUrl: gallery[index].image,
+                        child: InkWell(
+                          onTap: () {
+                            List<String> images = [];
+                            gallery.forEach((element) {
+                              images.add(element.image);
+                            });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => GalleryPage(
+                                        images: images, index: index)));
+                          },
+                          child: Hero(
+                            tag: gallery[index].image + index.toString(),
+                            child: CachedNetworkImage(
+                              height: 95,
+                              imageUrl: gallery[index].image,
+                            ),
+                          ),
                         ),
                       ),
                     );

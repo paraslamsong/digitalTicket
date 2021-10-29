@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:fahrenheit/api/API.dart';
 import 'package:fahrenheit/api/APIService.dart';
+import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
 
 class Artist {
   int id;
@@ -45,10 +46,10 @@ class EventDetail {
 
   fetchData(int id) async {
     print(id);
-    API api = APIService();
-    Response response = await api.getApi(endpoint: "api/event-detail/$id/");
+    print("api/event-detail/$id/");
+    Response response = await HTTP().get(path: "event-detail/$id/");
     if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
+      var json = response.data;
       print(json);
       this.mapFromJson(json);
     } else {

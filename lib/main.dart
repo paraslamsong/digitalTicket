@@ -20,6 +20,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         scaffoldBackgroundColor: Colors.black,
         primarySwatch: mainPrimaryColor,
         primaryColor: mainColor,
@@ -29,6 +33,16 @@ class MyApp extends StatelessWidget {
           bodyText2: TextStyle(color: Colors.white),
           subtitle1: TextStyle(color: Colors.white),
           subtitle2: TextStyle(color: Colors.white),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          isDense: true,
+          contentPadding: EdgeInsets.only(bottom: 7, top: 10),
+          enabledBorder: new UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
         ),
         visualDensity: VisualDensity.compact,
         textButtonTheme: TextButtonThemeData(
@@ -40,6 +54,7 @@ class MyApp extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30.0))),
           ),
         ),
+        dividerColor: Colors.white70,
       ),
       // home: BlocBuilder<BlocCubit, BlocState>(
       //   builder: (context, state) => SplashPage(),

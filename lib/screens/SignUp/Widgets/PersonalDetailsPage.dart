@@ -27,17 +27,6 @@ class PersonalDetailsPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  InputDecoration inputDecoration = InputDecoration(
-    isDense: true,
-    contentPadding: EdgeInsets.only(bottom: 7, top: 10),
-    enabledBorder: new UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-    ),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -71,7 +60,6 @@ class PersonalDetailsPage extends StatelessWidget {
                       cursorColor: Colors.white,
                       style: TextStyle(color: Colors.white),
                       textInputAction: TextInputAction.next,
-                      decoration: inputDecoration,
                     ),
                     SizedBox(height: 20.0),
                     Text("Last Name", style: textStyle),
@@ -83,7 +71,6 @@ class PersonalDetailsPage extends StatelessWidget {
                       cursorColor: Colors.white,
                       style: TextStyle(color: Colors.white),
                       textInputAction: TextInputAction.next,
-                      decoration: inputDecoration,
                     ),
                     SizedBox(height: 20.0),
                     Text("Email", style: textStyle),
@@ -95,7 +82,6 @@ class PersonalDetailsPage extends StatelessWidget {
                       cursorColor: Colors.white,
                       textInputAction: TextInputAction.next,
                       style: TextStyle(color: Colors.white),
-                      decoration: inputDecoration,
                     ),
                     SizedBox(height: 20.0),
                     Text("Password", style: textStyle),
@@ -107,7 +93,6 @@ class PersonalDetailsPage extends StatelessWidget {
                       obscureText: true,
                       textInputAction: TextInputAction.done,
                       style: TextStyle(color: Colors.white),
-                      decoration: inputDecoration,
                     ),
                     SizedBox(height: 20.0),
                     Center(

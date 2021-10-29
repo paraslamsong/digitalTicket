@@ -146,10 +146,11 @@ class _EventTodayState extends State<EventToday> {
         ),
         onPressed: () async {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EventDetailsPage(id: event.id)),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    EventDetailsPage(id: event.id, bgImage: event.image),
+              ));
         },
       ),
     );

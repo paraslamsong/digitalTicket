@@ -6,7 +6,7 @@ class Ticket {
   DateTime date;
   int ticketId, eventId, eventRateId;
   fromJson(json) {
-    this.ticketNumber = "";
+    this.ticketNumber = json["ticket_number"];
     this.userName = json['user_first_name'] + " " + json['user_last_name'];
     this.title = json['event_title'];
     this.location = json['location'];

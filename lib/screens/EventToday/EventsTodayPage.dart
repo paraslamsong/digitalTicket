@@ -79,9 +79,12 @@ class _EventsTodayPageState extends State<EventsTodayPage> {
                       children: [
                         AllEvents(snapshot.data),
                         Container(
-                          height: 100,
+                          height: 200,
                           child: Center(
-                            child: Lottie.asset("assets/loading.json"),
+                            child: Center(
+                              child: Lottie.asset("assets/spinner.json",
+                                  height: 200, animate: true),
+                            ),
                           ),
                         )
                       ],

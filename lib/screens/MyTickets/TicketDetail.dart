@@ -172,8 +172,9 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            EventDetailsPage(id: widget.ticket.eventId)),
+                        builder: (context) => EventDetailsPage(
+                            id: widget.ticket.eventId,
+                            bgImage: widget.ticket.image)),
                   );
                 },
                 child:

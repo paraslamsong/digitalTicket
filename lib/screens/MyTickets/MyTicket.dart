@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:fahrenheit/screens/MyTickets/Model/Tickets.dart';
 import 'package:fahrenheit/screens/MyTickets/TicketDetail.dart';
+import 'package:fahrenheit/screens/utils/OverLayLoader.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -36,37 +38,45 @@ class _MyTicketState extends State<MyTicket> {
         padding: EdgeInsets.only(left: 15.0, right: 15.0),
         children: [
           SizedBox(height: 25.0),
-          Text(
-            "UPCOMING EVENTS",
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
-          ),
-          SizedBox(height: 20.0),
-          FutureBuilder<Tickets>(
-              future: tickets.fetchTickets(2),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: snapshot.data.tickets.length,
-                    itemBuilder: (context, index) =>
-                        TicketBox(index, snapshot.data.tickets[index]),
-                  );
-                } else
-                  return SizedBox();
-              }),
-          Padding(
-            padding: EdgeInsets.only(left: 15.0, right: 15.0),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Text(
-              "PAST EVENTS",
-              style: TextStyle(
-                fontSize: 22.0,
-                color: Colors.white,
-                fontWeight: FontWeight.w100,
-              ),
+              "UPCOMING EVENTS",
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 10.0),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: FutureBuilder<Tickets>(
+                future: tickets.fetchTickets(2),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data.tickets.length,
+                      itemBuilder: (context, index) =>
+                          TicketBox(index, snapshot.data.tickets[index]),
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting)
+                    return Center(
+                      child: loadingAnimation(context),
+                    );
+                  else
+                    return SizedBox();
+                }),
+          ),
+          SizedBox(height: 30.0),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
+            child: Text(
+              "PAST EVENTS",
+              style: TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
+          ),
+          SizedBox(height: 10.0),
           Container(
             child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
