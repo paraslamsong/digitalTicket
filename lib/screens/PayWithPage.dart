@@ -42,6 +42,7 @@ class _PayWithPageState extends State<PayWithPage> {
                           title: "Event time", value: "5:30 PM"),
                       _information(context,
                           title: "Door opens", value: "5:00 PM"),
+                      Divider(),
                       PopupMenuButton(
                         tooltip: "Select ticket",
                         offset: Offset(6, 30),
@@ -102,7 +103,10 @@ class _PayWithPageState extends State<PayWithPage> {
                           ),
                         ],
                       ),
-                      Divider(),
+                      _ticketSelection(context,
+                          title: "Choose show",
+                          value: "1st Show",
+                          btnTitle: "Choose show"),
                       SizedBox(height: 6),
                       _userInformationInput(context,
                           title: "Your Name",
@@ -209,6 +213,71 @@ class _PayWithPageState extends State<PayWithPage> {
     );
   }
 
+  Widget _ticketSelection(BuildContext context,
+      {String title,
+      String value,
+      String btnTitle,
+      Function(dynamic) onSelect}) {
+    return PopupMenuButton(
+      tooltip: btnTitle,
+      offset: Offset(6, 30),
+      child: Row(
+        children: [
+          Expanded(
+            child: _information(context, title: title, value: value),
+          ),
+          Text(
+            btnTitle,
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      color: Theme.of(context).scaffoldBackgroundColor,
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            setState(() {
+              ticketType = "Regular pass (Rs. 3400)";
+            });
+          },
+          child: Column(
+            children: [
+              Text(
+                "Regular pass",
+                style: TextStyle(fontSize: 10),
+              ),
+              Text(
+                "Rs 3400",
+                style: TextStyle(fontSize: 11),
+              ),
+            ],
+          ),
+          value: 2,
+        ),
+        PopupMenuItem(
+          onTap: () {
+            setState(() {
+              ticketType = "VIP pass (Rs. 3400)";
+            });
+          },
+          child: Column(
+            children: [
+              Text(
+                "VIP pass",
+                style: TextStyle(fontSize: 10),
+              ),
+              Text(
+                "Rs 5400",
+                style: TextStyle(fontSize: 11),
+              ),
+            ],
+          ),
+          value: 1,
+        ),
+      ],
+    );
+  }
+
   Widget _information(BuildContext context, {String title, String value}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -241,6 +310,7 @@ class _PayWithPageState extends State<PayWithPage> {
         TextFormField(
           cursorColor: Colors.white,
           controller: controller,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             border: new UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white70),

@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/constraints/constants.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
 import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'package:fahrenheit/widgets/IconGradient.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -93,13 +95,18 @@ class _EventTodayState extends State<EventToday> {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
-              child: Image.network(
-                event.image,
+              child: CachedNetworkImage(
+                imageUrl: event.image,
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 color: Colors.black45,
                 colorBlendMode: BlendMode.overlay,
+                placeholder: (context, _) => Center(
+                  child: CupertinoActivityIndicator(),
+                ),
+                errorWidget: (context, _, __) =>
+                    Image(image: AssetImage("images/logo.png")),
               ),
             ),
             _calendarBox(DateTime.parse(event.startDate)),

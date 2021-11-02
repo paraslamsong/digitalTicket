@@ -62,6 +62,12 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                       height: double.infinity,
                       fit: BoxFit.cover,
                       imageUrl: widget.bgImage,
+                      progressIndicatorBuilder: (context, _, __) =>
+                          CupertinoActivityIndicator(),
+                      errorWidget: (context, _, __) => Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage("images/background_image.jpeg"),
+                      ),
                     )
                   : SizedBox(),
               Positioned.fill(
@@ -155,10 +161,14 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
       child: Row(
         children: [
           CachedNetworkImage(
-            imageUrl: HTTP().getImageBase() + event.image,
+            imageUrl: event.image,
             height: 220,
             width: 180,
             fit: BoxFit.cover,
+            placeholder: (context, _) => Center(
+              child: CupertinoActivityIndicator(),
+            ),
+            errorWidget: (context, _, __) => Icon(Icons.error),
           ),
           SizedBox(width: 10),
           Expanded(
@@ -342,6 +352,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                                   height: 60,
                                   width: 60,
                                   fit: BoxFit.cover,
+                                  errorWidget: (context, _, __) =>
+                                      Icon(Icons.error),
                                 ),
                               ),
                             ),
@@ -482,6 +494,13 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                             child: CachedNetworkImage(
                               height: 95,
                               imageUrl: gallery[index].image,
+                              placeholder: (context, _) => Container(
+                                  width: 100,
+                                  child: Center(
+                                      child: CupertinoActivityIndicator())),
+                              errorWidget: (context, _, __) => Container(
+                                  width: 100,
+                                  child: Center(child: Icon(Icons.error))),
                             ),
                           ),
                         ),

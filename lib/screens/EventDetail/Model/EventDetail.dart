@@ -11,15 +11,15 @@ class Artist {
   String name, primaryContact, secondaryContact, profileImage, coverImage;
   bool isAvailable, isPopularArtist, isMain;
   Artist(Map<String, dynamic> json) {
-    this.id = json['guest_artist']['id'];
-    this.name = json['guest_artist']['name'];
-    this.primaryContact = json['guest_artist']['primary_contact'];
-    this.secondaryContact = json['guest_artist']['secondary_contact'];
-    this.profileImage = json['guest_artist']['profile_image'];
-    this.coverImage = json['guest_artist']['cover'];
-    this.isAvailable = json['guest_artist']['is_available'];
-    this.isPopularArtist = json['guest_artist']['is_popular_artist'];
-    this.isMain = json['is_main'];
+    this.id = json['id'] ?? 0;
+    this.name = json['name'] ?? "";
+    this.primaryContact = json['primary_contact'] ?? "";
+    this.secondaryContact = json['secondary_contact'] ?? "";
+    this.profileImage = json['profile_image'] ?? "";
+    this.coverImage = json['cover'] ?? "";
+    this.isAvailable = json['is_available'] ?? false;
+    this.isPopularArtist = json['is_popular_artist'] ?? false;
+    this.isMain = json['is_main'] ?? false;
   }
 }
 
@@ -29,15 +29,17 @@ class EventDetail {
   DateTime startDate, endDate;
   List<Artist> artists = [];
   mapFromJson(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.title = json['event_title'];
-    this.description = json['description'];
-    this.location = json['location'];
-    this.startDate = DateTime.parse(json['start_date']);
-    this.endDate = DateTime.parse(json['end_date']);
-    this.image = json['image'];
-    this.club = json['club'];
-    List<dynamic> artist = json['event_artist'];
+    this.id = json['id'] ?? 0;
+    this.title = json['event_title'] ?? "";
+    this.description = json['description'] ?? "";
+    this.location = json['location'] ?? "";
+    this.startDate =
+        DateTime.parse(json['start_date'] ?? DateTime.now().toString());
+    this.endDate =
+        DateTime.parse(json['end_date'] ?? DateTime.now().toString());
+    this.image = json['image'] ?? "";
+    this.club = json['club'] ?? 0;
+    List<dynamic> artist = json['event_artist'] ?? [];
     artist.forEach((element) {
       Artist artist = new Artist(element);
       artists.add(artist);

@@ -10,7 +10,7 @@ class Ticket {
     this.userName = json['user_first_name'] + " " + json['user_last_name'];
     this.title = json['event_title'];
     this.location = json['location'];
-    this.image = HTTP().getImageBase() + json['event_image'];
+    this.image = json['event_image'];
     this.date = DateTime.parse(json['start_date']);
     this.ticketId = json['id'];
     this.eventId = json['event_id'];

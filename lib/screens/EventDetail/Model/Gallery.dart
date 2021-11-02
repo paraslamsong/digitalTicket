@@ -4,7 +4,7 @@ import 'package:fahrenheit/api/API.dart';
 import 'package:fahrenheit/api/APIService.dart';
 import 'package:http/http.dart';
 
-class Image {
+class ImageModel {
   int id;
   String event, title, image, tags;
   mapToObject(Map<String, dynamic> json) {
@@ -18,10 +18,10 @@ class Image {
 }
 
 class Gallery {
-  List<Image> gallery = [];
+  List<ImageModel> gallery = [];
   mapToObject(List<dynamic> json) {
     json.forEach((element) {
-      Image image = new Image();
+      ImageModel image = new ImageModel();
       image.mapToObject(element);
       gallery.add(image);
     });

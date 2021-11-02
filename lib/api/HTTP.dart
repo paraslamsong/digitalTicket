@@ -37,6 +37,7 @@ class HTTP {
     bool useToken = false,
   }) async {
     Response response;
+    print(this._apiBase + path);
     try {
       response = await Dio().get(this._apiBase + path);
     } on DioError catch (e) {

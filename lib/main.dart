@@ -1,66 +1,150 @@
-import 'package:fahrenheit/bloc/BlocState.dart';
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fahrenheit/screens/EventToday/Bloc/AllEventCubit.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
-import 'package:fahrenheit/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:home_widget/home_widget.dart';
+import 'package:workmanager/workmanager.dart';
+
+/// Used for Background Updates using Workmanager Plugin
+void callbackDispatcher() {
+  HomeWidget.saveWidgetData(
+    'title',
+    'Updated from Background',
+  );
+  Workmanager().executeTask((taskName, inputData) {
+    final now = DateTime.now();
+    return Future.wait<bool>([
+      HomeWidget.saveWidgetData<Widget>(
+        'message',
+        Container(
+          width: 200,
+          height: 300,
+          child: CachedNetworkImage(
+            imageUrl:
+                "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+          ),
+        ),
+        // '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
+      ),
+      HomeWidget.updateWidget(
+        name: 'YetiTechDigitalTicket',
+        iOSName: 'YetiTechDigitalTicket',
+        androidName: "YetiTechDigitalTicket",
+      ),
+    ]).then((value) {
+      print(value);
+      return !value.contains(false);
+    });
+  });
+}
+
+/// Called when Doing Background Work initiated from Widget
+void backgroundCallback(Uri data) async {
+  print("One");
+  print(data);
+  if (data.host == 'titleclicked') {
+    final greetings = [
+      'Hello',
+      'Hallo',
+      'Bonjour',
+      'Hola',
+      'Ciao',
+      '哈洛',
+      '안녕하세요',
+      'xin chào'
+    ];
+    final selectedGreeting = greetings[Random().nextInt(greetings.length)];
+
+    await HomeWidget.saveWidgetData<String>('title', selectedGreeting);
+    await HomeWidget.updateWidget(
+        name: 'YetiTechDigitalTicket', iOSName: 'YetiTechDigitalTicket');
+  }
+}
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  HomeWidget.setAppGroupId('group.com.yetitech.digitalticket.Digital-Ticket');
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+
+  HomeWidget.saveWidgetData<Widget>(
+    'message',
+    Container(
+      width: 200,
+      height: 300,
+      child: CachedNetworkImage(
+        imageUrl:
+            "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+      ),
+    ),
+    // '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
+  );
+
+  HomeWidget.registerBackgroundCallback(backgroundCallback);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // status bar color
+    statusBarColor: Colors.transparent,
     statusBarBrightness: Brightness.dark,
   ));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AllEventsCubit>(
+          lazy: false,
+          create: (context) => AllEventsCubit(),
         ),
-        scaffoldBackgroundColor: Colors.black,
-        primarySwatch: mainPrimaryColor,
-        primaryColor: mainColor,
-        accentColor: Color(0xff2EBBA1),
-        textTheme: TextTheme(
-          bodyText1: TextStyle(color: Colors.white),
-          bodyText2: TextStyle(color: Colors.white),
-          subtitle1: TextStyle(color: Colors.white),
-          subtitle2: TextStyle(color: Colors.white),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          isDense: true,
-          contentPadding: EdgeInsets.only(bottom: 7, top: 10),
-          enabledBorder: new UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+          scaffoldBackgroundColor: Colors.black,
+          primarySwatch: mainPrimaryColor,
+          primaryColor: mainColor,
+          accentColor: Color(0xff2EBBA1),
+          textTheme: TextTheme(
+            bodyText1: TextStyle(color: Colors.white),
+            bodyText2: TextStyle(color: Colors.white),
+            subtitle1: TextStyle(color: Colors.white),
+            subtitle2: TextStyle(color: Colors.white),
           ),
-        ),
-        visualDensity: VisualDensity.compact,
-        textButtonTheme: TextButtonThemeData(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all(
-                EdgeInsets.symmetric(horizontal: 20, vertical: 20)),
-            backgroundColor: MaterialStateProperty.all(Colors.red),
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0))),
+          inputDecorationTheme: InputDecorationTheme(
+            isDense: true,
+            contentPadding: EdgeInsets.only(bottom: 7, top: 10),
+            enabledBorder: new UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
           ),
+          visualDensity: VisualDensity.compact,
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(horizontal: 20, vertical: 20)),
+              backgroundColor: MaterialStateProperty.all(Colors.red),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0))),
+            ),
+          ),
+          dividerColor: Colors.white70,
         ),
-        dividerColor: Colors.white70,
+        home: GetStartedPage(),
       ),
-      // home: BlocBuilder<BlocCubit, BlocState>(
-      //   builder: (context, state) => SplashPage(),
-      home: GetStartedPage(),
-
-      // ),
     );
   }
 }

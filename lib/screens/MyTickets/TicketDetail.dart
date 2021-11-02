@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/MyTickets/Model/Tickets.dart';
+import 'package:fahrenheit/service/RemainderService.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -159,10 +160,8 @@ class _YourTicketPageState extends State<TicketDetailPage> {
             children: [
               TextButton(
                 onPressed: () {
-                  Toast.show("Set Reminder", context,
-                      gravity: Toast.BOTTOM,
-                      duration: Toast.LENGTH_LONG,
-                      backgroundColor: Colors.black);
+                  Remender remender = Remender();
+                  remender.setRemender(context);
                 },
                 child:
                     Text("Set Reminder", style: TextStyle(color: Colors.white)),

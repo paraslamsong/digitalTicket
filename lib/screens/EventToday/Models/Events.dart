@@ -20,7 +20,7 @@ class Event {
     location = json['location'] ?? "";
     startDate = json['start_date'] ?? "";
     endDate = json['end_date'] ?? "";
-    image = HTTP().getImageBase() + json['image'] ?? "";
+    image = json['image'] ?? "";
     user = json['user'] ?? null;
     club = json['club'] ?? 0;
     likes = json['likes'] ?? null;
@@ -32,28 +32,34 @@ class Events {
   bool isLoading = true;
   bool hasNext = true;
   int i = 0;
+  int page = 1;
 
   Future<void> fetchTodaysEvent() async {
-    Response response = await HTTP().get(path: "all-event/?limit=5");
+    Response response = await HTTP().get(path: "all-event/?pagination=1");
     if (response.statusCode == 200) {
-      List<dynamic> result = response.data;
-      result.forEach((element) {
+      var result = response.data;
+      result['results'].forEach((element) {
         events.add(new Event(element));
       });
     }
   }
 
   Future<void> fetchAllEvent() async {
-    Response response = await HTTP().get(path: "all-event/?limit=5");
-    if (response.statusCode == 200) {
-      List<dynamic> result = response.data;
-      result.forEach((element) {
-        events.add(new Event(element));
-      });
+    if (this.hasNext) {
+      this.hasNext = true;
+      Response response = await HTTP().get(path: "all-event/?pagination=$page");
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        var result = response.data;
+        result['results'].forEach((element) {
+          events.add(new Event(element));
+        });
+        page++;
+        // this.hasNext = result['next'] != null ? true : false;
+
+      }
     }
     this.isLoading = false;
-    i++;
-    if (i != 0) this.hasNext = false;
   }
 
   void reload() {
@@ -64,7 +70,13 @@ class Events {
   }
 
   Events() {
-    reload();
+    this.reload();
+  }
+
+  copy(Events events) {
+    this.events = events.events;
+    this.hasNext = events.hasNext;
+    this.isLoading = events.isLoading;
   }
 
   Future<void> fetchFeaturedEvent() async {

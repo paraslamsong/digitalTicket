@@ -302,6 +302,11 @@ class _TicketState extends State<TicketBox> {
                                 height: double.infinity,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
+                                placeholder: (context, _) => Center(
+                                  child: CupertinoActivityIndicator(),
+                                ),
+                                errorWidget: (context, _, __) =>
+                                    Image(image: AssetImage("images/logo.png")),
                               ),
                               Container(
                                 color: Colors.black38,
