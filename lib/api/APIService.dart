@@ -8,7 +8,7 @@ class APIService extends API {
   String _apiUrl = "https://alishmanandhar.com.np/";
 
   Future<Response> _getNoToken(String url) async {
-    Response response = await get(url);
+    Response response = await get(Uri(path: url));
     return response;
   }
 
@@ -25,7 +25,8 @@ class APIService extends API {
   }
 
   Future<Response> _postNoToken(String url, Map<String, dynamic> body) async {
-    Response response = await post(url, body: jsonEncode(body), headers: {
+    Response response =
+        await post(Uri(path: url), body: jsonEncode(body), headers: {
       "Content-Type": "application/json",
     });
     return response;

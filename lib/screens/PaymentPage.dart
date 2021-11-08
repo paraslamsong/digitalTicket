@@ -1,4 +1,4 @@
-import 'package:dotted_border/dotted_border.dart';
+// import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
@@ -213,31 +213,31 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                       ),
                       SizedBox(height: 10.0),
-                      Container(
-                        height: 35.0,
-                        child: DottedBorder(
-                          color: Colors.green,
-                          strokeWidth: 0.5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Additional savings",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15.0),
-                                ),
-                                Text(
-                                  "Rs2500",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 15.0),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   height: 35.0,
+                      //   child: DottedBorder(
+                      //     color: Colors.green,
+                      //     strokeWidth: 0.5,
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.all(8.0),
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //         children: [
+                      //           Text(
+                      //             "Additional savings",
+                      //             style: TextStyle(
+                      //                 color: Colors.white, fontSize: 15.0),
+                      //           ),
+                      //           Text(
+                      //             "Rs2500",
+                      //             style: TextStyle(
+                      //                 color: Colors.white, fontSize: 15.0),
+                      //           )
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(height: 20.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

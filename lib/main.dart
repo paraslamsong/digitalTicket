@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:home_widget/home_widget.dart';
+import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:workmanager/workmanager.dart';
 
 /// Used for Background Updates using Workmanager Plugin
@@ -66,6 +67,7 @@ void backgroundCallback(Uri data) async {
   }
 }
 
+const String testPublicKey = 'test_public_key_dc74e0fd57cb46cd93832aee0a507256';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -82,7 +84,6 @@ void main() {
             "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
       ),
     ),
-    // '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
   );
 
   HomeWidget.registerBackgroundCallback(backgroundCallback);
@@ -96,56 +97,68 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AllEventsCubit>(
-          lazy: false,
-          create: (context) => AllEventsCubit(),
-        ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-          ),
-          scaffoldBackgroundColor: Colors.black,
-          primarySwatch: mainPrimaryColor,
-          primaryColor: mainColor,
-          accentColor: Color(0xff2EBBA1),
-          textTheme: TextTheme(
-            bodyText1: TextStyle(color: Colors.white),
-            bodyText2: TextStyle(color: Colors.white),
-            subtitle1: TextStyle(color: Colors.white),
-            subtitle2: TextStyle(color: Colors.white),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            isDense: true,
-            contentPadding: EdgeInsets.only(bottom: 7, top: 10),
-            enabledBorder: new UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
+    return KhaltiScope(
+        publicKey: testPublicKey,
+        enabledDebugging: true,
+        builder: (context, navKey) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<AllEventsCubit>(
+                lazy: false,
+                create: (context) => AllEventsCubit(),
+              ),
+            ],
+            child: MaterialApp(
+              title: 'Flutter Demo',
+              supportedLocales: const [
+                Locale('en', 'US'),
+                Locale('ne', 'NP'),
+              ],
+              navigatorKey: navKey,
+              localizationsDelegates: const [
+                KhaltiLocalizations.delegate,
+              ],
+              theme: ThemeData(
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                ),
+                scaffoldBackgroundColor: Colors.black,
+                primarySwatch: mainPrimaryColor,
+                primaryColor: mainColor,
+                accentColor: Color(0xff2EBBA1),
+                textTheme: TextTheme(
+                  bodyText1: TextStyle(color: Colors.white),
+                  bodyText2: TextStyle(color: Colors.white),
+                  subtitle1: TextStyle(color: Colors.white),
+                  subtitle2: TextStyle(color: Colors.white),
+                ),
+                inputDecorationTheme: InputDecorationTheme(
+                  isDense: true,
+                  contentPadding: EdgeInsets.only(bottom: 7, top: 10),
+                  enabledBorder: new UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                ),
+                visualDensity: VisualDensity.compact,
+                textButtonTheme: TextButtonThemeData(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20)),
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0))),
+                  ),
+                ),
+                dividerColor: Colors.white70,
+              ),
+              home: GetStartedPage(),
             ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-            ),
-          ),
-          visualDensity: VisualDensity.compact,
-          textButtonTheme: TextButtonThemeData(
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all(
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 20)),
-              backgroundColor: MaterialStateProperty.all(Colors.red),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0))),
-            ),
-          ),
-          dividerColor: Colors.white70,
-        ),
-        home: GetStartedPage(),
-      ),
-    );
+          );
+        });
   }
 }
 
