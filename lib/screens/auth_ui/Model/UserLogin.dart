@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fahrenheit/api/API.dart';
-import 'package:fahrenheit/api/APIService.dart';
 import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
@@ -18,7 +16,6 @@ class UserLogin {
       "email": this.email,
       "password": this._password
     };
-    API _api = new APIService();
     Response response = await HTTP().post(path: 'token/', body: body);
     var result = response.data;
     if (response.statusCode == 200) {

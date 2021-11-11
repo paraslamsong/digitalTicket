@@ -1,7 +1,5 @@
-import 'package:fahrenheit/screens/OffersPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//Custom Package
 import 'package:fahrenheit/screens/WalletPage.dart';
 import 'package:numberpicker/numberpicker.dart';
 

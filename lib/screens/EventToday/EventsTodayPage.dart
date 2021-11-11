@@ -1,4 +1,3 @@
-import 'package:fahrenheit/screens/EventToday/Bloc/AllEventCubit.dart';
 import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'package:fahrenheit/screens/EventToday/Streams/AllEventsStream.dart';
 import 'package:fahrenheit/screens/EventToday/Widgets/AllEvents.dart';
@@ -7,44 +6,28 @@ import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:fahrenheit/screens/Profile/Profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 
-class EventsTodayPage extends StatefulWidget {
-  @override
-  _EventsTodayPageState createState() => _EventsTodayPageState();
-}
-
-class _EventsTodayPageState extends State<EventsTodayPage> {
+class EventsTodayPage extends StatelessWidget {
   final AllEventsModelBuilder allEventsModelBuilder = AllEventsModelBuilder();
-  @override
-  void initState() {
-    super.initState();
 
-    // Future.delayed(Duration(seconds: 6), () {
-    // context.read<AllEventsCubit>().reload();
-    // });
-
-    // SchedulerBinding.instance
-    //     .addPostFrameCallback((_) =>context.read<AllEventsCubit>().reload() );
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        BlocProvider.of<AllEventsCubit>(context).loadMore();
-      }
-    });
-  }
-
-  ScrollController _scrollController =
-      ScrollController(keepScrollOffset: false);
+  final ScrollController _scrollController =
+      ScrollController(debugLabel: "Debug");
 
   @override
   Widget build(BuildContext context) {
+    allEventsModelBuilder.eventSink.add(
+        AllEventsListener(action: EventsActions.refresh, context: context));
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          _scrollController.position.pixels != 0) {
+        allEventsModelBuilder.eventSink.add(AllEventsListener(
+            action: EventsActions.loadmore, context: context));
+      }
+    });
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
+          shape: Border(bottom: BorderSide(color: Colors.white70, width: 0.3)),
           backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: false,
@@ -74,17 +57,25 @@ class _EventsTodayPageState extends State<EventsTodayPage> {
           ]),
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<AllEventsCubit>().reload();
+          allEventsModelBuilder.eventSink.add(AllEventsListener(
+              action: EventsActions.refresh, context: context));
         },
         child: ListView(
           controller: _scrollController,
           shrinkWrap: false,
           children: [
-            EventToday(),
-            BlocBuilder<AllEventsCubit, Events>(
-              builder: (context, state) {
-                print(state.hasNext);
-                return AllEvents(state);
+            eventToday(context),
+            StreamBuilder<Events>(
+              stream: allEventsModelBuilder.stateStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  print(snapshot.data.hasNext.toString());
+                  return AllEvents(snapshot.data);
+                } else if (snapshot.hasError)
+                  return Text(snapshot.error);
+                else {
+                  return CupertinoActivityIndicator();
+                }
               },
             ),
           ],

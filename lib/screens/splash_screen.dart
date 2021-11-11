@@ -1,12 +1,7 @@
 import 'dart:async';
-
-import 'package:fahrenheit/bloc/splash_bloc.dart';
-import 'package:fahrenheit/screens/Dashboard/Dashboard.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
-import 'package:fahrenheit/screens/auth_ui/log_in_screen.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
@@ -15,9 +10,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final SplashBloc _splashBloc = SplashBloc(null);
   String token;
-  bool _isAppOpened = false;
 
   @override
   void initState() {
@@ -85,18 +78,8 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  Widget _buildSplashWidget() {
-    return Center(
-      child: Text(
-        "Logo Splash",
-        style: TextStyle(fontSize: 28.0, color: Colors.white),
-      ),
-    );
-  }
-
   _getIsAppAlreadyLoaded() async {
     String userToken = await LocalUserProvider.getToken();
-    bool _isAppOpened = await LocalUserProvider.getIsAppAlreadyOpened();
     if (userToken != null) {
       setState(() {
         this.token = userToken;

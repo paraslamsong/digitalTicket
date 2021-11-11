@@ -9,10 +9,10 @@ class UserModel {
         await HTTP().get(path: "user-profile/${User().getAcess()}/");
     if (response.statusCode == 200) {
       var result = response.data[0];
-      this.firstName = result['first_name'];
-      this.lastName = result['last_name'];
-      this.email = result['email'];
-      this.gender = result['gender'];
+      this.firstName = result['first_name'] ?? "";
+      this.lastName = result['last_name'] ?? "";
+      this.email = result['email'] ?? "";
+      this.gender = result['gender'] ?? "";
     }
     return this;
   }

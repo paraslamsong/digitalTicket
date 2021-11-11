@@ -1,6 +1,9 @@
 import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 enum EventsActions { loadmore, refresh }
 
 class AllEventsModelBuilder {
@@ -17,17 +20,21 @@ class AllEventsModelBuilder {
   Stream<AllEventsListener> get _eventStream => _eventStreamController.stream;
   var subs;
   AllEventsModelBuilder() {
-    subs = _eventStream.listen((AllEventsListener event) {
-      _stateSink.add(state);
+    subs = _eventStream.listen((AllEventsListener event) async {
       switch (event.action) {
         case EventsActions.loadmore:
           if (state.hasNext) {
-            state.isLoading = true;
-            state.fetchAllEvent();
+            Fluttertoast.cancel();
+            Fluttertoast.showToast(msg: "Loading more");
+            await state.fetchAllEvent(event.context);
           }
           break;
         case EventsActions.refresh:
-          state.reload();
+          state.events = [];
+          state.page = 1;
+          _stateSink.add(state);
+          state.hasNext = true;
+          await state.fetchAllEvent(event.context);
           break;
         default:
           break;
@@ -43,5 +50,6 @@ class AllEventsModelBuilder {
 
 class AllEventsListener {
   EventsActions action;
-  AllEventsListener(this.action);
+  BuildContext context;
+  AllEventsListener({this.action, this.context});
 }

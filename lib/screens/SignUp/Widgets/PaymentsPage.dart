@@ -47,7 +47,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       IconButton(
                         icon: ImageIcon(
                           ImageIcons.edit,
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).secondaryHeaderColor,
                           size: 20,
                         ),
                         onPressed: () {
@@ -153,7 +153,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         children: [
           ImageIcon(
             icon,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).secondaryHeaderColor,
             size: 20,
           ),
           SizedBox(width: 15),

@@ -11,7 +11,6 @@ class FeaturedEvents extends StatefulWidget {
 class _FeaturedEventsState extends State<FeaturedEvents> {
   Future<Events> fetchData() async {
     Events events = new Events();
-    await events.fetchFeaturedEvent();
     return Future.value(events);
   }
 

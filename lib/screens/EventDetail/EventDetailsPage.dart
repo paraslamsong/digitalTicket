@@ -1,17 +1,14 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fahrenheit/api/HTTP.dart';
-import 'package:fahrenheit/constraints/constants.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
-import 'package:fahrenheit/screens/EventDetail/Model/Gallery.dart';
-import 'package:fahrenheit/screens/EventDetail/Model/Tickets.dart';
 import 'package:fahrenheit/screens/GalleryView/GalleryView.dart';
 import 'package:fahrenheit/screens/PayWithPage.dart';
-import 'package:fahrenheit/screens/TableBooking/TableBookingPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final int id;
@@ -31,20 +28,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
 
   Future<EventDetail> fetchDetail() async {
     EventDetail eventDetail = new EventDetail();
-    await eventDetail.fetchData(widget.id);
+    await eventDetail.fetchData(context, id: widget.id);
     return Future.value(eventDetail);
-  }
-
-  fetchImages() async {
-    Gallery gallery = new Gallery();
-    await gallery.fetchImages(widget.id);
-    return Future.value(gallery);
-  }
-
-  fetchPrices() async {
-    Tickets tickets = new Tickets();
-    await tickets.fetchTickets(widget.id);
-    return Future.value(tickets);
   }
 
   @override
@@ -74,7 +59,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 13.0, sigmaY: 13.0),
                   child: Container(
-                    color: Colors.black54,
+                    color: Colors.black.withOpacity(0.6),
                   ),
                 ),
               ),
@@ -94,9 +79,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 future: fetchDetail(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError)
                     return Center(
                         child: Text(
@@ -112,9 +95,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                         _eventDetail(event),
                         _eventBuyBox(event),
                         SizedBox(height: 10),
-                        // _eventGuestArtist(event),
-                        // _eventReservation(),
-                        _eventGallery(event.id),
+                        _eventGuestArtist(event),
+                        _eventGallery(event),
                       ],
                     );
                   }
@@ -127,27 +109,29 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
 
   Widget _eventTitle(EventDetail event) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             event.title,
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+            maxLines: 2,
+            style: GoogleFonts.openSans().copyWith(
+                color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
           ),
           Text(
-            CLUB_NAME + ", " + event.location,
-            style:
-                TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13),
+            event.organizer + ", " + event.location,
+            style: GoogleFonts.openSans()
+                .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 13),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 5),
           Text(
-            DateFormat("MMM dd, yyyy, HH:mm").format(event.startDate) +
+            DateFormat("dd/MM/yyyy, HH:mm").format(event.startDate) +
                 " - " +
-                DateFormat("MMM dd, yyyy, HH:mm").format(event.endDate),
-            style:
-                TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 11),
+                DateFormat("dd/MM/yyyy, HH:mm").format(event.endDate),
+            style: GoogleFonts.openSans()
+                .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 11),
           ),
         ],
       ),
@@ -156,14 +140,15 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
 
   Widget _eventDetail(EventDetail event) {
     return Container(
-      height: 220,
+      height: 200,
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      color: Colors.black38,
       child: Row(
         children: [
           CachedNetworkImage(
             imageUrl: event.image,
             height: 220,
-            width: 180,
+            width: 150,
             fit: BoxFit.cover,
             placeholder: (context, _) => Center(
               child: CupertinoActivityIndicator(),
@@ -172,50 +157,72 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
           ),
           SizedBox(width: 10),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    event.description,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+            child: Container(
+              padding: EdgeInsets.all(9),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      event.description,
+                      style: GoogleFonts.openSans(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 10,
+                      ),
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Wrap(
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Text(
-                              "More info",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 11),
-                            ),
-                          ),
-                        ],
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        radius: 10,
+                        child: Text(
+                          "More info",
+                          style: GoogleFonts.openSans(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 11),
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        CupertinoIcons.heart_fill,
-                        color: Colors.red,
+                      Spacer(),
+                      Text(
+                        event.likes.toString(),
+                        style: GoogleFonts.openSans(
+                            color: Colors.white.withOpacity(0.8), fontSize: 9),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        print("Hello");
-                      },
-                      icon: Icon(
-                        Icons.share,
-                        color: Colors.red,
+                      SizedBox(width: 6),
+                      IconButton(
+                        onPressed: () {},
+                        iconSize: 18,
+                        constraints: BoxConstraints(minWidth: 30),
+                        visualDensity: VisualDensity.compact,
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          event.isLiked
+                              ? CupertinoIcons.heart_fill
+                              : CupertinoIcons.heart,
+                          color: Colors.red,
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                      IconButton(
+                        onPressed: () {
+                          Share.share(
+                              'check out my website https://example.com');
+                        },
+                        padding: EdgeInsets.zero,
+                        iconSize: 18,
+                        constraints: BoxConstraints(minWidth: 40),
+                        visualDensity: VisualDensity.compact,
+                        icon: ImageIcon(
+                          AssetImage("assets/icons/share.png"),
+                          color: Color(0xffFFF156),
+                          size: 17,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -230,67 +237,38 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: FutureBuilder(
-                future: fetchPrices(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Row(
-                      children: [
-                        SizedBox(width: 20),
-                        Center(
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                        SizedBox(width: 60),
-                        Center(
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      ],
-                    );
-                  } else if (snapshot.hasError)
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  else {
-                    var tickets = snapshot.data.tickets;
-                    return Container(
-                      height: 45,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: tickets.length,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        itemBuilder: (context, index) => Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: [
-                              Spacer(),
-                              Text(
-                                tickets[index].title,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 12),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                "रू " + tickets[index].rate,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                        ),
+            child: Container(
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: event.rates.length,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                itemBuilder: (context, index) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      Text(
+                        event.rates[index].name,
+                        style: GoogleFonts.openSans(
+                            color: Colors.white.withOpacity(0.8), fontSize: 13),
                       ),
-                    );
-                  }
-                }),
+                      Text(
+                        "रू " +
+                            double.parse(event.rates[index].rate)
+                                .toStringAsFixed(0),
+                        style: GoogleFonts.openSans(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
           SizedBox(width: 18),
           TextButton(
@@ -301,7 +279,9 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => PayWithPage()));
               },
-              child: Text("Buy ticket", style: TextStyle(color: Colors.white))),
+              child: Text("Buy ticket",
+                  style: GoogleFonts.openSans(
+                      color: Color(0xffFAFBFD), fontSize: 13))),
         ],
       ),
     );
@@ -315,18 +295,21 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20).copyWith(top: 5),
                   child: Text(
                     "Guest Artists",
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.openSans(
+                        color: Colors.white.withOpacity(0.8), fontSize: 13),
                   ),
                 ),
                 Container(
-                  height: 150,
+                  height: 130,
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: ListView.builder(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
                     itemCount: event.artists.length,
                     itemBuilder: (context, index) => Container(
                       width: 65,
@@ -347,21 +330,27 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(60),
                                 child: CachedNetworkImage(
-                                  imageUrl: APIURL +
-                                      event.artists[index].profileImage,
+                                  imageUrl: event.artists[index].image,
                                   height: 60,
                                   width: 60,
                                   fit: BoxFit.cover,
+                                  progressIndicatorBuilder: (context, _, __) =>
+                                      CupertinoActivityIndicator(),
                                   errorWidget: (context, _, __) =>
                                       Icon(Icons.error),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 7),
                           Text(
                             event.artists[index].name,
-                            style: TextStyle(color: Colors.white),
+                            maxLines: 2,
+                            style: GoogleFonts.openSans(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 13,
+                              height: 1.4,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -374,141 +363,57 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
     );
   }
 
-  Widget _eventReservation() {
-    var _reservationButtonStyle = ButtonStyle(
-      padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-      foregroundColor: MaterialStateProperty.all(Colors.white),
-      alignment: Alignment.center,
-      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 13)),
-      backgroundColor: MaterialStateProperty.all(Color(0xff141313)),
-    );
-
+  Widget _eventGallery(EventDetail event) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              "Event Detail",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                style: _reservationButtonStyle,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TableBookingPage()));
-                },
-                child: Text("Table\nReservation", textAlign: TextAlign.center),
-              ),
-              TextButton(
-                style: _reservationButtonStyle,
-                onPressed: () {},
-                child: Text("Couple\nReservation", textAlign: TextAlign.center),
-              ),
-              TextButton(
-                style: _reservationButtonStyle,
-                onPressed: () {},
-                child: Text("VIP\nAccess", textAlign: TextAlign.center),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _eventGallery(int id) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 50),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               "Event Images",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: GoogleFonts.openSans(
+                  color: Colors.white.withOpacity(0.8), fontSize: 13),
             ),
           ),
           SizedBox(height: 15),
           Container(
             height: 95,
-            child: FutureBuilder(
-                future: fetchImages(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Row(
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 95,
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                        Container(
-                          width: 120,
-                          height: 95,
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                      ],
-                    );
-                  } else if (snapshot.hasError)
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  else {
-                    var gallery = snapshot.data.gallery;
-                    if (gallery.length == 0)
-                      return Center(
-                        child: Text(
-                          "Not Available",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      );
-                    return ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: gallery.length,
-                      itemBuilder: (context, index) => Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: InkWell(
-                          onTap: () {
-                            List<String> images = [];
-                            gallery.forEach((element) {
-                              images.add(element.image);
-                            });
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => GalleryPage(
-                                        images: images, index: index)));
-                          },
-                          child: Hero(
-                            tag: gallery[index].image + index.toString(),
-                            child: CachedNetworkImage(
-                              height: 95,
-                              imageUrl: gallery[index].image,
-                              placeholder: (context, _) => Container(
-                                  width: 100,
-                                  child: Center(
-                                      child: CupertinoActivityIndicator())),
-                              errorWidget: (context, _, __) => Container(
-                                  width: 100,
-                                  child: Center(child: Icon(Icons.error))),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                }),
+            child: ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              scrollDirection: Axis.horizontal,
+              itemCount: event.gallery.length,
+              itemBuilder: (context, index) => Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: InkWell(
+                  onTap: () {
+                    List<String> images = [];
+                    event.gallery.forEach((element) {
+                      images.add(element);
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                GalleryPage(images: images, index: index)));
+                  },
+                  child: Hero(
+                    tag: event.gallery[index] + index.toString(),
+                    child: CachedNetworkImage(
+                      height: 95,
+                      imageUrl: event.gallery[index],
+                      placeholder: (context, _) => Container(
+                          width: 100,
+                          child: Center(child: CupertinoActivityIndicator())),
+                      errorWidget: (context, _, __) => Container(
+                          width: 100, child: Center(child: Icon(Icons.error))),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
+          SizedBox(height: 15),
         ],
       ),
     );

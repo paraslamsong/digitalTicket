@@ -1,91 +1,79 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:fahrenheit/api/API.dart';
-import 'package:fahrenheit/api/APIService.dart';
 import 'package:fahrenheit/api/HTTP.dart';
+import 'package:flutter/material.dart';
 
 class Event {
   int id;
-  String eventTitle, description, location, startDate, endDate;
+  String eventTitle, description, location;
+  DateTime startDate, endDate;
   String image;
   var user;
-  int club;
+  String club;
   var likes;
 
-  Event(dynamic json) {
+  fromAllMap(dynamic json) {
     id = json['id'];
     eventTitle = json['event_title'] ?? "";
     description = json['description'] ?? "";
     location = json['location'] ?? "";
-    startDate = json['start_date'] ?? "";
-    endDate = json['end_date'] ?? "";
+    startDate = DateTime.parse(json['start_date']);
+    endDate = DateTime.parse(json['end_date']);
     image = json['image'] ?? "";
     user = json['user'] ?? null;
-    club = json['club'] ?? 0;
+    club = json['club'] ?? "";
     likes = json['likes'] ?? null;
+  }
+
+  fromTodayMap(dynamic json) {
+    id = json['id'];
+    eventTitle = json['event_title'] ?? "";
+    description = json['description'] ?? "";
+    location = json['location'] ?? "";
+    startDate = DateTime.parse(json['start_date']);
+    endDate = DateTime.parse(json['end_date']);
+    image = json['image'] ?? "";
+    user = 0;
+    club = json['club'];
+    likes = 0;
   }
 }
 
 class Events {
   List<Event> events = [];
-  bool isLoading = true;
   bool hasNext = true;
   int i = 0;
   int page = 1;
 
-  Future<void> fetchTodaysEvent() async {
-    Response response = await HTTP().get(path: "all-event/?pagination=1");
+  Future<Events> fetchTodaysEvent() async {
+    Response response = await HTTP().get(path: "today-event/");
     if (response.statusCode == 200) {
       var result = response.data;
-      result['results'].forEach((element) {
-        events.add(new Event(element));
+      result.forEach((element) {
+        Event event = Event();
+        event.fromTodayMap(element);
+        events.add(event);
       });
     }
+    return this;
   }
 
-  Future<void> fetchAllEvent() async {
+  Future<void> fetchAllEvent(BuildContext context) async {
     if (this.hasNext) {
       this.hasNext = true;
-      Response response = await HTTP().get(path: "all-event/?pagination=$page");
-      print(response.statusCode);
+      Response response = await HTTP().get(
+          path: "all-event/?pagination=$page",
+          context: context,
+          useToken: false);
       if (response.statusCode == 200) {
         var result = response.data;
         result['results'].forEach((element) {
-          events.add(new Event(element));
+          Event event = Event();
+          event.fromAllMap(element);
+          events.add(event);
         });
         page++;
-        // this.hasNext = result['next'] != null ? true : false;
-
+        this.hasNext = result['next'] != null ? true : false;
       }
     }
-    this.isLoading = false;
-  }
-
-  void reload() {
-    this.isLoading = true;
-    this.hasNext = true;
-    this.events = [];
-    this.fetchAllEvent();
-  }
-
-  Events() {
-    this.reload();
-  }
-
-  copy(Events events) {
-    this.events = events.events;
-    this.hasNext = events.hasNext;
-    this.isLoading = events.isLoading;
-  }
-
-  Future<void> fetchFeaturedEvent() async {
-    Response response = await HTTP().get(path: "all-event/");
-    // if (response.statusCode == 200) {
-    //   List<dynamic> result = jsonDecode(response.body);
-    //   result.forEach((element) {
-    //     events.add(new Event(element));
-    //   });
-    // }
   }
 }

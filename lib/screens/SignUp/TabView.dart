@@ -1,13 +1,9 @@
 import 'package:fahrenheit/screens/SignUp/Bloc/SignUpModel.dart';
 import 'package:fahrenheit/screens/SignUp/Widgets/PaymentsPage.dart';
 import 'package:fahrenheit/screens/SignUp/Widgets/PersonalDetailsPage.dart';
-import 'package:fahrenheit/screens/utils/OverLayLoader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-//Custom Page
 import 'package:flutter/services.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class TabView extends StatefulWidget {
   @override

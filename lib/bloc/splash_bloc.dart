@@ -10,7 +10,6 @@ part 'splash_state.dart';
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
   SplashBloc(SplashState initialState) : super(initialState);
 
-  @override
   SplashState get initialState => SplashInitial();
 
   @override

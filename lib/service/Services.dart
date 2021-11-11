@@ -1,16 +1,4 @@
-import 'dart:io';
-import 'package:fahrenheit/api/ApiList.dart';
-import 'package:fahrenheit/model/AllEventsModel.dart';
-import 'package:fahrenheit/model/EventDetailsModel.dart';
-import 'package:fahrenheit/model/EventsTodayModel.dart';
-import 'package:fahrenheit/model/PopularArtistsModel.dart';
-import 'package:fahrenheit/screens/splash_screen.dart';
-import 'package:http/http.dart' as http;
 
-//Custom Package
-import 'package:fahrenheit/model/MemberShip.dart';
-import 'package:fahrenheit/model/FeaturedEventsModel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // class Services {
 //   static Future<List<MemberShip>> getMemberShip() async {

@@ -9,6 +9,8 @@ import 'package:fahrenheit/screens/utils/OverLayLoader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -42,7 +44,8 @@ class _MyTicketState extends State<MyTicket> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: Text(
               "UPCOMING EVENTS",
-              style: TextStyle(color: Colors.white, fontSize: 20.0),
+              style: TextStyle(
+                  color: Colors.white, fontFamily: "SF Pro", fontSize: 20.0),
             ),
           ),
           SizedBox(height: 10.0),
@@ -224,39 +227,52 @@ class _TicketState extends State<TicketBox> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(widget.ticket.title,
-                          style: TextStyle(color: Colors.white, fontSize: 15)),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontFamily: "SF Pro")),
                       Text(
                         "Door Opens",
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10.0),
+                          fontFamily: "SF Pro",
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 9.0,
+                        ),
                       )
                     ],
                   ),
                 ),
+                SizedBox(height: 2),
                 Padding(
                   padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                          "${DateFormat('dd.MM.yy').format(widget.ticket.date)} at ${DateFormat('hh.mmaa').format(widget.ticket.date)}",
-                          style: TextStyle(color: Colors.white)),
+                        "${DateFormat('dd.MM.yy').format(widget.ticket.date)} at ${DateFormat('hh.mmaa').format(widget.ticket.date)}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "SF Pro",
+                        ),
+                      ),
                       Row(
                         children: [
                           Icon(
                             Icons.access_time,
                             color: Colors.white,
-                            size: 18.0,
+                            size: 13.0,
                           ),
                           Text(
                             DateFormat(' hh:mm').format(widget.ticket.date
                                 .subtract(Duration(minutes: 30))),
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontSize: 13.0,
+                              fontFamily: "SF Pro",
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       )
@@ -319,17 +335,24 @@ class _TicketState extends State<TicketBox> {
                                     children: [
                                       Text(
                                         widget.ticket.title,
+                                        maxLines: 2,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
+                                          fontFamily: "SF Pro",
+                                          fontSize: 14,
                                         ),
                                       ),
-                                      SizedBox(height: 6),
+                                      SizedBox(height: 4),
                                       Text(
                                         "${DateFormat('EEEE').format(widget.ticket.date)}, ${DateFormat('hh:mmaa').format(widget.ticket.date).toLowerCase()}",
-                                        style: TextStyle(fontSize: 10),
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            fontFamily: "SF Pro", fontSize: 10),
                                       ),
-                                      SizedBox(height: 6),
+                                      SizedBox(height: 4),
                                       Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Image(
                                             image: AssetImage(
@@ -340,10 +363,10 @@ class _TicketState extends State<TicketBox> {
                                           SizedBox(width: 6),
                                           Text(
                                             widget.ticket.location,
-                                            style: TextStyle(
-                                              color: Color(0xff46C2FF),
-                                              fontSize: 8,
-                                            ),
+                                            maxLines: 1,
+                                            style: GoogleFonts.poppins(
+                                                color: Color(0xff46C2FF),
+                                                fontSize: 7),
                                           )
                                         ],
                                       )
@@ -407,6 +430,7 @@ class _TicketState extends State<TicketBox> {
             ),
           ),
         ),
+        collapsed: null,
       ),
     );
   }

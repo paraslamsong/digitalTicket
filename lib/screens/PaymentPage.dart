@@ -198,18 +198,19 @@ class _PaymentPageState extends State<PaymentPage> {
                           height: 20.0,
                           width: 70.0,
                           color: Colors.cyanAccent.withOpacity(0.5),
-                          child: FlatButton(
-                              onPressed: () {
-                                Toast.show("More Offers", context,
-                                    gravity: Toast.BOTTOM,
-                                    duration: Toast.LENGTH_LONG,
-                                    backgroundColor: Colors.black);
-                              },
-                              child: Text(
-                                "More Offers",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 7.0),
-                              )),
+                          child: TextButton(
+                            onPressed: () {
+                              Toast.show("More Offers", context,
+                                  gravity: Toast.BOTTOM,
+                                  duration: Toast.LENGTH_LONG,
+                                  backgroundColor: Colors.black);
+                            },
+                            child: Text(
+                              "More Offers",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 7.0),
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 10.0),
@@ -263,7 +264,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               color: Colors.redAccent,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -293,7 +294,7 @@ class _PaymentPageState extends State<PaymentPage> {
               decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.5),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                   Toast.show("Other Option", context,
                       gravity: Toast.BOTTOM,

@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:fahrenheit/constraints/constants.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/Animation.dart/LoginSignUp.dart';

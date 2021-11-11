@@ -6,6 +6,7 @@ import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:home_widget/home_widget.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
@@ -18,7 +19,6 @@ void callbackDispatcher() {
     'Updated from Background',
   );
   Workmanager().executeTask((taskName, inputData) {
-    final now = DateTime.now();
     return Future.wait<bool>([
       HomeWidget.saveWidgetData<Widget>(
         'message',
@@ -121,12 +121,14 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 appBarTheme: AppBarTheme(
                   backgroundColor: Colors.transparent,
+                  titleTextStyle: GoogleFonts.poppins(
+                      fontSize: 23, fontWeight: FontWeight.w600),
                   elevation: 0,
                 ),
                 scaffoldBackgroundColor: Colors.black,
                 primarySwatch: mainPrimaryColor,
                 primaryColor: mainColor,
-                accentColor: Color(0xff2EBBA1),
+                secondaryHeaderColor: Color(0xff2EBBA1),
                 textTheme: TextTheme(
                   bodyText1: TextStyle(color: Colors.white),
                   bodyText2: TextStyle(color: Colors.white),
@@ -146,6 +148,8 @@ class MyApp extends StatelessWidget {
                 visualDensity: VisualDensity.compact,
                 textButtonTheme: TextButtonThemeData(
                   style: ButtonStyle(
+                    overlayColor:
+                        MaterialStateProperty.all(Colors.red.withOpacity(0.4)),
                     padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(horizontal: 20, vertical: 20)),
                     backgroundColor: MaterialStateProperty.all(Colors.red),

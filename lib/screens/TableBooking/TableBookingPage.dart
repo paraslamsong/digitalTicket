@@ -80,7 +80,7 @@ class _TableBookingPageState extends State<TableBookingPage> {
                   decoration: BoxDecoration(
                       color: Colors.redAccent,
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -100,7 +100,7 @@ class _TableBookingPageState extends State<TableBookingPage> {
                   decoration: BoxDecoration(
                       color: Colors.redAccent,
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       Toast.show("Book Table", context,
                           gravity: Toast.BOTTOM,

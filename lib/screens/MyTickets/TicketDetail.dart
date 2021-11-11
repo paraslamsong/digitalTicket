@@ -2,16 +2,15 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
-import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/MyTickets/Model/Tickets.dart';
 import 'package:fahrenheit/service/RemainderService.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:toast/toast.dart';
 
 //Custom Package
-import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 
 class TicketDetailPage extends StatefulWidget {
   final Ticket ticket;
@@ -35,88 +34,97 @@ class _YourTicketPageState extends State<TicketDetailPage> {
           Padding(
             padding: EdgeInsets.only(left: 15.0, right: 15.0),
             child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      offset: Offset(4, 4),
-                      blurRadius: 16,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    offset: Offset(4, 4),
+                    blurRadius: 16,
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomStart,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.ticket.image,
+                        height: 220,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        progressIndicatorBuilder: (context, _, __) =>
+                            CupertinoActivityIndicator(),
+                        errorWidget: (context, _, __) =>
+                            Image(image: AssetImage("images/logo.png")),
+                      ),
                     ),
-                  ],
-                ),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomStart,
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.ticket.image,
-                            height: 220,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Container(
-                          color: Colors.black54,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    Container(
+                      color: Colors.black54,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.ticket.title,
+                              style: TextStyle(
+                                  fontFamily: "SF Pro",
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              "${DateFormat('EEEE').format(widget.ticket.date)}, ${DateFormat('hh:mmaa').format(widget.ticket.date).toLowerCase()}",
+                              style: TextStyle(
+                                  fontFamily: "SF Pro",
+                                  color: Colors.white,
+                                  fontSize: 10.0),
+                            ),
+                            SizedBox(height: 3.0),
+                            Row(
                               children: [
-                                Text(
-                                  widget.ticket.title,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0),
+                                Image(
+                                  image:
+                                      AssetImage("assets/icons/location.png"),
+                                  width: 7,
+                                  height: 10,
                                 ),
-                                SizedBox(height: 5.0),
+                                SizedBox(width: 4),
                                 Text(
-                                  "${DateFormat('EEEE').format(widget.ticket.date)}, ${DateFormat('hh:mmaa').format(widget.ticket.date).toLowerCase()}",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 10.0),
-                                ),
-                                SizedBox(height: 5.0),
-                                Row(
-                                  children: [
-                                    Image(
-                                      image: AssetImage(
-                                          "assets/icons/location.png"),
-                                      width: 9,
-                                      height: 13,
-                                    ),
-                                    SizedBox(width: 6),
-                                    Text(
-                                      widget.ticket.location,
-                                      style: TextStyle(
-                                          color: Color(0xff46C2FF),
-                                          fontSize: 10.0),
-                                    ),
-                                  ],
+                                  widget.ticket.location,
+                                  style: GoogleFonts.poppins(
+                                      color: Color(0xff46C2FF), fontSize: 7.0),
                                 ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ))),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 30.0),
           Center(
             child: Text(
                 "${DateFormat('dd.MM.yy').format(widget.ticket.date)} at ${DateFormat('hh.mmaa').format(widget.ticket.date)}",
                 style: TextStyle(
+                    fontFamily: "Helvetica Neue",
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 12)),
           ),
-          SizedBox(height: 10.0),
+          SizedBox(height: 20.0),
           Container(
-              height: 10, width: double.infinity, color: Color(0xff2B2B2B)),
-          SizedBox(height: 10.0),
+              height: 18, width: double.infinity, color: Color(0xff2B2B2B)),
+          SizedBox(height: 30.0),
           Column(
             children: [
               Hero(
@@ -133,38 +141,109 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                   size: 160.0,
                 ),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 20.0),
               Text(
                 widget.ticket.userName,
                 style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold),
+                  fontFamily: "Helvetica Neue",
+                  color: Colors.white,
+                  fontSize: 13.0,
+                ),
               ),
-              SizedBox(height: 6.0),
               Text(
                 widget.ticket.ticketNumber,
                 style: TextStyle(
+                    fontFamily: "Helvetica Neue",
                     color: Colors.white,
-                    fontSize: 13.0,
-                    fontWeight: FontWeight.w600),
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w500),
               )
             ],
           ),
-          SizedBox(height: 10.0),
-          Container(
-              height: 10, width: double.infinity, color: Color(0xff2B2B2B)),
           SizedBox(height: 20.0),
+          Container(
+              height: 18, width: double.infinity, color: Color(0xff2B2B2B)),
+          SizedBox(height: 30.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               TextButton(
                 onPressed: () {
-                  Remender remender = Remender();
-                  remender.setRemender(context);
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        var style = ButtonStyle(
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        );
+                        return Dialog(
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Set reminder"),
+                              TextButton(
+                                style: style,
+                                child: Text("1 Day before the event"),
+                                onPressed: () {
+                                  Remender remender = Remender();
+                                  remender.setRemender(context,
+                                      date: widget.ticket.date
+                                          .subtract(Duration(days: 1)));
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                style: style,
+                                child: Text("2 hours before the event"),
+                                onPressed: () {
+                                  Remender remender = Remender();
+                                  remender.setRemender(context,
+                                      date: widget.ticket.date
+                                          .subtract(Duration(hours: 2)));
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                style: style,
+                                child: Text("1 hours before the event"),
+                                onPressed: () {
+                                  Remender remender = Remender();
+                                  remender.setRemender(context,
+                                      date: widget.ticket.date
+                                          .subtract(Duration(hours: 1)));
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                child: Text("Cancel"),
+                                style: style,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      });
                 },
-                child:
-                    Text("Set Reminder", style: TextStyle(color: Colors.white)),
+                child: Text(
+                  "Set Reminder",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontFamily: "SF Pro",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w100,
+                  ),
+                ),
               ),
               TextButton(
                 onPressed: () {
@@ -176,8 +255,15 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                             bgImage: widget.ticket.image)),
                   );
                 },
-                child:
-                    Text("View Detail", style: TextStyle(color: Colors.white)),
+                child: Text(
+                  "View Detail",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontFamily: "SF Pro",
+                    fontSize: 16,
+                    fontWeight: FontWeight.w100,
+                  ),
+                ),
               )
             ],
           ),

@@ -1,59 +1,87 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:fahrenheit/api/API.dart';
-import 'package:fahrenheit/api/APIService.dart';
 import 'package:fahrenheit/api/HTTP.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Artist {
   int id;
-  String name, primaryContact, secondaryContact, profileImage, coverImage;
-  bool isAvailable, isPopularArtist, isMain;
-  Artist(Map<String, dynamic> json) {
-    this.id = json['id'] ?? 0;
-    this.name = json['name'] ?? "";
-    this.primaryContact = json['primary_contact'] ?? "";
-    this.secondaryContact = json['secondary_contact'] ?? "";
-    this.profileImage = json['profile_image'] ?? "";
-    this.coverImage = json['cover'] ?? "";
-    this.isAvailable = json['is_available'] ?? false;
-    this.isPopularArtist = json['is_popular_artist'] ?? false;
-    this.isMain = json['is_main'] ?? false;
+  String name, image;
+  bool isMain;
+  fromMap(json) {
+    this.id = json['id'];
+    this.name = json['artist_name'];
+    this.isMain = json['is_main'];
+    this.image = json['image'];
+  }
+}
+
+class Rate {
+  int id;
+  String name, rate;
+  fromMap(json) {
+    this.id = json['id'];
+    this.name = json['title'];
+    this.rate = json['rate'];
+  }
+}
+
+class Schedule {
+  int id;
+  String name;
+  DateTime startDate, endDate;
+  fromMap(json) {
+    this.id = 0;
+    this.name = json['title'];
+    this.startDate = DateTime.parse(json['start_date']);
+    this.endDate = DateTime.parse(json['end_date']);
   }
 }
 
 class EventDetail {
-  int id, club;
-  String title, description, location, image;
+  int id, likes;
+  String title, organizer, description, location, image;
   DateTime startDate, endDate;
   List<Artist> artists = [];
-  mapFromJson(Map<String, dynamic> json) {
-    this.id = json['id'] ?? 0;
-    this.title = json['event_title'] ?? "";
-    this.description = json['description'] ?? "";
-    this.location = json['location'] ?? "";
-    this.startDate =
-        DateTime.parse(json['start_date'] ?? DateTime.now().toString());
-    this.endDate =
-        DateTime.parse(json['end_date'] ?? DateTime.now().toString());
-    this.image = json['image'] ?? "";
-    this.club = json['club'] ?? 0;
-    List<dynamic> artist = json['event_artist'] ?? [];
-    artist.forEach((element) {
-      Artist artist = new Artist(element);
-      artists.add(artist);
-    });
-  }
+  List<Rate> rates = [];
+  List<Schedule> schedules = [];
+  List<String> gallery = [];
+  bool isLiked = false;
 
-  fetchData(int id) async {
-    print(id);
-    print("api/event-detail/$id/");
-    Response response = await HTTP().get(path: "event-detail/$id/");
+  fetchData(BuildContext context, {@required int id}) async {
+    Response response = await HTTP().get(
+        context: context,
+        path: "event-detail/$id/"); //?token=" + User().getAcess());
     if (response.statusCode == 200) {
       var json = response.data;
-      print(json);
-      this.mapFromJson(json);
+      this.id = json['id'];
+      this.title = json['event_title'];
+      this.organizer = json['event_organizer'];
+      this.location = json['location'];
+      this.image = json['image'];
+      this.startDate = DateTime.parse(json['start_date']);
+      this.endDate = DateTime.parse(json['end_date']);
+      this.description = json['description'];
+      this.likes = json['likes'];
+      this.isLiked = json['user_liked'];
+      json['event_artist'].forEach((json) {
+        Artist artist = Artist();
+        artist.fromMap(json);
+        this.artists.add(artist);
+      });
+
+      json['event_rate'].forEach((json) {
+        Rate rate = Rate();
+        rate.fromMap(json);
+        this.rates.add(rate);
+      });
+      json['event_schedule'].forEach((json) {
+        Schedule schedule = Schedule();
+        schedule.fromMap(json);
+        this.schedules.add(schedule);
+      });
+      json['gallery'].forEach((json) {
+        this.gallery.add(json['image']);
+      });
     } else {
       Fluttertoast.showToast(msg: "Error");
     }

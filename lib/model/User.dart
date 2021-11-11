@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class Session {
-  factory Session() {}
-}
+abstract class Session {}
 
 class User {
   String _access, _refresh;

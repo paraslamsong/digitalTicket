@@ -1,7 +1,8 @@
-import 'package:fahrenheit/screens/EventDetail/Model/Tickets.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -16,7 +17,7 @@ class Remender {
     );
   }
 
-  setRemender(BuildContext context) async {
+  setRemender(BuildContext context, {DateTime date}) async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
     AndroidInitializationSettings initializationSettingsAndroid =
@@ -46,15 +47,16 @@ class Remender {
           badge: true,
           sound: true,
         );
+    print(result);
 
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      "alarm notification",
+      "alarm notification",
+      icon: "@mipmap/ic_launcher",
       channelDescription: 'your channel description',
       importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
+      priority: Priority.max,
+      fullScreenIntent: true,
     );
 
     const IOSNotificationDetails iosNotificationDetails =
@@ -66,35 +68,28 @@ class Remender {
     );
 
     tz.initializeTimeZones();
-    final nep = tz.getLocation("Asia/Kathmandu");
-    var tx = tz.TZDateTime.now(nep);
+
+    final String currentTimeZone =
+        await FlutterNativeTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics, iOS: iosNotificationDetails);
-    print(tx.toString());
-    DateTime dateTime = DateTime.now();
-    tz.TZDateTime.parse(nep, dateTime.toString());
 
-    var time =
-        tz.TZDateTime.parse(nep, dateTime.toString()).add(Duration(seconds: 8));
-    print(time);
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      1,
-      "Remainder",
-      "Its time for you Event",
-      tz.TZDateTime.now(nep).add(Duration(seconds: 8)),
-      platformChannelSpecifics,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-    );
-    // flutterLocalNotificationsPlugin.show(
-    //   1,
-    //   "Remainder",
-    //   "Its time for you Event",
-    //   platformChannelSpecifics,
-    //   payload: "Happy",
-    // );
-
-    print("Ok");
+    try {
+      flutterLocalNotificationsPlugin.zonedSchedule(
+        1,
+        "Remainder",
+        "Its time for you Event",
+        tz.TZDateTime.from(date, tz.local),
+        platformChannelSpecifics,
+        androidAllowWhileIdle: true,
+        payload: "Hello",
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+    } catch (err) {
+      Fluttertoast.showToast(msg: err);
+    }
   }
 }

@@ -5,8 +5,6 @@ import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// ignore: implementation_imports
-import 'package:loader_overlay/src/overlay_controller_widget_extension.dart';
 
 class SignUp {
   String firstName, lastName, email, password, gender = "";
