@@ -96,6 +96,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                         _eventBuyBox(event),
                         SizedBox(height: 10),
                         _eventGuestArtist(event),
+                        _eventSchedule(event),
                         _eventGallery(event),
                       ],
                     );
@@ -363,58 +364,110 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
     );
   }
 
-  Widget _eventGallery(EventDetail event) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              "Event Images",
+  Widget _eventSchedule(EventDetail event) {
+    List<Schedule> schedules = event.schedules;
+    return Visibility(
+      visible: schedules.length > 0,
+      child: Container(
+        padding:
+            EdgeInsets.symmetric(horizontal: 20).copyWith(top: 5, bottom: 25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Schedule",
               style: GoogleFonts.openSans(
                   color: Colors.white.withOpacity(0.8), fontSize: 13),
             ),
-          ),
-          SizedBox(height: 15),
-          Container(
-            height: 95,
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              scrollDirection: Axis.horizontal,
-              itemCount: event.gallery.length,
-              itemBuilder: (context, index) => Container(
+            SizedBox(height: 5),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: schedules.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Text(
+                        schedules[index].name,
+                        style: GoogleFonts.openSans(
+                            color: Colors.white.withOpacity(0.9), fontSize: 16),
+                      ),
+                      Spacer(),
+                      Text(
+                        DateFormat("dd/M/yyyy, HH:MM")
+                            .format(schedules[index].startDate),
+                        style: GoogleFonts.openSans(
+                            color: Colors.white.withOpacity(0.9), fontSize: 16),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _eventGallery(EventDetail event) {
+    return Visibility(
+      visible: event.gallery.length > 0,
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Event Images",
+                style: GoogleFonts.openSans(
+                    color: Colors.white.withOpacity(0.8), fontSize: 13),
+              ),
+            ),
+            SizedBox(height: 15),
+            Container(
+              height: 95,
+              child: ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: InkWell(
-                  onTap: () {
-                    List<String> images = [];
-                    event.gallery.forEach((element) {
-                      images.add(element);
-                    });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                GalleryPage(images: images, index: index)));
-                  },
-                  child: Hero(
-                    tag: event.gallery[index] + index.toString(),
-                    child: CachedNetworkImage(
-                      height: 95,
-                      imageUrl: event.gallery[index],
-                      placeholder: (context, _) => Container(
-                          width: 100,
-                          child: Center(child: CupertinoActivityIndicator())),
-                      errorWidget: (context, _, __) => Container(
-                          width: 100, child: Center(child: Icon(Icons.error))),
+                scrollDirection: Axis.horizontal,
+                itemCount: event.gallery.length,
+                itemBuilder: (context, index) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: InkWell(
+                    onTap: () {
+                      List<String> images = [];
+                      event.gallery.forEach((element) {
+                        images.add(element);
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  GalleryPage(images: images, index: index)));
+                    },
+                    child: Hero(
+                      tag: event.gallery[index] + index.toString(),
+                      child: CachedNetworkImage(
+                        height: 95,
+                        imageUrl: event.gallery[index],
+                        placeholder: (context, _) => Container(
+                            width: 100,
+                            child: Center(child: CupertinoActivityIndicator())),
+                        errorWidget: (context, _, __) => Container(
+                            width: 100,
+                            child: Center(child: Icon(Icons.error))),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 15),
-        ],
+            SizedBox(height: 15),
+          ],
+        ),
       ),
     );
   }

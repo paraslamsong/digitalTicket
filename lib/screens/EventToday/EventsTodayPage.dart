@@ -1,6 +1,7 @@
 import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'package:fahrenheit/screens/EventToday/Streams/AllEventsStream.dart';
 import 'package:fahrenheit/screens/EventToday/Widgets/AllEvents.dart';
+import 'package:fahrenheit/screens/EventToday/Widgets/PopularArtists.dart';
 import 'package:fahrenheit/screens/EventToday/Widgets/TodaysEvents.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:fahrenheit/screens/Profile/Profile.dart';
@@ -65,6 +66,7 @@ class EventsTodayPage extends StatelessWidget {
           shrinkWrap: false,
           children: [
             eventToday(context),
+            popularArtist(context),
             StreamBuilder<Events>(
               stream: allEventsModelBuilder.stateStream,
               builder: (context, snapshot) {
