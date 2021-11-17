@@ -10,7 +10,6 @@ class Event {
   var user;
   String club;
   var likes;
-
   fromAllMap(dynamic json) {
     id = json['id'];
     eventTitle = json['event_title'] ?? "";
@@ -35,6 +34,19 @@ class Event {
     user = 0;
     club = json['club'];
     likes = 0;
+  }
+
+  fromFeaturedMap(json) {
+    this.id = json['event_id'];
+    this.eventTitle = json['featured_title'];
+    this.description = json['event_title'];
+    this.location = json['location'];
+    this.startDate = DateTime.now();
+    this.endDate = DateTime.now();
+    this.image = json['picture'];
+    this.user = null;
+    this.club = "";
+    this.likes = 0;
   }
 }
 
@@ -75,5 +87,20 @@ class Events {
         this.hasNext = result['next'] != null ? true : false;
       }
     }
+  }
+
+  Future<Events> fetchFeaturedEvent(BuildContext context) async {
+    Response response = await HTTP()
+        .get(path: "feature-event/", context: context, useToken: false);
+    if (response.statusCode == 200) {
+      var result = response.data;
+      this.events = [];
+      result.forEach((element) {
+        Event event = Event();
+        event.fromFeaturedMap(element);
+        events.add(event);
+      });
+    }
+    return this;
   }
 }
