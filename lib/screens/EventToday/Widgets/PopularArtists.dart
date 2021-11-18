@@ -16,8 +16,7 @@ Widget popularArtist(BuildContext context) {
         padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 5),
         child: Text(
           "POPULAR ARTIST",
-          style: TextStyle(
-              fontFamily: "SF Pro", color: Color(0xffF6F5FC), fontSize: 26),
+          style: Theme.of(context).textTheme.headline1,
         ),
       ),
       SizedBox(height: 17),
@@ -76,11 +75,10 @@ Widget popularArtist(BuildContext context) {
                         Text(
                           artists[index].name,
                           maxLines: 2,
-                          style: GoogleFonts.openSans(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 10,
-                            height: 1.4,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(color: Colors.white.withOpacity(0.8)),
                           textAlign: TextAlign.center,
                         ),
                       ],

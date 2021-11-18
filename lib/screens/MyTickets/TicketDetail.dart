@@ -71,19 +71,12 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                           children: [
                             Text(
                               widget.ticket.title,
-                              style: TextStyle(
-                                  fontFamily: "SF Pro",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18.0),
+                              style: Theme.of(context).textTheme.headline2,
                             ),
                             SizedBox(height: 5.0),
                             Text(
                               "${DateFormat('EEEE').format(widget.ticket.date)}, ${DateFormat('hh:mmaa').format(widget.ticket.date).toLowerCase()}",
-                              style: TextStyle(
-                                  fontFamily: "SF Pro",
-                                  color: Colors.white,
-                                  fontSize: 10.0),
+                              style: Theme.of(context).textTheme.bodyText2,
                             ),
                             SizedBox(height: 3.0),
                             Row(
@@ -91,14 +84,20 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                                 Image(
                                   image:
                                       AssetImage("assets/icons/location.png"),
-                                  width: 7,
-                                  height: 10,
+                                  width: 8,
+                                  height: 11,
                                 ),
                                 SizedBox(width: 4),
                                 Text(
                                   widget.ticket.location,
-                                  style: GoogleFonts.poppins(
-                                      color: Color(0xff46C2FF), fontSize: 7.0),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                        fontFamily:
+                                            GoogleFonts.poppins().fontFamily,
+                                        color: Color(0xff46C2FF),
+                                      ),
                                 ),
                               ],
                             ),
@@ -114,12 +113,12 @@ class _YourTicketPageState extends State<TicketDetailPage> {
           SizedBox(height: 30.0),
           Center(
             child: Text(
-                "${DateFormat('dd.MM.yy').format(widget.ticket.date)} at ${DateFormat('hh.mmaa').format(widget.ticket.date)}",
-                style: TextStyle(
+              "${DateFormat('dd.MM.yy').format(widget.ticket.date)} at ${DateFormat('hh.mmaa').format(widget.ticket.date)}",
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
                     fontFamily: "Helvetica Neue",
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12)),
+                  ),
+            ),
           ),
           SizedBox(height: 20.0),
           Container(
@@ -144,19 +143,17 @@ class _YourTicketPageState extends State<TicketDetailPage> {
               SizedBox(height: 20.0),
               Text(
                 widget.ticket.userName,
-                style: TextStyle(
-                  fontFamily: "Helvetica Neue",
-                  color: Colors.white,
-                  fontSize: 13.0,
-                ),
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontFamily: "Helvetica Neue",
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
               Text(
                 widget.ticket.ticketNumber,
-                style: TextStyle(
-                    fontFamily: "Helvetica Neue",
-                    color: Colors.white,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500),
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      fontFamily: "Helvetica Neue",
+                      fontWeight: FontWeight.w500,
+                    ),
               )
             ],
           ),

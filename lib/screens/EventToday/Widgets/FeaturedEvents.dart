@@ -22,11 +22,7 @@ class _FeaturedEventsState extends State<FeaturedEvents> {
           padding: EdgeInsets.only(left: 16.0, right: 16.0),
           child: Text(
             "FEATURED EVENT",
-            style: TextStyle(
-              fontFamily: "SF Pro",
-              fontSize: 26.0,
-              color: Colors.white,
-            ),
+            style: Theme.of(context).textTheme.headline1,
           ),
         ),
         SizedBox(height: 15.0),
@@ -76,47 +72,49 @@ class _FeaturedEventsState extends State<FeaturedEvents> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: CachedNetworkImage(
-                    imageUrl: event.image,
-                    height: 130.0,
-                    width: 195.0,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>
-                        Center(child: Icon(Icons.error)),
+                  child: Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: event.image,
+                        height: 130.0,
+                        width: 195.0,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                            Center(child: Icon(Icons.error)),
+                      ),
+                      Container(
+                        color: Colors.black45,
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //Featured Events Title
                       Text(
                         event.eventTitle,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11.0,
-                        ),
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       SizedBox(height: 5.0),
                       Row(
                         children: [
-                          Icon(
-                            Icons.location_on,
-                            color: const Color(0xffb74093),
-                            size: 8.0,
+                          Image(
+                            image: AssetImage("assets/icons/location.png"),
+                            width: 8,
+                            height: 11,
                           ),
-                          //Featured Events Location
+                          SizedBox(width: 4),
                           Text(
-                            "$CLUB_NAME, ${event.location}",
-                            style: TextStyle(
-                              color: const Color(0xff46C2FF),
-                              fontSize: 7.0,
-                            ),
+                            "${event.location}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(color: Color(0xff46C2FF)),
                           ),
                         ],
                       ),
@@ -128,6 +126,8 @@ class _FeaturedEventsState extends State<FeaturedEvents> {
           ),
           TextButton(
             style: ButtonStyle(
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16))),
               padding: MaterialStateProperty.all(EdgeInsets.zero),
               backgroundColor: MaterialStateProperty.all(Colors.transparent),
             ),

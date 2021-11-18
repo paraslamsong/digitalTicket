@@ -121,12 +121,13 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
             style: GoogleFonts.openSans().copyWith(
                 color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
           ),
+          SizedBox(height: 5),
           Text(
             event.organizer + ", " + event.location,
             style: GoogleFonts.openSans()
                 .copyWith(color: Colors.white.withOpacity(0.8), fontSize: 13),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 3),
           Text(
             DateFormat("dd/MM/yyyy, HH:mm").format(event.startDate) +
                 " - " +
@@ -166,9 +167,10 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                   Expanded(
                     child: Text(
                       event.description,
+                      maxLines: 9,
                       style: GoogleFonts.openSans(
                         color: Colors.white.withOpacity(0.8),
-                        fontSize: 10,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -261,7 +263,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                                 .toStringAsFixed(0),
                         style: GoogleFonts.openSans(
                             color: Colors.white.withOpacity(0.9),
-                            fontSize: 18,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600),
                       ),
                       Spacer(),
@@ -300,8 +302,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                       EdgeInsets.symmetric(horizontal: 20).copyWith(top: 5),
                   child: Text(
                     "Guest Artists",
-                    style: GoogleFonts.openSans(
-                        color: Colors.white.withOpacity(0.8), fontSize: 13),
+                    style: Theme.of(context).textTheme.headline2.copyWith(
+                        fontFamily: GoogleFonts.openSans().fontFamily),
                   ),
                 ),
                 Container(
@@ -347,11 +349,12 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                           Text(
                             event.artists[index].name,
                             maxLines: 2,
-                            style: GoogleFonts.openSans(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 13,
-                              height: 1.4,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                                  fontFamily: GoogleFonts.openSans().fontFamily,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -376,8 +379,10 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
           children: [
             Text(
               "Schedule",
-              style: GoogleFonts.openSans(
-                  color: Colors.white.withOpacity(0.8), fontSize: 13),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2
+                  .copyWith(fontFamily: GoogleFonts.openSans().fontFamily),
             ),
             SizedBox(height: 5),
             ListView.builder(
@@ -391,15 +396,15 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                     children: [
                       Text(
                         schedules[index].name,
-                        style: GoogleFonts.openSans(
-                            color: Colors.white.withOpacity(0.9), fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontFamily: GoogleFonts.openSans().fontFamily),
                       ),
                       Spacer(),
                       Text(
                         DateFormat("dd/M/yyyy, HH:MM")
                             .format(schedules[index].startDate),
-                        style: GoogleFonts.openSans(
-                            color: Colors.white.withOpacity(0.9), fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontFamily: GoogleFonts.openSans().fontFamily),
                       ),
                     ],
                   ),
@@ -423,8 +428,10 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 "Event Images",
-                style: GoogleFonts.openSans(
-                    color: Colors.white.withOpacity(0.8), fontSize: 13),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    .copyWith(fontFamily: GoogleFonts.openSans().fontFamily),
               ),
             ),
             SizedBox(height: 15),

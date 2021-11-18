@@ -121,6 +121,7 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 appBarTheme: AppBarTheme(
                   backgroundColor: Colors.transparent,
+                  iconTheme: IconThemeData(color: Colors.white),
                   titleTextStyle: GoogleFonts.poppins(
                       fontSize: 23, fontWeight: FontWeight.w600),
                   elevation: 0,
@@ -130,10 +131,24 @@ class MyApp extends StatelessWidget {
                 primaryColor: mainColor,
                 secondaryHeaderColor: Color(0xff2EBBA1),
                 textTheme: TextTheme(
-                  bodyText1: TextStyle(color: Colors.white),
-                  bodyText2: TextStyle(color: Colors.white),
+                  bodyText1: TextStyle(
+                      color: Colors.white, fontSize: 13, fontFamily: "Sf Pro"),
+                  bodyText2: TextStyle(
+                      color: Colors.white, fontSize: 10, fontFamily: "SF Pro"),
                   subtitle1: TextStyle(color: Colors.white),
                   subtitle2: TextStyle(color: Colors.white),
+                  headline1: TextStyle(
+                    fontSize: 25,
+                    fontFamily: "SF Pro",
+                    color: Color(0xffF6F5FC),
+                    fontWeight: FontWeight.normal,
+                  ),
+                  headline2: TextStyle(
+                    fontSize: 18,
+                    fontFamily: "SF Pro",
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 inputDecorationTheme: InputDecorationTheme(
                   isDense: true,
@@ -148,11 +163,12 @@ class MyApp extends StatelessWidget {
                 visualDensity: VisualDensity.compact,
                 textButtonTheme: TextButtonThemeData(
                   style: ButtonStyle(
-                    overlayColor:
-                        MaterialStateProperty.all(Colors.red.withOpacity(0.4)),
+                    overlayColor: MaterialStateProperty.all(
+                        mainPrimaryColor.withOpacity(0.4)),
                     padding: MaterialStateProperty.all(
                         EdgeInsets.symmetric(horizontal: 20, vertical: 20)),
-                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    backgroundColor:
+                        MaterialStateProperty.all(mainPrimaryColor),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0))),
                   ),
@@ -166,7 +182,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Color mainColor = Color(0xffE82D30);
+Color mainColor = Color(0xff1DAEEF);
 Map<int, Color> maincolor = {
   50: mainColor.withOpacity(.1),
   100: mainColor.withOpacity(.2),

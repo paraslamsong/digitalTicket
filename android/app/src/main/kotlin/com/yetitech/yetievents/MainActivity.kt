@@ -1,4 +1,4 @@
-package com.fahrenheit
+package com.yetitech.yetievents
 
 import io.flutter.embedding.android.FlutterActivity
 

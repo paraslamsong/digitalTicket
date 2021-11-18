@@ -18,11 +18,7 @@ class AllEvents extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             "ALL EVENTS",
-            style: TextStyle(
-              fontFamily: "SF Pro",
-              fontSize: 26.0,
-              color: Colors.white,
-            ),
+            style: Theme.of(context).textTheme.headline1,
           ),
         ),
         SizedBox(height: 20.0),
@@ -32,14 +28,6 @@ class AllEvents extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) =>
               _allEvents(this.events.events[index], context),
-        ),
-        Visibility(
-          visible: !events.hasNext,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            alignment: Alignment.center,
-            child: Text("--- End ---"),
-          ),
         ),
       ],
     );
@@ -80,27 +68,17 @@ class AllEvents extends StatelessWidget {
                       Text(
                         event.eventTitle,
                         maxLines: 1,
-                        style: TextStyle(
-                          fontFamily: "SF Pro",
-                          color: Colors.white,
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       SizedBox(height: 6),
                       Expanded(
                         child: Text(
                           event.description,
-                          maxLines: 6,
-                          style: TextStyle(
-                            fontFamily: "SF Pro",
-                            fontSize: 7.0,
-                            color: Colors.white,
-                          ),
+                          maxLines: 3,
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
                       SizedBox(height: 6),
-                      //All Events Time
                       Text(
                         event.startDate.isAfter(
                                 DateTime.now().subtract(Duration(days: 1)))
@@ -108,28 +86,23 @@ class AllEvents extends StatelessWidget {
                                 .format(event.startDate)
                             : DateFormat("EEEE, MMM dd, yyyy, hh:mmaa")
                                 .format(event.startDate),
-                        style: TextStyle(
-                          fontFamily: "SF Pro",
-                          color: Colors.white,
-                          fontSize: 9.0,
-                        ),
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                       SizedBox(height: 6),
                       Row(
                         children: [
                           Image(
                             image: AssetImage("assets/icons/location.png"),
-                            width: 7,
-                            height: 10,
+                            width: 8,
+                            height: 11,
                           ),
                           SizedBox(width: 3),
-                          //All Events Location
                           Text(
                             "${event.location}",
-                            style: TextStyle(
-                                fontFamily: "SF Pro",
-                                color: const Color(0xff46C2FF),
-                                fontSize: 6.0),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(color: Color(0xff46C2FF)),
                           ),
                         ],
                       ),

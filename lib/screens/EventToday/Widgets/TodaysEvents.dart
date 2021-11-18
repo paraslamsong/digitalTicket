@@ -17,7 +17,7 @@ Widget eventToday(BuildContext context) {
         child: Text(
           "TODAY",
           style: GoogleFonts.sourceSansPro(
-            fontSize: 68.0,
+            fontSize: 50.0,
             color: Colors.white,
             letterSpacing: -2,
           ),
@@ -86,8 +86,6 @@ Widget _eventSlideShow(BuildContext context, Event event) {
             height: 200,
             width: double.infinity,
             fit: BoxFit.cover,
-            color: Colors.black45,
-            colorBlendMode: BlendMode.overlay,
             placeholder: (context, _) => Center(
               child: CupertinoActivityIndicator(),
             ),
@@ -110,19 +108,15 @@ Widget _eventSlideShow(BuildContext context, Event event) {
                 Text(
                   event.eventTitle,
                   maxLines: 2,
-                  style: TextStyle(
-                    color: Color(0xffF6F5FC),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    fontFamily: "SF Pro",
-                  ),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
+                SizedBox(height: 5),
                 Text(
                   DateFormat("EEEE, hh:mma")
                       .format(DateTime.parse(event.startDate.toString())),
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10.0,
+                    fontSize: 13.0,
                     fontFamily: "SF Pro",
                   ),
                 ),
@@ -133,8 +127,8 @@ Widget _eventSlideShow(BuildContext context, Event event) {
                       image: AssetImage(
                         "assets/icons/location.png",
                       ),
-                      width: 7,
-                      height: 10,
+                      width: 10,
+                      height: 12,
                     ),
                     SizedBox(width: 6),
                     Text(
@@ -142,7 +136,7 @@ Widget _eventSlideShow(BuildContext context, Event event) {
                       style: TextStyle(
                           fontFamily: "SF Pro",
                           color: Color(0xff46C2FF),
-                          fontSize: 8.0),
+                          fontSize: 12.0),
                     ),
                   ],
                 ),
@@ -180,7 +174,7 @@ Widget _calendarBox(DateTime date) {
     top: 20,
     left: -13,
     child: Container(
-      padding: EdgeInsets.all(2),
+      padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
         gradient: LinearGradient(
@@ -199,7 +193,7 @@ Widget _calendarBox(DateTime date) {
         style: TextStyle(
           fontFamily: "SF Pro",
           color: Color(0xffF4F4F4),
-          fontSize: 11,
+          fontSize: 12,
         ),
       ),
     ),
