@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fahrenheit/screens/ArtistList/ArtistList.dart';
 import 'package:fahrenheit/screens/EventToday/Models/Artists.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,13 @@ Widget popularArtist(BuildContext context) {
                             borderRadius: BorderRadius.circular(60),
                           ),
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ArtistListScreen(artists[index].id)));
+                            },
                             borderRadius: BorderRadius.circular(60),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(60),

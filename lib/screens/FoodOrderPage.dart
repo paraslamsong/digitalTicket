@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fahrenheit/screens/PayWithPage.dart';
+import 'package:fahrenheit/screens/BuyTicket/Ticket.dart';
 
 class FoodOrderPage extends StatefulWidget {
   @override
@@ -210,7 +210,7 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PayWithPage()),
+                  MaterialPageRoute(builder: (context) => TicketPage()),
                 );
               },
               child: Text(

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:fahrenheit/screens/GalleryView/GalleryView.dart';
-import 'package:fahrenheit/screens/PayWithPage.dart';
+import 'package:fahrenheit/screens/BuyTicket/Ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -275,12 +275,9 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
           ),
           SizedBox(width: 18),
           TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xff2FBCA1)),
-              ),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PayWithPage()));
+                    MaterialPageRoute(builder: (context) => TicketPage()));
               },
               child: Text("Buy ticket",
                   style: GoogleFonts.openSans(
