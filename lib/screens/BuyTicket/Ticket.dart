@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fahrenheit/model/User.dart';
+import 'package:fahrenheit/screens/BuyTicket/Model/TicketModel.dart';
+import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TicketPage extends StatefulWidget {
+  final List<Rate> tickets;
+  TicketPage(this.tickets);
   @override
   _PayWithPageState createState() => _PayWithPageState();
 }
@@ -15,9 +20,16 @@ class _PayWithPageState extends State<TicketPage> {
   int people = 1;
   String ticketType = "Regular pass (Rs. 3400)";
   List<TextEditingController> controllers =
-      List<TextEditingController>.generate(3, (i) => TextEditingController());
-
+      List<TextEditingController>.generate(
+          3, (i) => TextEditingController(text: ""));
+  Rate _selectedTicket = Rate();
+  TicketModel _ticketModel = TicketModel();
+  PaymentType _paymentType = PaymentType.Khalti;
   int _currentIndex = 0;
+
+  bool isLoggedIn = User().getAcess() == "";
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,29 +88,52 @@ class _PayWithPageState extends State<TicketPage> {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _information(
-              context,
-              icon: AssetImage("assets/icons/userIcon.png"),
-              hintText: "First Name",
-              controller: controllers[0],
-            ),
-            _information(
-              context,
-              hintText: "Email",
-              icon: AssetImage("assets/icons/emailIcon.png"),
-              controller: controllers[1],
-            ),
-            _information(
-              context,
-              hintText: "Phone",
-              icon: AssetImage("assets/icons/phoneIcon.png"),
-              controller: controllers[2],
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _information(
+                context,
+                icon: AssetImage("assets/icons/userIcon.png"),
+                hintText: "First Name",
+                controller: controllers[0],
+                // ignore: missing_return
+                validator: (value) {
+                  if (value == "")
+                    return "This field cannot be empty";
+                  else if (!value.contains(" ")) return "Enter Full name";
+                },
+              ),
+              _information(
+                context,
+                hintText: "Email",
+                icon: AssetImage("assets/icons/emailIcon.png"),
+                controller: controllers[1],
+                // ignore: missing_return
+                validator: (value) {
+                  if (value == "")
+                    return "This field cannot be empty";
+                  else if (!RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                      .hasMatch(value)) return "Enter valid email";
+                },
+              ),
+              _information(
+                context,
+                hintText: "Phone",
+                icon: AssetImage("assets/icons/phoneIcon.png"),
+                controller: controllers[2],
+                // ignore: missing_return
+                validator: (value) {
+                  if (value == "")
+                    return "This field cannot be empty";
+                  else if (value.length < 6) return "Enter valid phone number";
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -111,6 +146,7 @@ class _PayWithPageState extends State<TicketPage> {
     String hintText,
     List<TextInputFormatter> inputFormatters,
     int maxLength,
+    String Function(String) validator,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -154,6 +190,7 @@ class _PayWithPageState extends State<TicketPage> {
           filled: true,
           fillColor: Colors.black,
         ),
+        validator: validator,
       ),
     );
   }
@@ -196,8 +233,16 @@ class _PayWithPageState extends State<TicketPage> {
       child: ListView(
         shrinkWrap: true,
         children: [
-          userInfo(),
-          SizedBox(height: 36),
+          Visibility(
+            visible: !isLoggedIn,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                userInfo(),
+                SizedBox(height: 36),
+              ],
+            ),
+          ),
           Text(
             "Select Ticket",
             style: TextStyle(
@@ -207,7 +252,7 @@ class _PayWithPageState extends State<TicketPage> {
             ),
           ),
           GridView.builder(
-            itemCount: 4,
+            itemCount: widget.tickets.length,
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.symmetric(vertical: 18, horizontal: 5),
             shrinkWrap: true,
@@ -228,8 +273,7 @@ class _PayWithPageState extends State<TicketPage> {
                         height: double.infinity,
                         width: double.infinity,
                         fit: BoxFit.fill,
-                        imageUrl:
-                            "https://steamcdn-a.akamaihd.net/apps/570/icons/econ/leagues/subscriptions_nepal_inhouse_league_large.5fbedc293a72fbffa7e52af77c9aec71e7dcccf9.png",
+                        imageUrl: widget.tickets[index].image,
                       ),
                     ),
                     TextButton(
@@ -240,20 +284,38 @@ class _PayWithPageState extends State<TicketPage> {
                           backgroundColor:
                               MaterialStateProperty.all(Colors.transparent)),
                       child: Container(),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _selectedTicket = widget.tickets[index];
+                        });
+                      },
                     ),
-                    Positioned(
-                      top: -15,
-                      right: -15,
-                      child: Checkbox(
-                        fillColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColor),
-                        value: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
+                    Visibility(
+                      visible: _selectedTicket == widget.tickets[index],
+                      child: Positioned(
+                        top: -15,
+                        right: -15,
+                        child: Checkbox(
+                          fillColor: MaterialStateProperty.all(
+                              Theme.of(context).primaryColor),
+                          value: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
                         ),
                       ),
                     ),
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(color: Colors.black54),
+                        child: Text(
+                          widget.tickets[index].name,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               );
@@ -288,7 +350,7 @@ class _PayWithPageState extends State<TicketPage> {
                     child: Row(
                       children: [
                         Text(
-                          "VVIP PACKAGE",
+                          _selectedTicket.name,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -297,7 +359,7 @@ class _PayWithPageState extends State<TicketPage> {
                         ),
                         Spacer(),
                         Text(
-                          "रू 3000",
+                          "रू ${_selectedTicket.rate.toStringAsFixed(2)}",
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
@@ -308,12 +370,23 @@ class _PayWithPageState extends State<TicketPage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  _infoDetail(context,
-                      icon: "assets/icons/user.png", value: "Yeti Tech"),
-                  _infoDetail(context,
-                      icon: "assets/icons/email.png", value: "yeti@gmail.com"),
-                  _infoDetail(context,
-                      icon: "assets/icons/phone.png", value: "9814373666"),
+                  Visibility(
+                    visible: !isLoggedIn,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _infoDetail(context,
+                            icon: "assets/icons/user.png",
+                            value: controllers[0].text ?? ""),
+                        _infoDetail(context,
+                            icon: "assets/icons/email.png",
+                            value: controllers[1].text ?? ""),
+                        _infoDetail(context,
+                            icon: "assets/icons/phone.png",
+                            value: controllers[2].text ?? ""),
+                      ],
+                    ),
+                  ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(
@@ -342,54 +415,18 @@ class _PayWithPageState extends State<TicketPage> {
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
-          GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            childAspectRatio: 90 / 65,
-            crossAxisSpacing: 40,
-            children: [
-              _paymentButton(
-                context,
-                icon: "assets/icons/imepay.png",
-                isSelected: true,
-                onPressed: () {},
-              ),
-              _paymentButton(
-                context,
-                icon: "assets/icons/esewaicon.png",
-                isSelected: false,
-                onPressed: () {},
-              ),
-              _paymentButton(
-                context,
-                icon: "assets/icons/prabhu.png",
-                isSelected: false,
-                onPressed: () {},
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
           Center(
-            child: TextButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  Color(0xff1C1C1E),
-                ),
-              ),
-              child: Text(
-                "Other Option",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "SF Pro Display",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
+            child: _paymentButton(
+              context,
+              icon: "assets/icons/khalti.jpg",
+              isSelected: true,
+              onPressed: () {
+                setState(() {
+                  _paymentType = PaymentType.Khalti;
+                });
+              },
             ),
           ),
-          SizedBox(height: 20),
         ],
       ),
     );
@@ -421,17 +458,24 @@ class _PayWithPageState extends State<TicketPage> {
   Widget _paymentButton(BuildContext context,
       {String icon, bool isSelected, Function() onPressed}) {
     return Container(
+      width: 100,
+      height: 60,
       padding: EdgeInsets.zero,
       child: Stack(
         fit: StackFit.expand,
         alignment: Alignment.center,
         children: [
-          Image(
-            fit: BoxFit.cover,
-            image: AssetImage(icon),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Image(
+              fit: BoxFit.cover,
+              image: AssetImage(icon),
+            ),
           ),
           TextButton(
             style: ButtonStyle(
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15))),
               backgroundColor: MaterialStateProperty.all(Colors.transparent),
             ),
             onPressed: onPressed,
@@ -474,7 +518,17 @@ class _PayWithPageState extends State<TicketPage> {
             width: 100,
             child: TextButton(
               onPressed: () {
-                setState(() {
+                if (!isLoggedIn) {
+                  if (!_formKey.currentState.validate()) return;
+                }
+                if (_selectedTicket.id == 0) {
+                  final snackBar =
+                      SnackBar(content: Text("Select ticket please"));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  return;
+                }
+
+                return setState(() {
                   _currentIndex = 1;
                 });
                 // Navigator.push(
@@ -519,12 +573,20 @@ class _PayWithPageState extends State<TicketPage> {
             width: 100,
             child: TextButton(
               onPressed: () {
-                setState(() {
-                  _currentIndex = 1;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyTicket()),
+                _ticketModel.saveData(
+                  name: controllers[0].text,
+                  email: controllers[1].text,
+                  phone: controllers[2].text,
+                );
+                _ticketModel.payNow(
+                  context: context,
+                  paymentType: _paymentType,
+                  onSuccess: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyTicket()));
+                  },
                 );
               },
               child: Text(

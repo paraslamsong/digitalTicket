@@ -208,10 +208,10 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
                 borderRadius: BorderRadius.all(Radius.circular(20))),
             child: TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TicketPage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => TicketPage()),
+                // );
               },
               child: Text(
                 "Order Now",

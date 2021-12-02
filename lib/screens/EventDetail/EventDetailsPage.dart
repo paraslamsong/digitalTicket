@@ -259,11 +259,11 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                       ),
                       Text(
                         "रू " +
-                            double.parse(event.rates[index].rate)
-                                .toStringAsFixed(0),
+                            double.parse(event.rates[index].rate.toString())
+                                .toStringAsFixed(2),
                         style: GoogleFonts.openSans(
                             color: Colors.white.withOpacity(0.9),
-                            fontSize: 13,
+                            fontSize: 11,
                             fontWeight: FontWeight.w600),
                       ),
                       Spacer(),
@@ -276,8 +276,10 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
           SizedBox(width: 18),
           TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TicketPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TicketPage(event.rates)));
               },
               child: Text("Buy ticket",
                   style: GoogleFonts.openSans(

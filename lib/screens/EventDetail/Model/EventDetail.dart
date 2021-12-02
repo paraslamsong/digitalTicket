@@ -16,12 +16,14 @@ class Artist {
 }
 
 class Rate {
-  int id;
-  String name, rate;
+  int id = 0;
+  String name = "", image = "";
+  double rate = 0.0;
   fromMap(json) {
     this.id = json['id'];
     this.name = json['title'];
     this.rate = json['rate'];
+    this.image = json['image'];
   }
 }
 
