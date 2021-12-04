@@ -26,10 +26,14 @@ class _PayWithPageState extends State<TicketPage> {
   TicketModel _ticketModel = TicketModel();
   PaymentType _paymentType = PaymentType.Khalti;
   int _currentIndex = 0;
-
-  bool isLoggedIn = User().getAcess() == "";
-
   final _formKey = GlobalKey<FormState>();
+
+  bool isLoggedIn = (User().getAcess() != "");
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -578,16 +582,17 @@ class _PayWithPageState extends State<TicketPage> {
                   email: controllers[1].text,
                   phone: controllers[2].text,
                 );
-                _ticketModel.payNow(
-                  context: context,
-                  paymentType: _paymentType,
-                  onSuccess: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyTicket()));
-                  },
-                );
+                // _ticketModel.payNow(
+                //   context: context,
+                //   paymentType: _paymentType,
+                //   onSuccess: () {
+                //     Navigator.pop(context);
+                //     Navigator.pop(context);
+                //     Navigator.push(context,
+                //         MaterialPageRoute(builder: (context) => MyTicket()));
+                //   },
+                // );
+                _ticketModel.bookTicket(context, _selectedTicket.id);
               },
               child: Text(
                 "Pay Now",

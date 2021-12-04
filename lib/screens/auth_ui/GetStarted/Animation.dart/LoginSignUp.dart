@@ -1,3 +1,4 @@
+import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/SignUp/TabView.dart';
 import 'package:fahrenheit/screens/auth_ui/log_in_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,47 +41,61 @@ class LoginSignUpState extends State<LoginSignUp>
       duration: Duration(milliseconds: 800),
       child: FadeTransition(
         opacity: opacity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
           children: [
-            Hero(
-              tag: "LoginBtn",
-              child: TextButton(
-                style: ButtonStyle(),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return LogInScreen();
-                      },
-                    ),
-                  );
-                },
-                child: Text(
-                  "LOG IN",
-                  style: TextStyle(color: Colors.white, fontSize: 13.0),
-                ),
-              ),
-            ),
-            SizedBox(width: 20),
-            TextButton(
-              style: ButtonStyle(),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return TabView();
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Hero(
+                  tag: "LoginBtn",
+                  child: TextButton(
+                    style: ButtonStyle(),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return LogInScreen();
+                          },
+                        ),
+                      );
                     },
+                    child: Text(
+                      "LOG IN",
+                      style: TextStyle(color: Colors.white, fontSize: 13.0),
+                    ),
                   ),
-                );
-              },
-              child: Text(
-                "SIGN UP",
-                style: TextStyle(color: Colors.white, fontSize: 13.0),
-              ),
+                ),
+                SizedBox(width: 20),
+                TextButton(
+                  style: ButtonStyle(),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return TabView();
+                        },
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "SIGN UP",
+                    style: TextStyle(color: Colors.white, fontSize: 13.0),
+                  ),
+                ),
+              ],
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => EventsTodayPage()));
+              },
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent)),
+              child: Text("Skip Now"),
+            )
           ],
         ),
       ),

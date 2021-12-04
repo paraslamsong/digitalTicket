@@ -21,7 +21,7 @@ class ArtistListScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.headline1,
             ),
           ),
-          commingSoonEvents(context),
+          commingSoonEvents(context, this.id),
           SizedBox(height: 30),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -31,7 +31,7 @@ class ArtistListScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 30),
-          PastEvents(),
+          PastEvents(this.id),
         ],
       ),
     );

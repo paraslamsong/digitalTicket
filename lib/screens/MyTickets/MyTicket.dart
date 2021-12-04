@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
+import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/MyTickets/Model/Tickets.dart';
 import 'package:fahrenheit/screens/MyTickets/TicketDetail.dart';
 import 'package:fahrenheit/screens/utils/OverLayLoader.dart';

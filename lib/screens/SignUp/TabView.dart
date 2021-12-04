@@ -82,7 +82,6 @@ class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
               onNextPage: () {
                 user.setUserDetails(
                   firstName: _controllers[0].text,
-                  lastName: _controllers[1].text,
                   email: _controllers[2].text,
                   gender: gender,
                   password: _controllers[3].text,

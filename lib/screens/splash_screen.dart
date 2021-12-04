@@ -54,27 +54,6 @@ class _SplashPageState extends State<SplashPage> {
           Image.asset("images/logo.png"),
         ],
       ),
-      /*  body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.blue,
-        child: BlocProvider(
-          create: (_) => _splashBloc,
-          child: BlocListener<SplashBloc, SplashState>(
-            listener: (context, state) {
-              if (state is SplashLoaded) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => DashboardPage(),
-                  ),
-                );
-              }
-            },
-            child: _buildSplashWidget(),
-          ),
-        ),
-      ),*/
     );
   }
 
@@ -85,11 +64,6 @@ class _SplashPageState extends State<SplashPage> {
         this.token = userToken;
       });
     }
-    /*if (_isAppOpened != null) {
-      setState(() {
-        this._isAppOpened = _isAppOpened;
-      });
-    }*/
   }
 }
 

@@ -1,20 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fahrenheit/screens/ArtistList/Model/Events.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
-import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
-Widget commingSoonEvents(BuildContext context) {
+Widget commingSoonEvents(BuildContext context, int id) {
   final Events events = new Events();
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       SizedBox(height: 20.0),
       FutureBuilder(
-        future: events.fetchTodaysEvent(),
+        future: events.fetchComingEvent(context, id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = snapshot.data.events;

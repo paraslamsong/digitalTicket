@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:fahrenheit/screens/auth_ui/log_in_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Session {}
 
 class User {
-  String _access, _refresh;
+  String _access = "", _refresh = "";
   User._privateConstructor();
   static final User _instance = User._privateConstructor();
   factory User() {
@@ -51,5 +53,16 @@ class User {
     } catch (e) {
       return false;
     }
+  }
+
+  logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    this._refresh = "";
+    this._access = "";
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LogInScreen()),
+    );
   }
 }

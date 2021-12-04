@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fahrenheit/constraints/constants.dart';
+import 'package:fahrenheit/screens/ArtistList/Model/Events.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
-import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PastEvents extends StatefulWidget {
+  final int id;
+  PastEvents(this.id);
   @override
   _PastEventsState createState() => _PastEventsState();
 }
@@ -15,8 +17,16 @@ class _PastEventsState extends State<PastEvents> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: events.fetchFeaturedEvent(context),
+      future: events.fetchFeaturedEvent(context, widget.id),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: 2,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            itemBuilder: (context, index) => _loading(),
+          );
         if (snapshot.hasData) {
           var data = snapshot.data.events;
           return ListView.builder(
@@ -27,13 +37,8 @@ class _PastEventsState extends State<PastEvents> {
               itemBuilder: (context, index) {
                 return _featuredEvent(data[index]);
               });
-        } else if (snapshot.hasError) {
+        } else
           return Text(snapshot.error);
-        } else {
-          return Center(
-            child: CupertinoActivityIndicator(),
-          );
-        }
       },
     );
   }
@@ -42,7 +47,7 @@ class _PastEventsState extends State<PastEvents> {
     return Container(
       height: 170.0,
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Stack(
         children: [
           ClipRRect(
@@ -121,6 +126,23 @@ class _PastEventsState extends State<PastEvents> {
             child: Container(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _loading() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey,
+        highlightColor: Colors.grey.withOpacity(0.6),
+        child: Container(
+          height: 170,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
       ),
     );
   }

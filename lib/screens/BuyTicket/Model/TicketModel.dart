@@ -1,7 +1,17 @@
+import 'package:dio/dio.dart';
+import 'package:fahrenheit/api/HTTP.dart';
+import 'package:fahrenheit/model/User.dart';
+import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 
 enum PaymentType { Khalti }
+
+String getPaymentKey(PaymentType type) {
+  if (type == PaymentType.Khalti) return "khalti";
+  return "";
+}
 
 class TicketModel {
   String fullName, email, phone;
@@ -16,6 +26,7 @@ class TicketModel {
   payNow(
       {BuildContext context, PaymentType paymentType, Function() onSuccess}) {
     this.paymentType = paymentType;
+
     if (paymentType == PaymentType.Khalti) {
       final config = PaymentConfig(
         amount: 10000,
@@ -47,5 +58,25 @@ class TicketModel {
     }
   }
 
-  bookTicket() {}
+  bookTicket(BuildContext context, int ticketId) async {
+    Map<String, dynamic> body = {
+      "email": email,
+      "firstName": fullName,
+      "phone": phone,
+      "payment_method": getPaymentKey(paymentType),
+      "access": User().getAcess(),
+      "eventRate": ticketId
+    };
+    Response response = await HTTP().post(
+        context: context, path: "create-ticket/", body: body, useToken: true);
+    if (response.statusCode >= 200 && response.statusCode <= 209) {
+      Fluttertoast.showToast(msg: "Event ticket is booked");
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MyTicket()));
+    } else {
+      Fluttertoast.showToast(msg: "Sorry ticket is not booked");
+    }
+  }
 }

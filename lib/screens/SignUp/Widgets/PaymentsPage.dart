@@ -58,9 +58,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   ),
                   _information(context,
                       icon: ImageIcons.user,
-                      value: this.widget.state.firstName +
-                          " " +
-                          this.widget.state.lastName),
+                      value: this.widget.state.firstName),
                   _information(context,
                       icon: ImageIcons.email, value: this.widget.state.email),
                   SizedBox(height: 20),

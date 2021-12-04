@@ -34,21 +34,16 @@ class SignUp {
   }
 
   Future<void> createUser(BuildContext context, {String otp}) async {
-    // context.loaderOverlay.show();
-
     OverlayLoader(context).show();
     try {
       Response response = await HTTP().post(path: "create-user/", body: {
         "email": this.email,
         "password": this.password,
         "gender": this.gender,
-        "lastName": this.lastName,
         "otp": int.parse(otp),
         "firstName": this.firstName,
       });
       if (response != null) {
-        // context.loaderOverlay.hide();
-
         OverlayLoader(context).hide();
         if (response.statusCode == 200) {
           var json = response.data;
@@ -65,7 +60,6 @@ class SignUp {
       print(response.data);
     } catch (e) {
       OverlayLoader(context).hide();
-      // context.loaderOverlay.hide();
     }
   }
 }

@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   loadData() async {
     await userModel.fetchData();
 
-    controllers[0].text = userModel.firstName + " " + userModel.lastName;
+    controllers[0].text = userModel.firstName;
     controllers[1].text = userModel.email;
     controllers[2].text = userModel.email;
   }
@@ -112,6 +112,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius:
               BorderRadius.vertical(bottom: Radius.elliptical(60, 60)),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              return showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Color(0xFF1C1C1E),
+                  title: Text(
+                    'Do you want to logout?',
+                    style: TextStyle(color: Colors.white, fontSize: 13),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Text('No'),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                        User().logout(context);
+                      },
+                      child: Text(
+                        'Yes',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+              //
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
