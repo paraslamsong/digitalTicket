@@ -64,11 +64,13 @@ class TicketModel {
       "firstName": fullName,
       "phone": phone,
       "payment_method": getPaymentKey(paymentType),
-      "access": User().getAcess(),
       "eventRate": ticketId
     };
+    print(body);
     Response response = await HTTP().post(
         context: context, path: "create-ticket/", body: body, useToken: true);
+
+    print(response.statusCode);
     if (response.statusCode >= 200 && response.statusCode <= 209) {
       Fluttertoast.showToast(msg: "Event ticket is booked");
       Navigator.pop(context);

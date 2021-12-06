@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final List<TextEditingController> controllers =
       List<TextEditingController>.generate(5, (i) => TextEditingController());
-  String image, gender = "Male";
+  String image, gender = "MALE";
 
   @override
   void initState() {
@@ -61,7 +61,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     controllers[0].text = userModel.firstName;
     controllers[1].text = userModel.email;
-    controllers[2].text = userModel.email;
+    controllers[2].text = userModel.phone;
+    controllers[3].text = userModel.dob;
+    controllers[4].text = userModel.location;
+    setState(() {
+      gender = userModel.gender ?? "MALE";
+    });
   }
 
   @override
@@ -70,48 +75,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Color(0xFF1C1C1E),
         title: Text("Profile"),
-        bottom: PreferredSize(
-          preferredSize: Size(double.infinity, 120),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Center(
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      height: 90,
-                      width: 90,
-                      fit: BoxFit.cover,
-                      imageUrl:
-                          "https://images.hindustantimes.com/img/2021/08/20/1600x900/82f2cb26-01e5-11ec-8bb0-cae8e339dabd_1629485044566.jpg",
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: IconButton(
-                      icon: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Icon(Icons.camera),
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.vertical(bottom: Radius.elliptical(60, 60)),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: Size(double.infinity, 120),
+        //   child: Container(
+        //     width: double.infinity,
+        //     padding: EdgeInsets.symmetric(vertical: 20),
+        //     child: Center(
+        //       child: Stack(
+        //         clipBehavior: Clip.none,
+        //         children: [
+        //           ClipRRect(
+        //             borderRadius: BorderRadius.circular(100),
+        //             child: CachedNetworkImage(
+        //               height: 90,
+        //               width: 90,
+        //               fit: BoxFit.cover,
+        //               imageUrl:
+        //                   "https://images.hindustantimes.com/img/2021/08/20/1600x900/82f2cb26-01e5-11ec-8bb0-cae8e339dabd_1629485044566.jpg",
+        //             ),
+        //           ),
+        //           Positioned(
+        //             right: 0,
+        //             bottom: 0,
+        //             child: IconButton(
+        //               icon: Container(
+        //                 decoration: BoxDecoration(
+        //                   color: Theme.of(context).primaryColor,
+        //                   borderRadius: BorderRadius.circular(100),
+        //                 ),
+        //                 child: Icon(Icons.camera),
+        //               ),
+        //               onPressed: () {},
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius:
+        //       BorderRadius.vertical(bottom: Radius.elliptical(60, 60)),
+        // ),
         actions: [
           IconButton(
             onPressed: () {
@@ -189,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         context,
                         hintText: "Phone",
                         icon: AssetImage("assets/icons/phoneIcon.png"),
-                        controller: controllers[1],
+                        controller: controllers[2],
                       ),
                       _information(
                         context,
@@ -225,14 +230,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _genderButton(
                         context,
                         icon: "assets/icons/maleIcon.png",
-                        isSelected: gender == "Male",
+                        isSelected: gender.toUpperCase() == "MALE",
                         title: "Male",
                       ),
                       SizedBox(width: 20),
                       _genderButton(
                         context,
                         icon: "assets/icons/femaleIcon.png",
-                        isSelected: gender == "Female",
+                        isSelected: gender.toUpperCase() == "FEMALE",
                         title: "Female",
                       ),
                     ],
@@ -241,7 +246,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(height: 56),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  userModel.saveChanges(
+                    context,
+                    fullName: controllers[0].text,
+                    email: controllers[1].text,
+                    phone: controllers[2].text,
+                    dob: controllers[3].text,
+                    location: controllers[4].text,
+                    gender: gender,
+                  );
+                },
                 child: Text(
                   "Save",
                   style: TextStyle(color: Colors.white),
@@ -314,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: IconButton(
         onPressed: () {
           setState(() {
-            gender = title;
+            gender = title.toUpperCase();
           });
         },
         iconSize: 85,

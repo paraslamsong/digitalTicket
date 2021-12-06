@@ -249,7 +249,7 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                     MaterialPageRoute(
                         builder: (context) => EventDetailsPage(
                             id: widget.ticket.eventId,
-                            bgImage: widget.ticket.image)),
+                            bgImage: widget.ticket.eventImage)),
                   );
                 },
                 child: Text(

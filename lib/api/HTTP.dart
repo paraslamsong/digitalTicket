@@ -39,7 +39,17 @@ class HTTP {
     Response response;
     print(this._apiBase + path);
     try {
-      response = await Dio().get(this._apiBase + path);
+      if (!useToken)
+        response = await Dio().get(this._apiBase + path);
+      else
+        response = await Dio().get(
+          this._apiBase + path,
+          options: Options(
+            headers: {
+              "Authorization": User().getAcess(),
+            },
+          ),
+        );
     } on DioError catch (e) {
       response = e.response;
 
@@ -65,12 +75,61 @@ class HTTP {
       this._apiBase + path,
     );
     try {
-      response = await Dio().post(this._apiBase + path, data: body);
+      if (!useToken)
+        response = await Dio().post(this._apiBase + path, data: body);
+      else {
+        response = await Dio().post(
+          this._apiBase + path,
+          data: body,
+          options: Options(
+            headers: {
+              "Authorization": User().getAcess(),
+            },
+          ),
+        );
+      }
     } on DioError catch (e) {
       response = e.response;
       if (response.statusCode == 403) {
         response = await refreshToken(onCallback: () async {
           return await this.post(
+              path: path, context: context, body: body, useToken: useToken);
+        });
+      }
+    }
+    return response;
+  }
+
+  Future<Response> put({
+    BuildContext context,
+    String path,
+    Map<String, dynamic> body,
+    bool useToken = false,
+  }) async {
+    Response response;
+    print(path);
+    print(
+      this._apiBase + path,
+    );
+    try {
+      if (!useToken)
+        response = await Dio().put(this._apiBase + path, data: body);
+      else {
+        response = await Dio().put(
+          this._apiBase + path,
+          data: body,
+          options: Options(
+            headers: {
+              "Authorization": User().getAcess(),
+            },
+          ),
+        );
+      }
+    } on DioError catch (e) {
+      response = e.response;
+      if (response.statusCode == 403) {
+        response = await refreshToken(onCallback: () async {
+          return await this.put(
               path: path, context: context, body: body, useToken: useToken);
         });
       }

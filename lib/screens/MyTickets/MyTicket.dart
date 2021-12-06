@@ -4,6 +4,9 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:fahrenheit/model/User.dart';
+import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
+import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
+import 'package:fahrenheit/screens/MyTickets/Model/PastEventsModel.dart';
 import 'package:fahrenheit/screens/MyTickets/Model/Tickets.dart';
 import 'package:fahrenheit/screens/MyTickets/TicketDetail.dart';
 import 'package:fahrenheit/screens/utils/OverLayLoader.dart';
@@ -22,6 +25,8 @@ class MyTicket extends StatefulWidget {
 
 class _MyTicketState extends State<MyTicket> {
   Tickets tickets = Tickets();
+
+  PastEventList _pastEventList = PastEventList();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +57,7 @@ class _MyTicketState extends State<MyTicket> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: FutureBuilder<Tickets>(
-                future: tickets.fetchTickets(2),
+                future: tickets.fetchTickets(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
@@ -82,88 +87,130 @@ class _MyTicketState extends State<MyTicket> {
             ),
           ),
           SizedBox(height: 10.0),
-          Container(
-            child: ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => Divider(
-                      color: Colors.black,
-                      height: 30.0,
-                    ),
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(0.0),
-                itemCount: 4,
-                itemBuilder: (BuildContext context, int index) {
+          FutureBuilder<PastEventList>(
+              future: _pastEventList.fetchList(context),
+              builder: (context, AsyncSnapshot<PastEventList> snapshot) {
+                if (snapshot.hasData) {
+                  List<PastEvent> list = snapshot.data.list;
                   return Container(
-                    height: 150.0,
-                    color: Colors.black,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
-                            child: Container(
-                              /* width: MediaQuery.of(context).size.width * 0.4,
-                              height: MediaQuery.of(context).size.width,*/
-
-                              child: Image.asset("images/dance.jpg",
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  height: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.cover),
+                    child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) => Divider(
+                              color: Colors.black,
+                              height: 30.0,
                             ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "All you can drink Party",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 15.0),
-                                  ),
-                                  Text(
-                                    "Beer Pong challenge vol2\nwith exciting Offers and Live\nmusic from different artist.",
-                                    style: TextStyle(
-                                        fontSize: 11.0, color: Colors.white),
-                                  ),
-                                  Text(
-                                    "Saturday, 11:00pm",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 10.0),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Colors.blueAccent,
-                                        size: 15.0,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(0.0),
+                        itemCount: list.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            height: 150.0,
+                            color: Colors.black,
+                            child: Stack(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0)),
+                                      child: Container(
+                                        child: CachedNetworkImage(
+                                            imageUrl: list[index].eventImage,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.45,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            fit: BoxFit.cover),
                                       ),
-                                      Text(
-                                        "Fahrenheit, Thamel",
-                                        style: TextStyle(
-                                            color: Colors.blueAccent,
-                                            fontSize: 10.0),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      height: MediaQuery.of(context).size.width,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 12.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              list[index].eventTitle,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 15.0),
+                                            ),
+                                            Text(
+                                              list[index].eventDescription,
+                                              style: TextStyle(
+                                                  fontSize: 11.0,
+                                                  color: Colors.white),
+                                            ),
+                                            Text(
+                                              DateFormat('EEEE, hh:MM aa')
+                                                  .format(list[index].dateTime),
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10.0),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.location_on,
+                                                  color: Colors.blueAccent,
+                                                  size: 15.0,
+                                                ),
+                                                Text(
+                                                  "Fahrenheit, Thamel",
+                                                  style: TextStyle(
+                                                      color: Colors.blueAccent,
+                                                      fontSize: 10.0),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                                TextButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.transparent)),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EventDetailsPage(
+                                                  id: list[index].id,
+                                                  bgImage:
+                                                      list[index].eventImage,
+                                                )));
+                                  },
+                                  child: Container(),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                          );
+                        }),
                   );
-                }),
-          ),
+                } else if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                } else {
+                  return Center(
+                    child: loadingAnimation(context),
+                  );
+                }
+              }),
         ],
       ),
     );
