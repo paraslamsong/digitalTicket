@@ -17,7 +17,7 @@ class HTTP {
 
   Future<Response<dynamic>> refreshToken({onCallback}) async {
     Response response;
-    String path = "accounts/refresh/";
+    String path = "token/refresh/";
     print(this._apiBase + path);
     response = await Dio().post(this._apiBase + path,
         data: {"refreshtoken": User().getRefresh()});
@@ -53,7 +53,7 @@ class HTTP {
     } on DioError catch (e) {
       response = e.response;
 
-      if (response.statusCode == 403) {
+      if (response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this
               .get(path: path, context: context, useToken: useToken);
@@ -90,7 +90,7 @@ class HTTP {
       }
     } on DioError catch (e) {
       response = e.response;
-      if (response.statusCode == 403) {
+      if (response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this.post(
               path: path, context: context, body: body, useToken: useToken);
@@ -127,7 +127,7 @@ class HTTP {
       }
     } on DioError catch (e) {
       response = e.response;
-      if (response.statusCode == 403) {
+      if (response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this.put(
               path: path, context: context, body: body, useToken: useToken);
