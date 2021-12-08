@@ -199,6 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _information(
                         context,
                         hintText: "yyyy-mm-dd",
+                        icon: AssetImage("assets/icons/dobIcon.png"),
                         inputFormatters: [
                           DateTextFormatter(),
                         ],
@@ -207,6 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       _information(
                         context,
+                        icon: AssetImage("assets/icons/locationIcon.png"),
                         hintText: "Location",
                         controller: controllers[4],
                       ),
@@ -338,7 +340,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         icon: Column(
           children: [
             Opacity(
-              opacity: isSelected ? 1 : 0.4,
+              opacity: isSelected ? 1 : 0.3,
               child: Image(
                 width: 57,
                 height: 57,

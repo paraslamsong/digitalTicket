@@ -17,10 +17,11 @@ class TicketModel {
   String fullName, email, phone;
   PaymentType paymentType;
   String transactionId;
-  saveData({String name, email, phone}) {
+  saveData({String name, email, phone, paymentType}) {
     this.fullName = name;
     this.email = email;
     this.phone = phone;
+    this.paymentType = paymentType;
   }
 
   payNow(

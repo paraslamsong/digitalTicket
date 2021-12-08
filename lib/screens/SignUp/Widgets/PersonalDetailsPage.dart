@@ -3,6 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+class DateTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (oldValue.text.length >= newValue.text.length) {
+      return newValue;
+    }
+    var dateText = _addSeperators(newValue.text, '-');
+    return newValue.copyWith(
+        text: dateText, selection: updateCursorPosition(dateText));
+  }
+
+  String _addSeperators(String value, String seperator) {
+    value = value.replaceAll(seperator, '');
+    var newString = '';
+    for (int i = 0; i < value.length; i++) {
+      newString += value[i];
+      if (i == 3) {
+        newString += seperator;
+      }
+      if (i == 5) {
+        newString += seperator;
+      }
+    }
+    return newString;
+  }
+
+  TextSelection updateCursorPosition(String text) {
+    return TextSelection.fromPosition(TextPosition(offset: text.length));
+  }
+}
+
 class PersonalDetailsPage extends StatelessWidget {
   final TabController tabController;
   final List<TextEditingController> controllers;
@@ -49,71 +81,101 @@ class PersonalDetailsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30.0),
-                    Text("Full Name", style: textStyle),
-                    SizedBox(height: 5.0),
-                    TextFormField(
-                      keyboardType: TextInputType.name,
+                    SizedBox(height: 20),
+                    _information(
+                      context,
+                      icon: AssetImage("assets/icons/userIcon.png"),
+                      hintText: "Full Name",
                       controller: controllers[0],
                       validator: validateForm,
-                      cursorColor: Colors.white,
-                      style: TextStyle(color: Colors.white),
-                      textInputAction: TextInputAction.next,
                     ),
-                    // SizedBox(height: 20.0),
-                    // Text("Last Name", style: textStyle),
-                    // SizedBox(height: 5.0),
-                    // TextFormField(
-                    //   keyboardType: TextInputType.name,
-                    //   controller: controllers[1],
-                    //   validator: validateForm,
-                    //   cursorColor: Colors.white,
-                    //   style: TextStyle(color: Colors.white),
-                    //   textInputAction: TextInputAction.next,
-                    // ),
-                    SizedBox(height: 20.0),
-                    Text("Email", style: textStyle),
-                    SizedBox(height: 5.0),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: controllers[2],
+                    _information(
+                      context,
+                      hintText: "Email",
+                      icon: AssetImage("assets/icons/emailIcon.png"),
+                      controller: controllers[1],
                       validator: validateEmail,
-                      cursorColor: Colors.white,
-                      textInputAction: TextInputAction.next,
-                      style: TextStyle(color: Colors.white),
+                      keyboardtype: TextInputType.emailAddress,
                     ),
-                    SizedBox(height: 20.0),
-                    Text("Password", style: textStyle),
-                    SizedBox(height: 5.0),
-                    TextFormField(
-                      controller: controllers[3],
-                      validator: validatePassword,
-                      cursorColor: Colors.white,
+                    _information(
+                      context,
+                      hintText: "Password",
+                      icon: AssetImage("assets/icons/passwordicon.png"),
+                      controller: controllers[2],
                       obscureText: true,
-                      textInputAction: TextInputAction.done,
-                      style: TextStyle(color: Colors.white),
+                      validator: validateForm,
                     ),
-                    SizedBox(height: 20.0),
-                    Center(
-                      child: Text(
-                        "Gender",
-                        style: textStyle,
-                      ),
+                    _information(
+                      context,
+                      hintText: "Confirm Password",
+                      icon: AssetImage("assets/icons/confirmPasswordIcon.png"),
+                      controller: controllers[6],
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == "")
+                          return "This field is required";
+                        else if (value != controllers[2].text)
+                          return "Passwords doesnot match";
+                        return null;
+                      },
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        genderBtn("Male", () {
-                          onGenderSelect("Male");
-                        }, this.gender == "Male"),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        genderBtn("Female", () {
-                          onGenderSelect("Female");
-                        }, this.gender == "Female"),
+                    _information(
+                      context,
+                      hintText: "Phone",
+                      icon: AssetImage("assets/icons/phoneIcon.png"),
+                      controller: controllers[3],
+                      validator: validatePhone,
+                      keyboardtype: TextInputType.phone,
+                    ),
+                    _information(
+                      context,
+                      hintText: "yyyy-mm-dd",
+                      inputFormatters: [
+                        DateTextFormatter(),
                       ],
+                      maxLength: 10,
+                      controller: controllers[4],
+                      icon: AssetImage("assets/icons/dobIcon.png"),
+                      validator: validateForm,
+                      keyboardtype: TextInputType.datetime,
+                    ),
+                    _information(
+                      context,
+                      hintText: "Location",
+                      controller: controllers[5],
+                      validator: validateForm,
+                      icon: AssetImage("assets/icons/locationIcon.png"),
+                      keyboardtype: TextInputType.text,
+                      done: true,
+                    ),
+                    Material(
+                      elevation: 2,
+                      color: Color(0xFF1C1C1E),
+                      borderRadius: BorderRadius.circular(28),
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _genderButton(
+                              context,
+                              icon: "assets/icons/maleIcon.png",
+                              isSelected: gender.toUpperCase() == "MALE",
+                              title: "Male",
+                            ),
+                            SizedBox(width: 20),
+                            _genderButton(
+                              context,
+                              icon: "assets/icons/femaleIcon.png",
+                              isSelected: gender.toUpperCase() == "FEMALE",
+                              title: "Female",
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -242,5 +304,102 @@ class PersonalDetailsPage extends StatelessWidget {
     } else {
       return null;
     }
+  }
+
+  Widget _information(
+    BuildContext context, {
+    AssetImage icon,
+    TextEditingController controller,
+    String hintText,
+    List<TextInputFormatter> inputFormatters,
+    int maxLength,
+    String Function(String) validator,
+    bool obscureText = false,
+    TextInputType keyboardtype = TextInputType.text,
+    bool done = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: TextFormField(
+        controller: controller,
+        style:
+            TextStyle(fontSize: 13, fontFamily: "SF Pro", color: Colors.white),
+        inputFormatters: inputFormatters,
+        maxLength: maxLength,
+        maxLines: 1,
+        obscureText: obscureText,
+        keyboardType: keyboardtype,
+        textInputAction: done ? TextInputAction.done : TextInputAction.next,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+          isDense: false,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          prefixIcon: ImageIcon(
+            icon,
+            color: Colors.white,
+          ),
+          prefixIconConstraints: BoxConstraints(
+            maxHeight: 20,
+            maxWidth: 50,
+            minWidth: 50,
+          ),
+          prefixStyle: TextStyle(color: Colors.white),
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: Colors.white38,
+            fontFamily: "SF Pro",
+            fontSize: 13,
+          ),
+          filled: true,
+          fillColor: Colors.black,
+        ),
+        validator: validator,
+      ),
+    );
+  }
+
+  Widget _genderButton(BuildContext context,
+      {String icon, String title, bool isSelected}) {
+    return Container(
+      child: IconButton(
+        onPressed: () {
+          onGenderSelect(title.toUpperCase());
+        },
+        iconSize: 85,
+        padding: EdgeInsets.zero,
+        constraints: BoxConstraints(minWidth: 57, minHeight: 87),
+        icon: Column(
+          children: [
+            Opacity(
+              opacity: isSelected ? 1 : 0.3,
+              child: Image(
+                width: 57,
+                height: 57,
+                image: AssetImage(icon),
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 15,
+                fontFamily: "SF Pro",
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

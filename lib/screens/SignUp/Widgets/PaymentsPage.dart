@@ -41,13 +41,16 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     children: [
                       Text(
                         "Your detail",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                       Spacer(),
                       IconButton(
                         icon: ImageIcon(
                           ImageIcons.edit,
-                          color: Theme.of(context).secondaryHeaderColor,
+                          color: Theme.of(context).primaryColor,
                           size: 20,
                         ),
                         onPressed: () {
@@ -61,13 +64,22 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       value: this.widget.state.firstName),
                   _information(context,
                       icon: ImageIcons.email, value: this.widget.state.email),
+                  _information(context,
+                      icon: ImageIcons.email, value: this.widget.state.phone),
+                  _information(context,
+                      icon: ImageIcons.email, value: this.widget.state.dob),
+                  _information(context,
+                      icon: ImageIcons.email,
+                      value: this.widget.state.location),
                   SizedBox(height: 20),
                   Text(
                     "Enter OTP we sent you",
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 20),
                   Container(
                     child: OTPTextField(
                       length: 4,
@@ -75,6 +87,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                       width: double.infinity,
                       style: TextStyle(fontSize: 17, color: Colors.white),
                       textFieldAlignment: MainAxisAlignment.spaceAround,
+                      margin: EdgeInsets.symmetric(vertical: 10),
                       fieldStyle: FieldStyle.box,
                       otpFieldStyle: OtpFieldStyle(
                           backgroundColor: Colors.black38,
@@ -97,13 +110,17 @@ class _PaymentsPageState extends State<PaymentsPage> {
                         "Didn't get OTP? ",
                         style: TextStyle(fontSize: 11),
                       ),
-                      InkWell(
-                        child: Text(
-                          "Resend OTP",
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        iconSize: 40,
+                        icon: Text(
+                          "Resend",
                           style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.bold),
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold),
                         ),
-                        onTap: () {
+                        onPressed: () {
                           widget.state.sendOtp();
                         },
                       ),
@@ -151,7 +168,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         children: [
           ImageIcon(
             icon,
-            color: Theme.of(context).secondaryHeaderColor,
+            color: Colors.white,
             size: 20,
           ),
           SizedBox(width: 15),

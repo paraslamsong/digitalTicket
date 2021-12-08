@@ -535,10 +535,6 @@ class _PayWithPageState extends State<TicketPage> {
                 return setState(() {
                   _currentIndex = 1;
                 });
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => WalletPage()),
-                // );
               },
               child: Text(
                 "Confirm",
@@ -581,6 +577,7 @@ class _PayWithPageState extends State<TicketPage> {
                   name: controllers[0].text,
                   email: controllers[1].text,
                   phone: controllers[2].text,
+                  paymentType: _paymentType,
                 );
                 // _ticketModel.payNow(
                 //   context: context,

@@ -27,9 +27,9 @@ class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
     });
   }
 
-  final _controllers = List.generate(4, (i) => TextEditingController());
+  final _controllers = List.generate(7, (i) => TextEditingController());
 
-  String gender = "Male";
+  String gender = "MALE";
   bool acceptTerms = false;
 
   SignUp user = SignUp();
@@ -45,8 +45,7 @@ class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
           ),
         ),
         backgroundColor: Color(0xFF1C1C1E),
-        title:
-            Text(_tabController.index == 0 ? "Personal Details" : "OTP Verify"),
+        title: Text("Sign Up"),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(100.0),
           child: Padding(
@@ -82,9 +81,12 @@ class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
               onNextPage: () {
                 user.setUserDetails(
                   firstName: _controllers[0].text,
-                  email: _controllers[2].text,
+                  email: _controllers[1].text,
+                  password: _controllers[2].text,
+                  phone: _controllers[3].text,
+                  dob: _controllers[4].text,
+                  location: _controllers[5].text,
                   gender: gender,
-                  password: _controllers[3].text,
                   acceptTerms: acceptTerms,
                 );
                 user.sendOtp();
@@ -106,9 +108,9 @@ class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
       child: Column(
         children: [
           Container(
-            width: 60,
-            height: 60,
-            padding: EdgeInsets.all(15),
+            width: 55,
+            height: 55,
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: _tabController.index == index
                   ? Theme.of(context).primaryColor

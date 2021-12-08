@@ -6,22 +6,31 @@ import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';
+}
+
 class SignUp {
-  String firstName, lastName, email, password, gender = "";
+  String firstName, phone, email, password, dob, location, gender = "";
   bool acceptTerms = false;
 
   setUserDetails(
       {String firstName,
-      String lastName,
+      String phone,
       String email,
       String password,
       String gender,
+      String dob,
+      String location,
       bool acceptTerms}) {
     this.firstName = firstName;
-    this.lastName = lastName;
+    this.phone = phone;
     this.email = email;
     this.password = password;
     this.gender = gender;
+    this.dob = dob;
+    this.location = location;
     this.acceptTerms = acceptTerms;
   }
 
@@ -36,15 +45,30 @@ class SignUp {
   Future<void> createUser(BuildContext context, {String otp}) async {
     OverlayLoader(context).show();
     try {
+      print({
+        "email": this.email,
+        "password": this.password,
+        "gender": this.gender,
+        "otp": int.parse(otp),
+        "firstName": this.firstName,
+        "dob": this.dob,
+        "phone": this.phone,
+        "location": this.location,
+      });
       Response response = await HTTP().post(path: "create-user/", body: {
         "email": this.email,
         "password": this.password,
         "gender": this.gender,
         "otp": int.parse(otp),
         "firstName": this.firstName,
+        "dob": this.dob,
+        "phone": this.phone,
+        "location": this.location,
       });
       if (response != null) {
         OverlayLoader(context).hide();
+        print(response.data);
+        print(response.statusCode);
         if (response.statusCode == 200) {
           var json = response.data;
           User().setTokens(access: json['access'], refresh: json['refresh']);

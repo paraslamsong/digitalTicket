@@ -38,6 +38,7 @@ class HTTP {
   }) async {
     Response response;
     print(this._apiBase + path);
+    print(User().getAcess());
     try {
       if (!useToken)
         response = await Dio().get(this._apiBase + path);
@@ -74,6 +75,7 @@ class HTTP {
     print(
       this._apiBase + path,
     );
+
     try {
       if (!useToken)
         response = await Dio().post(this._apiBase + path, data: body);

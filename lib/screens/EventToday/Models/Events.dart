@@ -73,7 +73,7 @@ class Events {
     if (this.hasNext) {
       this.hasNext = true;
       Response response = await HTTP().get(
-          path: "all-event/?pagination=$page",
+          path: "all-event/?page=$page",
           context: context,
           useToken: false);
       if (response.statusCode == 200) {
