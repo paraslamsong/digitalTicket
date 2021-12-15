@@ -60,6 +60,13 @@ class _MyTicketState extends State<MyTicket> {
                 future: tickets.fetchTickets(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    if (snapshot.data.tickets.length == 0)
+                      return Container(
+                        height: 100,
+                        child: Center(
+                            child: Text("No upcoming events",
+                                style: TextStyle(fontSize: 16))),
+                      );
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -79,6 +86,8 @@ class _MyTicketState extends State<MyTicket> {
                 }),
           ),
           SizedBox(height: 0.0),
+          Divider(),
+          SizedBox(height: 10.0),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
             child: Text(
@@ -92,6 +101,14 @@ class _MyTicketState extends State<MyTicket> {
               builder: (context, AsyncSnapshot<PastEventList> snapshot) {
                 if (snapshot.hasData) {
                   List<PastEvent> list = snapshot.data.list;
+
+                  if (list.length == 0)
+                    return Container(
+                      height: 100,
+                      child: Center(
+                          child: Text("No past events",
+                              style: TextStyle(fontSize: 16))),
+                    );
                   return Container(
                     child: ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),

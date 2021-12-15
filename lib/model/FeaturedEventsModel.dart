@@ -58,8 +58,8 @@ class Result {
         event: Event.fromJson(json["event"]),
         featuredTitle: json["featured_title"],
         description: json["description"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: DateTime.parse(json["start_date"]).toLocal(),
+        endDate: DateTime.parse(json["end_date"]).toLocal(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,8 +104,8 @@ class Event {
         eventTitle: json["event_title"],
         description: json["description"],
         location: json["location"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: DateTime.parse(json["start_date"]).toLocal(),
+        endDate: DateTime.parse(json["end_date"]).toLocal(),
         image: json["image"],
         user: json["user"],
         club: json["club"],

@@ -61,8 +61,8 @@ class Data {
         eventTitle: json["event_title"],
         description: json["description"],
         likes: json["likes"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: DateTime.parse(json["start_date"]).toLocal(),
+        endDate: DateTime.parse(json["end_date"]).toLocal(),
         image: json["image"],
         featureEvent: List<dynamic>.from(json["feature_event"].map((x) => x)),
         eventArtist: List<EventArtist>.from(
@@ -262,8 +262,8 @@ class EventSchedule {
   factory EventSchedule.fromJson(Map<String, dynamic> json) => EventSchedule(
         id: json["id"],
         title: json["title"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: DateTime.parse(json["start_date"]).toLocal(),
+        endDate: DateTime.parse(json["end_date"]).toLocal(),
         isActive: json["is_active"],
         eventSchedules: json["event_schedules"],
       );

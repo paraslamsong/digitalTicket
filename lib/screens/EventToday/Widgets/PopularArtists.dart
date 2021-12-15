@@ -35,6 +35,12 @@ Widget popularArtist(BuildContext context) {
               );
             } else if (snapshot.hasData) {
               List<Artist> artists = snapshot.data.artists;
+
+              if (artists.length == 0)
+                return Center(
+                  child:
+                      Text("No data available", style: TextStyle(fontSize: 15)),
+                );
               return Container(
                 height: 130,
                 padding: EdgeInsets.symmetric(vertical: 10),

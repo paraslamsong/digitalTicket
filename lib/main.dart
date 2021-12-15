@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/screens/EventToday/Bloc/AllEventCubit.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,9 @@ class MyApp extends StatelessWidget {
               BlocProvider<AllEventsCubit>(
                 lazy: false,
                 create: (context) => AllEventsCubit(),
+              ),
+              BlocProvider<SessionCubit>(
+                create: (context) => SessionCubit(),
               ),
             ],
             child: MaterialApp(

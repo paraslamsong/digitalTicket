@@ -29,6 +29,11 @@ Widget eventToday(BuildContext context) {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = snapshot.data.events;
+            if (data.length == 0)
+              return Center(
+                child:
+                    Text("No data available", style: TextStyle(fontSize: 15)),
+              );
             return Container(
               height: 202,
               child: ListView.builder(
@@ -112,8 +117,8 @@ Widget _eventSlideShow(BuildContext context, Event event) {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  DateFormat("EEEE, hh:mma")
-                      .format(DateTime.parse(event.startDate.toString())),
+                  DateFormat("EEEE, hh:mma").format(
+                      DateTime.parse(event.startDate.toString()).toLocal()),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 13.0,

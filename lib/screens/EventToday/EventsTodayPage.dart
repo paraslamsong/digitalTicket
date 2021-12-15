@@ -1,3 +1,4 @@
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
 import 'package:fahrenheit/screens/EventToday/Streams/AllEventsStream.dart';
@@ -9,6 +10,7 @@ import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:fahrenheit/screens/Profile/Profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventsTodayPage extends StatelessWidget {
   final AllEventsModelBuilder allEventsModelBuilder = AllEventsModelBuilder();
@@ -47,30 +49,34 @@ class EventsTodayPage extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  User().getAcess() != ""
-                      ? IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileScreen()));
-                          },
-                          icon: Icon(Icons.account_box_rounded,
-                              color: Colors.white),
-                        )
-                      : SizedBox(),
-                  User().getAcess() != ""
-                      ? IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyTicket()));
-                          },
-                          icon:
-                              Icon(CupertinoIcons.tickets, color: Colors.white),
-                        )
-                      : SizedBox(),
+                  BlocBuilder<SessionCubit, bool>(builder: (context, state) {
+                    if (state)
+                      return Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileScreen()));
+                            },
+                            icon: Icon(Icons.account_box_rounded,
+                                color: Colors.white),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyTicket()));
+                            },
+                            icon: Icon(CupertinoIcons.tickets,
+                                color: Colors.white),
+                          ),
+                        ],
+                      );
+                    return SizedBox();
+                  }),
                 ],
               ),
             ),

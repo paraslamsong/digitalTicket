@@ -137,7 +137,34 @@ class PersonalDetailsPage extends StatelessWidget {
                       controller: controllers[4],
                       icon: AssetImage("assets/icons/dobIcon.png"),
                       validator: validateForm,
-                      keyboardtype: TextInputType.datetime,
+                      onPressed: () {
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (_) => Container(
+                                  height: 190,
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 180,
+                                        child: CupertinoDatePicker(
+                                            mode: CupertinoDatePickerMode.date,
+                                            initialDateTime: DateTime.now()
+                                                .subtract(
+                                                    Duration(days: 18 * 365)),
+                                            onDateTimeChanged: (val) {
+                                              controllers[4].text =
+                                                  val.year.toString() +
+                                                      "-" +
+                                                      val.month.toString() +
+                                                      "-" +
+                                                      val.day.toString();
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                ));
+                      },
                     ),
                     _information(
                       context,
@@ -317,54 +344,61 @@ class PersonalDetailsPage extends StatelessWidget {
     bool obscureText = false,
     TextInputType keyboardtype = TextInputType.text,
     bool done = false,
+    Function() onPressed,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: TextFormField(
-        controller: controller,
-        style:
-            TextStyle(fontSize: 13, fontFamily: "SF Pro", color: Colors.white),
-        inputFormatters: inputFormatters,
-        maxLength: maxLength,
-        maxLines: 1,
-        obscureText: obscureText,
-        keyboardType: keyboardtype,
-        textInputAction: done ? TextInputAction.done : TextInputAction.next,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-          isDense: false,
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(100),
+      child: InkWell(
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        highlightColor: Colors.transparent,
+        onTap: onPressed,
+        child: TextFormField(
+          enabled: onPressed == null,
+          controller: controller,
+          style: TextStyle(
+              fontSize: 13, fontFamily: "SF Pro", color: Colors.white),
+          inputFormatters: inputFormatters,
+          maxLength: maxLength,
+          maxLines: 1,
+          obscureText: obscureText,
+          keyboardType: keyboardtype,
+          textInputAction: done ? TextInputAction.done : TextInputAction.next,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+            isDense: false,
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            prefixIcon: ImageIcon(
+              icon,
+              color: Colors.white,
+            ),
+            prefixIconConstraints: BoxConstraints(
+              maxHeight: 20,
+              maxWidth: 50,
+              minWidth: 50,
+            ),
+            prefixStyle: TextStyle(color: Colors.white),
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: Colors.white38,
+              fontFamily: "SF Pro",
+              fontSize: 13,
+            ),
+            filled: true,
+            fillColor: Colors.black,
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          prefixIcon: ImageIcon(
-            icon,
-            color: Colors.white,
-          ),
-          prefixIconConstraints: BoxConstraints(
-            maxHeight: 20,
-            maxWidth: 50,
-            minWidth: 50,
-          ),
-          prefixStyle: TextStyle(color: Colors.white),
-          hintText: hintText,
-          hintStyle: TextStyle(
-            color: Colors.white38,
-            fontFamily: "SF Pro",
-            fontSize: 13,
-          ),
-          filled: true,
-          fillColor: Colors.black,
+          validator: validator,
         ),
-        validator: validator,
       ),
     );
   }

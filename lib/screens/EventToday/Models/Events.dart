@@ -15,8 +15,8 @@ class Event {
     eventTitle = json['event_title'] ?? "";
     description = json['description'] ?? "";
     location = json['location'] ?? "";
-    startDate = DateTime.parse(json['start_date']);
-    endDate = DateTime.parse(json['end_date']);
+    startDate = DateTime.parse(json['start_date']).toLocal();
+    endDate = DateTime.parse(json['end_date']).toLocal();
     image = json['image'] ?? "";
     user = json['user'] ?? null;
     club = json['club'] ?? "";
@@ -28,8 +28,8 @@ class Event {
     eventTitle = json['event_title'] ?? "";
     description = json['description'] ?? "";
     location = json['location'] ?? "";
-    startDate = DateTime.parse(json['start_date']);
-    endDate = DateTime.parse(json['end_date']);
+    startDate = DateTime.parse(json['start_date']).toLocal();
+    endDate = DateTime.parse(json['end_date']).toLocal();
     image = json['image'] ?? "";
     user = 0;
     club = json['club'];
@@ -73,9 +73,7 @@ class Events {
     if (this.hasNext) {
       this.hasNext = true;
       Response response = await HTTP().get(
-          path: "all-event/?page=$page",
-          context: context,
-          useToken: false);
+          path: "all-event/?page=$page", context: context, useToken: false);
       if (response.statusCode == 200) {
         var result = response.data;
         result['results'].forEach((element) {

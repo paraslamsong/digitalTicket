@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/screens/auth_ui/log_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Session {}
@@ -45,10 +47,11 @@ class User {
     return this._refresh;
   }
 
-  Future<bool> isSessionAvalable() async {
+  Future<bool> isSessionAvalable(BuildContext context) async {
     try {
       await loadToken();
       if (this._access == null || this._refresh == null) return false;
+      context.read<SessionCubit>().loggedIn();
       return true;
     } catch (e) {
       return false;
@@ -60,6 +63,8 @@ class User {
     prefs.clear();
     this._refresh = "";
     this._access = "";
+
+    context.read<SessionCubit>().loggOut();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LogInScreen()),

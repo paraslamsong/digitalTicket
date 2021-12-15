@@ -12,7 +12,7 @@ class Ticket {
     this.location = json['location'];
     this.image = json['ticket_img'];
     this.eventImage = json['event_image'];
-    this.date = DateTime.parse(json['start_date']);
+    this.date = DateTime.parse(json['start_date']).toLocal();
     this.ticketId = json['id'];
     this.eventId = json['event_id'];
     this.eventRateId = json['event_rate_id'];

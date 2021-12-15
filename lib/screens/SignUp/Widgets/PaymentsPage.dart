@@ -81,13 +81,15 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   ),
                   SizedBox(height: 20),
                   Container(
+                    height: 60,
+                    padding: EdgeInsets.zero,
                     child: OTPTextField(
                       length: 4,
                       fieldWidth: 50,
                       width: double.infinity,
-                      style: TextStyle(fontSize: 17, color: Colors.white),
+                      style: TextStyle(fontSize: 24, color: Colors.white),
                       textFieldAlignment: MainAxisAlignment.spaceAround,
-                      margin: EdgeInsets.symmetric(vertical: 10),
+                      margin: EdgeInsets.symmetric(vertical: 0),
                       fieldStyle: FieldStyle.box,
                       otpFieldStyle: OtpFieldStyle(
                           backgroundColor: Colors.black38,

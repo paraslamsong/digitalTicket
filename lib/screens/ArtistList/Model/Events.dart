@@ -16,8 +16,8 @@ class Event {
     eventTitle = json['event_title'] ?? "";
     description = json['description'] ?? "";
     location = json['location'] ?? "";
-    startDate = DateTime.parse(json['start_date']);
-    endDate = DateTime.parse(json['end_date']);
+    startDate = DateTime.parse(json['start_date']).toLocal();
+    endDate = DateTime.parse(json['end_date']).toLocal();
     image = json['image'] ?? "";
     user = 0;
     club = json['club'];

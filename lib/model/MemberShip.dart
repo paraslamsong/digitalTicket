@@ -32,8 +32,8 @@ class MemberShip {
         title: json["title"],
         description: json["description"],
         price: json["price"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: DateTime.parse(json["start_date"]).toLocal(),
+        endDate: DateTime.parse(json["end_date"]).toLocal(),
       );
 
   Map<String, dynamic> toJson() => {

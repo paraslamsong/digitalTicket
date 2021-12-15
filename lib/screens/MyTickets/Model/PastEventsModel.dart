@@ -12,7 +12,7 @@ class PastEvent {
     this.eventDescription = "";
     this.eventImage = json['event_image'];
     this.location = json['location'];
-    this.dateTime = DateTime.parse(json['start_date']);
+    this.dateTime = DateTime.parse(json['start_date']).toLocal();
   }
 }
 

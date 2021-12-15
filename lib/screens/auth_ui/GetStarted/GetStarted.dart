@@ -26,7 +26,7 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
       });
     });
     Future.delayed(const Duration(milliseconds: 2000), () async {
-      if (await User().isSessionAvalable()) {
+      if (await User().isSessionAvalable(context)) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -91,7 +91,7 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
                     SizedBox(height: 10.0),
                     Center(
                       child: Text(
-                        "Welcome to Digital Ticket",
+                        "Welcome to Mero Ticket App",
                         style: TextStyle(color: Colors.white, fontSize: 14.0),
                       ),
                     ),

@@ -183,18 +183,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: AssetImage("assets/icons/userIcon.png"),
                         hintText: "First Name",
                         controller: controllers[0],
+                        keyboardtype: TextInputType.text,
                       ),
                       _information(
                         context,
                         hintText: "Email",
                         icon: AssetImage("assets/icons/emailIcon.png"),
                         controller: controllers[1],
+                        keyboardtype: TextInputType.emailAddress,
                       ),
                       _information(
                         context,
                         hintText: "Phone",
                         icon: AssetImage("assets/icons/phoneIcon.png"),
                         controller: controllers[2],
+                        keyboardtype: TextInputType.phone,
                       ),
                       _information(
                         context,
@@ -205,12 +208,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                         maxLength: 10,
                         controller: controllers[3],
+                        isDob: true,
+                        onPressed: () {
+                          showCupertinoModalPopup(
+                              context: context,
+                              builder: (_) => Container(
+                                    height: 190,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 180,
+                                          child: CupertinoDatePicker(
+                                              mode:
+                                                  CupertinoDatePickerMode.date,
+                                              initialDateTime: DateTime.now()
+                                                  .subtract(
+                                                      Duration(days: 18 * 365)),
+                                              onDateTimeChanged: (val) {
+                                                controllers[3].text =
+                                                    val.year.toString() +
+                                                        "-" +
+                                                        val.month.toString() +
+                                                        "-" +
+                                                        val.day.toString();
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                  ));
+                        },
                       ),
                       _information(
                         context,
                         icon: AssetImage("assets/icons/locationIcon.png"),
                         hintText: "Location",
                         controller: controllers[4],
+                        keyboardtype: TextInputType.text,
+                        done: true,
                       ),
                     ],
                   ),
@@ -271,55 +306,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _information(
-    BuildContext context, {
-    AssetImage icon,
-    TextEditingController controller,
-    String hintText,
-    List<TextInputFormatter> inputFormatters,
-    int maxLength,
-  }) {
+  Widget _information(BuildContext context,
+      {AssetImage icon,
+      TextEditingController controller,
+      String hintText,
+      List<TextInputFormatter> inputFormatters,
+      int maxLength,
+      String Function(String) validator,
+      TextInputType keyboardtype = TextInputType.text,
+      bool done = false,
+      bool isDob = false,
+      Function() onPressed}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        controller: controller,
-        style:
-            TextStyle(fontSize: 13, fontFamily: "SF Pro", color: Colors.white),
-        inputFormatters: inputFormatters,
-        maxLength: maxLength,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-          isDense: false,
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(100),
+      padding: EdgeInsets.only(top: 8.0, bottom: isDob ? 0.0 : 8.0),
+      child: InkWell(
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        highlightColor: Colors.transparent,
+        onTap: onPressed,
+        child: TextFormField(
+          controller: controller,
+          enabled: onPressed == null,
+          style: TextStyle(
+              fontSize: 13, fontFamily: "SF Pro", color: Colors.white),
+          inputFormatters: inputFormatters,
+          maxLength: maxLength,
+          keyboardType: keyboardtype,
+          textInputAction: done ? TextInputAction.done : TextInputAction.next,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+            isDense: false,
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            prefixIcon: ImageIcon(
+              icon,
+              color: Colors.white,
+            ),
+            prefixIconConstraints: BoxConstraints(
+              maxHeight: 20,
+              maxWidth: 50,
+              minWidth: 50,
+            ),
+            prefixStyle: TextStyle(color: Colors.white),
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: Colors.white38,
+              fontFamily: "SF Pro",
+              fontSize: 13,
+            ),
+            filled: true,
+            fillColor: Colors.black,
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          prefixIcon: ImageIcon(
-            icon,
-            color: Colors.white,
-          ),
-          prefixIconConstraints: BoxConstraints(
-            maxHeight: 20,
-            maxWidth: 50,
-            minWidth: 50,
-          ),
-          prefixStyle: TextStyle(color: Colors.white),
-          hintText: hintText,
-          hintStyle: TextStyle(
-            color: Colors.white38,
-            fontFamily: "SF Pro",
-            fontSize: 13,
-          ),
-          filled: true,
-          fillColor: Colors.black,
+          validator: validator,
         ),
       ),
     );

@@ -34,8 +34,8 @@ class Schedule {
   fromMap(json) {
     this.id = 0;
     this.name = json['title'];
-    this.startDate = DateTime.parse(json['start_date']);
-    this.endDate = DateTime.parse(json['end_date']);
+    this.startDate = DateTime.parse(json['start_date']).toLocal();
+    this.endDate = DateTime.parse(json['end_date']).toLocal();
   }
 }
 
@@ -60,8 +60,8 @@ class EventDetail {
       this.organizer = json['event_organizer'];
       this.location = json['location'];
       this.image = json['image'];
-      this.startDate = DateTime.parse(json['start_date']);
-      this.endDate = DateTime.parse(json['end_date']);
+      this.startDate = DateTime.parse(json['start_date']).toLocal();
+      this.endDate = DateTime.parse(json['end_date']).toLocal();
       this.description = json['description'];
       this.likes = json['likes'];
       this.isLiked = json['user_liked'];

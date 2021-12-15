@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:fahrenheit/api/HTTP.dart';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
+import 'package:provider/src/provider.dart';
 
 enum PaymentType { Khalti }
 
@@ -69,11 +71,17 @@ class TicketModel {
     };
     print(body);
     Response response = await HTTP().post(
-        context: context, path: "create-ticket/", body: body, useToken: true);
+        context: context,
+        path: "create-ticket/",
+        body: body,
+        useToken: context.read<SessionCubit>().state);
 
     print(response.statusCode);
     if (response.statusCode >= 200 && response.statusCode <= 209) {
       Fluttertoast.showToast(msg: "Event ticket is booked");
+      User().setTokens(
+          access: response.data['access'], refresh: response.data['refresh']);
+      context.read<SessionCubit>().loggedIn();
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.push(

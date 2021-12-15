@@ -31,6 +31,12 @@ class _FeaturedEventsState extends State<FeaturedEvents> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var data = snapshot.data.events;
+
+              if (data.length == 0)
+                return Center(
+                  child:
+                      Text("No data available", style: TextStyle(fontSize: 15)),
+                );
               return Container(
                 height: 130,
                 child: ListView.builder(

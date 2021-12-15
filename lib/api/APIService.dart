@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class APIService extends API {
-  String _apiUrl = "https://alishmanandhar.com.np/";
+  String _apiUrl = "https://api.meroticketapp.com/";
 
   Future<Response> _getNoToken(String url) async {
     Response response = await get(Uri(path: url));
