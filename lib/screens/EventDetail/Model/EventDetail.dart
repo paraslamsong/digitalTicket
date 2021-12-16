@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:fahrenheit/api/HTTP.dart';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/src/provider.dart';
 
 class Artist {
   int id;
@@ -51,8 +53,10 @@ class EventDetail {
 
   fetchData(BuildContext context, {@required int id}) async {
     Response response = await HTTP().get(
-        context: context,
-        path: "event-detail/$id/"); //?token=" + User().getAcess());
+      context: context,
+      path: "event-detail/$id/",
+      useToken: context.read<SessionCubit>().state,
+    ); //?token=" + User().getAcess());
     if (response.statusCode == 200) {
       var json = response.data;
       this.id = json['id'];

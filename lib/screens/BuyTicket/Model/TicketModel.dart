@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:fahrenheit/api/API.dart';
 import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
+import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
+import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
@@ -19,40 +22,55 @@ class TicketModel {
   String fullName, email, phone;
   PaymentType paymentType;
   String transactionId;
-  saveData({String name, email, phone, paymentType}) {
+  Rate rate;
+  String organizer;
+  int peopleCounts;
+  saveData({String name, email, phone, paymentType, rate, organizer, counts}) {
     this.fullName = name;
     this.email = email;
     this.phone = phone;
     this.paymentType = paymentType;
+    this.rate = rate;
+    this.organizer = organizer;
+    this.peopleCounts = counts;
   }
 
-  payNow(
-      {BuildContext context, PaymentType paymentType, Function() onSuccess}) {
+  payNow({
+    BuildContext context,
+    PaymentType paymentType,
+    Function(dynamic, dynamic, dynamic, dynamic) onSuccess,
+    String productName,
+    String ticketNumber,
+    var additionalData,
+  }) {
     this.paymentType = paymentType;
 
     if (paymentType == PaymentType.Khalti) {
       final config = PaymentConfig(
-        amount: 10000,
-        productIdentity: 'dell-g5-g5510-2021',
-        productName: 'Dell G5 G5510 2021',
-        productUrl: 'https://www.khalti.com/#/bazaar',
+        amount: (peopleCounts * rate.rate * 100).toInt(),
+        productIdentity: ticketNumber,
+        productName: organizer + " - " + ticketNumber,
+        productUrl: "http://www.meroticketapp.com/",
         additionalData: {
-          'vendor': 'Khalti Bazaar',
+          "oragnizer": organizer,
+          "ticketType": rate.name,
+          "ticketId": rate.id.toString(),
+          "ticketNumber": ticketNumber,
+          "paiedDateTime": DateTime.now().toString(),
         },
       );
       KhaltiScope.of(context).pay(
         config: config,
         onSuccess: (PaymentSuccessModel model) {
-          print(model.idx);
-          print(model.token);
-          this.transactionId = model.token;
-          onSuccess();
+          onSuccess(model.idx, model.token, model.amount, ticketNumber);
         },
         onFailure: (PaymentFailureModel failure) {
+          OverlayLoader(context).hide();
           final snackBar = SnackBar(content: Text(failure.message));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
         onCancel: () {
+          OverlayLoader(context).hide();
           final snackBar =
               SnackBar(content: Text("Payment cancelled by User!"));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -67,9 +85,11 @@ class TicketModel {
       "firstName": fullName,
       "phone": phone,
       "payment_method": getPaymentKey(paymentType),
-      "eventRate": ticketId
+      "eventRate": ticketId,
+      "ticket_count": peopleCounts,
     };
-    print(body);
+
+    OverlayLoader(context).show();
     Response response = await HTTP().post(
         context: context,
         path: "create-ticket/",
@@ -78,15 +98,45 @@ class TicketModel {
 
     print(response.statusCode);
     if (response.statusCode >= 200 && response.statusCode <= 209) {
-      Fluttertoast.showToast(msg: "Event ticket is booked");
       User().setTokens(
           access: response.data['access'], refresh: response.data['refresh']);
       context.read<SessionCubit>().loggedIn();
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyTicket()));
+      if ((peopleCounts * rate.rate * 100).toInt() == 0) {
+        OverlayLoader(context).hide();
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MyTicket()));
+      } else {
+        this.payNow(
+          context: context,
+          paymentType: this.paymentType,
+          ticketNumber: response.data['ticket_number'],
+          onSuccess: (idx, token, amount, ticketNumber) async {
+            Response response = await HTTP()
+                .post(context: context, path: "verify-khalti/", body: {
+              "idx": idx,
+              "token": token,
+              "amount": amount,
+              "ticketNumber": ticketNumber,
+            });
+            print(response.statusCode);
+            if (response.statusCode == 200) {
+              OverlayLoader(context).hide();
+              Fluttertoast.showToast(msg: "Event ticket is booked");
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyTicket()));
+            } else {
+              OverlayLoader(context).hide();
+              Fluttertoast.showToast(msg: response.data['message']);
+            }
+          },
+        );
+      }
     } else {
+      OverlayLoader(context).hide();
       Fluttertoast.showToast(msg: "Sorry ticket is not booked");
     }
   }

@@ -68,24 +68,24 @@ void backgroundCallback(Uri data) async {
   }
 }
 
-const String testPublicKey = 'test_public_key_dc74e0fd57cb46cd93832aee0a507256';
+const String khaltiKey = 'live_public_key_71b217bd2f5c48449fd95ada7bb1941c';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   HomeWidget.setAppGroupId('group.com.yetitech.digitalticket.Digital-Ticket');
   Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
-  HomeWidget.saveWidgetData<Widget>(
-    'message',
-    Container(
-      width: 200,
-      height: 300,
-      child: CachedNetworkImage(
-        imageUrl:
-            "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
-      ),
-    ),
-  );
+  // HomeWidget.saveWidgetData<Widget>(
+  //   'message',
+  //   Container(
+  //     width: 200,
+  //     height: 300,
+  //     child: CachedNetworkImage(
+  //       imageUrl:
+  //           "https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png",
+  //     ),
+  //   ),
+  // );
 
   HomeWidget.registerBackgroundCallback(backgroundCallback);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return KhaltiScope(
-        publicKey: testPublicKey,
+        publicKey: khaltiKey,
         enabledDebugging: true,
         builder: (context, navKey) {
           return MultiBlocProvider(

@@ -11,7 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TicketPage extends StatefulWidget {
   final List<Rate> tickets;
-  TicketPage(this.tickets);
+  final String organizerName;
+  TicketPage(this.tickets, this.organizerName);
   @override
   _PayWithPageState createState() => _PayWithPageState();
 }
@@ -570,29 +571,58 @@ class _PayWithPageState extends State<TicketPage> {
           ),
           Spacer(),
           Container(
-            width: 100,
+            width: 130,
             child: TextButton(
               onPressed: () {
-                _ticketModel.saveData(
-                  name: controllers[0].text,
-                  email: controllers[1].text,
-                  phone: controllers[2].text,
-                  paymentType: _paymentType,
+                TextEditingController _controller = TextEditingController();
+                showDialog(
+                  context: context,
+                  barrierColor: Colors.white10,
+                  builder: (context) => Dialog(
+                    backgroundColor: Colors.black,
+                    insetPadding: EdgeInsets.all(20),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: 20),
+                          TextField(
+                            controller: _controller,
+                            decoration: InputDecoration(
+                              hintText: "Enter no of people",
+                              hintStyle: TextStyle(color: Colors.white38),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          SizedBox(height: 20),
+                          TextButton(
+                              child: Text(
+                                "Buy Ticket",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                _ticketModel.saveData(
+                                  name: controllers[0].text,
+                                  email: controllers[1].text,
+                                  phone: controllers[2].text,
+                                  paymentType: _paymentType,
+                                  rate: _selectedTicket,
+                                  organizer: widget.organizerName,
+                                  counts: int.parse(_controller.text),
+                                );
+                                _ticketModel.bookTicket(
+                                    context, _selectedTicket.id);
+                              }),
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
-                // _ticketModel.payNow(
-                //   context: context,
-                //   paymentType: _paymentType,
-                //   onSuccess: () {
-                //     Navigator.pop(context);
-                //     Navigator.pop(context);
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) => MyTicket()));
-                //   },
-                // );
-                _ticketModel.bookTicket(context, _selectedTicket.id);
               },
               child: Text(
-                "Pay Now",
+                "Proceed Now",
                 style: TextStyle(color: Colors.white),
               ),
             ),

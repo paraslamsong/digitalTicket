@@ -159,6 +159,7 @@ class _MyTicketState extends State<MyTicket> {
                                           children: [
                                             Text(
                                               list[index].eventTitle,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 15.0),
@@ -442,12 +443,7 @@ class _TicketState extends State<TicketBox> {
                           child: Hero(
                             tag: "qrCode${widget.ticket.ticketId}",
                             child: QrImage(
-                              data: jsonEncode({
-                                'ticketId': widget.ticket.ticketId,
-                                'eventId': widget.ticket.eventId,
-                                'eventRateId': widget.ticket.eventRateId,
-                                'ticketNumber': widget.ticket.ticketNumber,
-                              }),
+                              data: widget.ticket.ticketNumber,
                               foregroundColor: Colors.white,
                               version: QrVersions.auto,
                               size: 110.0,

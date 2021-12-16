@@ -1,11 +1,16 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
+import 'package:fahrenheit/api/HTTP.dart';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
+import 'package:fahrenheit/screens/EventDetail/Widgets/EventDetailText.dart';
 import 'package:fahrenheit/screens/GalleryView/GalleryView.dart';
 import 'package:fahrenheit/screens/BuyTicket/Ticket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
@@ -20,6 +25,7 @@ class EventDetailsPage extends StatefulWidget {
 
 class _ArtistDetailsPageState extends State<EventDetailsPage> {
   final key = GlobalKey();
+  final _descriptionKey = GlobalKey<EventDetailDescriptionState>();
 
   @override
   void initState() {
@@ -78,15 +84,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 key: key,
                 future: fetchDetail(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError)
-                    return Center(
-                        child: Text(
-                      'Error: ${snapshot.error}',
-                      style: TextStyle(color: Colors.red),
-                    ));
-                  else {
+                  if (snapshot.hasData) {
                     EventDetail event = snapshot.data;
                     print(event);
                     return ListView(
@@ -100,7 +98,15 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                         _eventGallery(event),
                       ],
                     );
-                  }
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else
+                    return Center(
+                        child: Text(
+                      'Error: ${snapshot.error}',
+                      style: TextStyle(color: Colors.red),
+                    ));
                 }),
           ),
         ),
@@ -165,23 +171,19 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(
-                      event.description,
-                      maxLines: 9,
-                      style: GoogleFonts.openSans(
-                        color: Colors.white.withOpacity(0.8),
-                        fontSize: 12,
-                      ),
-                    ),
+                    child: EventDetailDescription(
+                        detail: event.description, key: _descriptionKey),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          _descriptionKey.currentState.hideShowText();
+                        },
                         radius: 10,
                         child: Text(
-                          "More info",
+                          "Hide/Show more",
                           style: GoogleFonts.openSans(
                               color: Colors.white.withOpacity(0.8),
                               fontSize: 11),
@@ -194,17 +196,28 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                             color: Colors.white.withOpacity(0.8), fontSize: 9),
                       ),
                       SizedBox(width: 6),
-                      IconButton(
-                        onPressed: () {},
-                        iconSize: 18,
-                        constraints: BoxConstraints(minWidth: 30),
-                        visualDensity: VisualDensity.compact,
-                        padding: EdgeInsets.zero,
-                        icon: Icon(
-                          event.isLiked
-                              ? CupertinoIcons.heart_fill
-                              : CupertinoIcons.heart,
-                          color: Colors.red,
+                      BlocBuilder<SessionCubit, bool>(
+                        builder: (context, state) => Visibility(
+                          visible: state,
+                          child: IconButton(
+                            onPressed: () async {
+                              Response response = await HTTP().post(
+                                  path: "like-event/",
+                                  body: {"event": event.id},
+                                  useToken: true);
+                              if (response.statusCode == 200) setState(() {});
+                            },
+                            iconSize: 18,
+                            constraints: BoxConstraints(minWidth: 30),
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              event.isLiked
+                                  ? CupertinoIcons.heart_fill
+                                  : CupertinoIcons.heart,
+                              color: Colors.red,
+                            ),
+                          ),
                         ),
                       ),
                       IconButton(
@@ -279,7 +292,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TicketPage(event.rates)));
+                        builder: (context) =>
+                            TicketPage(event.rates, event.organizer)));
               },
               child: Text("Buy ticket",
                   style: GoogleFonts.openSans(
