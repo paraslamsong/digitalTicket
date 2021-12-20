@@ -235,7 +235,7 @@ class PersonalDetailsPage extends StatelessWidget {
                   if (!await launch(_url)) throw 'Could not launch $_url';
                 },
                 child: Text(
-                  "Accept terms and conditions",
+                  "Accept terms and condition",
                   style: TextStyle(color: Colors.white, fontSize: 10.0),
                 ),
               ),
@@ -247,7 +247,7 @@ class PersonalDetailsPage extends StatelessWidget {
                     if (_formKey.currentState.validate()) {
                       if (!this.acceptTerms)
                         Fluttertoast.showToast(
-                            msg: "Please accept our terms and conditions");
+                            msg: "Please accept our terms and condition");
                       else {
                         onNextPage();
                         tabController.animateTo(tabController.index + 1);

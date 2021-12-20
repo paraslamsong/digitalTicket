@@ -199,7 +199,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                       ),
                       Positioned(
-                        top: 320,
+                        top: 120,
                         child: Hero(
                           tag: "Logo",
                           child: Image.asset(

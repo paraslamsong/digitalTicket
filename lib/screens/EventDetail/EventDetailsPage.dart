@@ -189,14 +189,14 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                       //   ),
                       // ),
                       Spacer(),
-                      Icon(Icons.thumb_up, color: Colors.white60, size: 18),
+                      // Icon(Icons.thumb_up, color: Colors.white60, size: 18),
                       SizedBox(width: 5),
                       Text(
                         event.likes.toString(),
                         style: GoogleFonts.openSans(
                             color: Colors.white.withOpacity(0.8), fontSize: 9),
                       ),
-                      SizedBox(width: 10),
+                      // SizedBox(width: 10),
                       BlocBuilder<SessionCubit, bool>(
                         builder: (context, state) => Visibility(
                           visible: state,

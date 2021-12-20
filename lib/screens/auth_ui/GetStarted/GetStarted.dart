@@ -54,7 +54,7 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
             Expanded(
               child: Stack(alignment: Alignment.topCenter, children: [
                 AnimatedPositioned(
-                  top: _move ? 200 : 0,
+                  top: _move ? 150 : 0,
                   curve: Curves.easeInOutBack,
                   duration: Duration(milliseconds: 700),
                   child: Hero(
