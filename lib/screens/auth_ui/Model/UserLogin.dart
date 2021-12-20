@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:fahrenheit/api/HTTP.dart';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/src/provider.dart';
 
 class UserLogin {
   String email, _password;
@@ -24,6 +26,8 @@ class UserLogin {
       print(User().getAcess());
       Fluttertoast.showToast(msg: "Logged in", backgroundColor: Colors.green);
       OverlayLoader(context).hide();
+
+      context.read<SessionCubit>().loggedIn();
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
