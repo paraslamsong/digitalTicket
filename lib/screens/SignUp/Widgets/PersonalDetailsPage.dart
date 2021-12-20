@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DateTextFormatter extends TextInputFormatter {
   @override
@@ -227,9 +228,16 @@ class PersonalDetailsPage extends StatelessWidget {
                   onAcceptTerm(value);
                 },
               ),
-              Text(
-                "Accept terms and conditions",
-                style: TextStyle(color: Colors.white, fontSize: 10.0),
+              InkWell(
+                onTap: () async {
+                  String _url =
+                      "https://www.meroticketapp.com/termsandconditions";
+                  if (!await launch(_url)) throw 'Could not launch $_url';
+                },
+                child: Text(
+                  "Accept terms and conditions",
+                  style: TextStyle(color: Colors.white, fontSize: 10.0),
+                ),
               ),
               Spacer(),
               Hero(

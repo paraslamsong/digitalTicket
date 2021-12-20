@@ -9,6 +9,52 @@ import 'package:shimmer/shimmer.dart';
 
 Widget eventToday(BuildContext context) {
   final Events events = new Events();
+  return FutureBuilder(
+      future: events.fetchTodaysEvent(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var data = snapshot.data.events;
+          if (data.length == 0) return SizedBox();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Text(
+                  "TODAY",
+                  style: GoogleFonts.sourceSansPro(
+                    fontSize: 50.0,
+                    color: Colors.white,
+                    letterSpacing: -2,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Container(
+                height: 202,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.all(0.0),
+                  itemCount: data.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _eventSlideShow(context, data[index]),
+                ),
+              ),
+              SizedBox(height: 40),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Divider(),
+              ),
+            ],
+          );
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          return _loading();
+        } else
+          return SizedBox();
+      });
+}
+
+Widget _loading() {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -24,55 +70,21 @@ Widget eventToday(BuildContext context) {
         ),
       ),
       SizedBox(height: 20.0),
-      FutureBuilder(
-        future: events.fetchTodaysEvent(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var data = snapshot.data.events;
-            if (data.length == 0)
-              return Center(
-                child:
-                    Text("No data available", style: TextStyle(fontSize: 15)),
-              );
-            return Container(
-              height: 202,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.all(0.0),
-                itemCount: data.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    _eventSlideShow(context, data[index]),
-              ),
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return _loading();
-          } else
-            return Text(snapshot.error.toString());
-        },
-      ),
-      SizedBox(height: 40),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Divider(),
-      ),
-    ],
-  );
-}
-
-Widget _loading() {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    child: Shimmer.fromColors(
-      baseColor: Colors.grey,
-      highlightColor: Colors.grey.withOpacity(0.6),
-      child: Container(
-        height: 200,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey,
+          highlightColor: Colors.grey.withOpacity(0.6),
+          child: Container(
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
         ),
       ),
-    ),
+    ],
   );
 }
 

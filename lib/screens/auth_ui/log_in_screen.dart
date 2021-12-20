@@ -203,7 +203,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         child: Hero(
                           tag: "Logo",
                           child: Image.asset(
-                            "images/logo.png",
+                            "assets/icons/logo.png",
                             width: 200,
                           ),
                         ),
@@ -222,6 +222,7 @@ class _LogInScreenState extends State<LogInScreen> {
   Future _logIn() async {
     UserLogin userLogin = new UserLogin(
         emailEditingController.text, passwordEditingController.text);
+
     userLogin.doLogin(context);
   }
 

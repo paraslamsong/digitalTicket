@@ -54,17 +54,17 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
             Expanded(
               child: Stack(alignment: Alignment.topCenter, children: [
                 AnimatedPositioned(
-                  top: _move ? 320 : 0,
+                  top: _move ? 200 : 0,
                   curve: Curves.easeInOutBack,
-                  duration: Duration(milliseconds: 1300),
+                  duration: Duration(milliseconds: 700),
                   child: Hero(
                     tag: "Logo",
                     child: SimpleShadow(
-                      child: Image.asset('images/logo.png', width: 200),
+                      child: Image.asset('assets/icons/logo.png', width: 220),
                       opacity: 1,
-                      color: Colors.black,
-                      offset: Offset(6, 6),
-                      sigma: 5,
+                      color: Colors.white,
+                      offset: Offset(0, 0),
+                      sigma: 1,
                     ),
                   ),
                 ),

@@ -26,7 +26,7 @@ class _YourTicketPageState extends State<TicketDetailPage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("YOUR TICKET"),
+        title: Text("TICKET DETAIL"),
       ),
       body: ListView(
         children: [
@@ -52,7 +52,7 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                     ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       child: CachedNetworkImage(
-                        imageUrl: widget.ticket.image,
+                        imageUrl: widget.ticket.eventImage,
                         height: 220,
                         width: double.infinity,
                         fit: BoxFit.cover,

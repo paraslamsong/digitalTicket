@@ -190,6 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         hintText: "Email",
                         icon: AssetImage("assets/icons/emailIcon.png"),
                         controller: controllers[1],
+                        enabled: false,
                         keyboardtype: TextInputType.emailAddress,
                       ),
                       _information(
@@ -310,6 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       {AssetImage icon,
       TextEditingController controller,
       String hintText,
+      bool enabled = true,
       List<TextInputFormatter> inputFormatters,
       int maxLength,
       String Function(String) validator,
@@ -325,7 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onTap: onPressed,
         child: TextFormField(
           controller: controller,
-          enabled: onPressed == null,
+          enabled: enabled,
           style: TextStyle(
               fontSize: 13, fontFamily: "SF Pro", color: Colors.white),
           inputFormatters: inputFormatters,

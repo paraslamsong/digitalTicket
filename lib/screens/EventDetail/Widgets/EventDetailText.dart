@@ -9,13 +9,7 @@ class EventDetailDescription extends StatefulWidget {
 }
 
 class EventDetailDescriptionState extends State<EventDetailDescription> {
-  bool isShown = false;
-  hideShowText() {
-    setState(() {
-      isShown = !isShown;
-    });
-  }
-
+  bool isShown = true;
   @override
   Widget build(BuildContext context) {
     return Container(

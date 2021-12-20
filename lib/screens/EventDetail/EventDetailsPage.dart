@@ -174,28 +174,29 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                     child: EventDetailDescription(
                         detail: event.description, key: _descriptionKey),
                   ),
+                  SizedBox(height: 5),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          _descriptionKey.currentState.hideShowText();
-                        },
-                        radius: 10,
-                        child: Text(
-                          "Hide/Show more",
-                          style: GoogleFonts.openSans(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 11),
-                        ),
-                      ),
+                      // InkWell(
+                      //   onTap: () {},
+                      //   radius: 10,
+                      //   child: Text(
+                      //     "Hide/Show more",
+                      //     style: GoogleFonts.openSans(
+                      //         color: Colors.white.withOpacity(0.8),
+                      //         fontSize: 11),
+                      //   ),
+                      // ),
                       Spacer(),
+                      Icon(Icons.thumb_up, color: Colors.white60, size: 18),
+                      SizedBox(width: 5),
                       Text(
                         event.likes.toString(),
                         style: GoogleFonts.openSans(
                             color: Colors.white.withOpacity(0.8), fontSize: 9),
                       ),
-                      SizedBox(width: 6),
+                      SizedBox(width: 10),
                       BlocBuilder<SessionCubit, bool>(
                         builder: (context, state) => Visibility(
                           visible: state,
@@ -220,10 +221,10 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                           ),
                         ),
                       ),
+                      SizedBox(width: 10),
                       IconButton(
                         onPressed: () {
-                          Share.share(
-                              'check out my website https://example.com');
+                          Share.share('https://www.meroticketapp.com/');
                         },
                         padding: EdgeInsets.zero,
                         iconSize: 18,

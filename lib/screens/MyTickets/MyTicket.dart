@@ -369,7 +369,7 @@ class _TicketState extends State<TicketBox> {
                         child: Stack(
                           children: [
                             CachedNetworkImage(
-                              imageUrl: widget.ticket.image,
+                              imageUrl: widget.ticket.eventImage,
                               height: double.infinity,
                               width: double.infinity,
                               fit: BoxFit.cover,

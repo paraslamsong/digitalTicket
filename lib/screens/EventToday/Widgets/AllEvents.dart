@@ -49,7 +49,7 @@ class AllEvents extends StatelessWidget {
                     imageUrl: event.image,
                     width: 160,
                     height: 120,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     progressIndicatorBuilder: (context, _, __) =>
                         CupertinoActivityIndicator(),
                     errorWidget: (context, _, __) => Image(
