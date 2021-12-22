@@ -18,23 +18,27 @@ class UserLogin {
       "email": this.email,
       "password": this._password
     };
-    Response response = await HTTP().post(path: 'token/', body: body);
-    var result = response.data;
-    if (response.statusCode == 200) {
-      User().setTokens(access: result['access'], refresh: result['refresh']);
-      User().saveToken();
-      print(User().getAcess());
-      Fluttertoast.showToast(msg: "Logged in", backgroundColor: Colors.green);
-      OverlayLoader(context).hide();
-
-      context.read<SessionCubit>().loggedIn();
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => EventsTodayPage()));
-    } else {
+    try {
+      Response response = await Dio()
+          .post("https://api.meroticketapp.com/api/token/", data: body);
+      var result = response.data;
+      if (response.statusCode == 200) {
+        print(result);
+        User().setTokens(access: result['access'], refresh: result['refresh']);
+        User().saveToken();
+        print(User().getAcess());
+        Fluttertoast.showToast(msg: "Logged in", backgroundColor: Colors.green);
+        OverlayLoader(context).hide();
+        context.read<SessionCubit>().loggedIn();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => EventsTodayPage()));
+      }
+    } on DioError catch (e) {
+      print(e.response.data);
       Fluttertoast.showToast(
-          msg: result['detail'], backgroundColor: Colors.red);
+          msg: e.response.data['detail'], backgroundColor: Colors.red);
       OverlayLoader(context).hide();
     }
   }

@@ -44,10 +44,11 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/background_image.jpeg"),
-            fit: BoxFit.cover,
-          ),
+          color: Colors.black54,
+          // image: DecorationImage(
+          //   image: AssetImage("images/background_image.jpeg"),
+          //   fit: BoxFit.cover,
+          // ),
         ),
         child: Column(
           children: [

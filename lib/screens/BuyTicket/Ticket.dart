@@ -27,6 +27,7 @@ class _PayWithPageState extends State<TicketPage> {
   TicketModel _ticketModel = TicketModel();
   PaymentType _paymentType = PaymentType.Khalti;
   int _currentIndex = 0;
+
   final _formKey = GlobalKey<FormState>();
 
   bool isLoggedIn = (User().getAcess() != "");
@@ -263,64 +264,131 @@ class _PayWithPageState extends State<TicketPage> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 167 / 113,
+              childAspectRatio: 167 / 180,
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
             ),
             itemBuilder: (context, index) {
               return Container(
-                child: Stack(
-                  clipBehavior: Clip.none,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: CachedNetworkImage(
-                        height: double.infinity,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                        imageUrl: widget.tickets[index].image,
+                    Expanded(
+                      // height: 80,
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(18),
+                            child: CachedNetworkImage(
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.fill,
+                              imageUrl: widget.tickets[index].image,
+                            ),
+                          ),
+                          Visibility(
+                            visible: _selectedTicket == widget.tickets[index],
+                            child: Positioned(
+                              top: -15,
+                              right: -15,
+                              child: Checkbox(
+                                fillColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColor),
+                                value: true,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(color: Colors.black54),
+                              child: Text(
+                                widget.tickets[index].name,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(color: Colors.black54),
+                              child: Text(
+                                "NRs. " + widget.tickets[index].rate.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18))),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.transparent)),
+                            child: Container(),
+                            onPressed: () {
+                              if (_selectedTicket == widget.tickets[index])
+                                return;
+                              setState(() {
+                                _selectedTicket = widget.tickets[index];
+                                people = 1;
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    TextButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18))),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent)),
-                      child: Container(),
-                      onPressed: () {
-                        setState(() {
-                          _selectedTicket = widget.tickets[index];
-                        });
-                      },
-                    ),
-                    Visibility(
-                      visible: _selectedTicket == widget.tickets[index],
-                      child: Positioned(
-                        top: -15,
-                        right: -15,
-                        child: Checkbox(
-                          fillColor: MaterialStateProperty.all(
-                              Theme.of(context).primaryColor),
-                          value: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
+                    SizedBox(height: 12),
+                    Center(
+                      child: Visibility(
+                        visible: _selectedTicket == widget.tickets[index],
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Material(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(10),
+                                child: IconButton(
+                                    iconSize: 18,
+                                    onPressed: () {
+                                      if (people == 1) return;
+                                      setState(() {
+                                        people--;
+                                      });
+                                    },
+                                    icon: Text("-")),
+                              ),
+                              Text(
+                                people.toString(),
+                              ),
+                              Material(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(10),
+                                child: IconButton(
+                                    iconSize: 18,
+                                    onPressed: () {
+                                      setState(() {
+                                        people++;
+                                      });
+                                    },
+                                    icon: Text("+")),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(color: Colors.black54),
-                        child: Text(
-                          widget.tickets[index].name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               );
@@ -515,7 +583,7 @@ class _PayWithPageState extends State<TicketPage> {
         children: [
           SizedBox(width: 20),
           Text(
-            "Confirm Ticket",
+            "NRs. " + _selectedTicket.rate.toString(),
             style: TextStyle(color: Colors.white, fontSize: 15),
           ),
           Spacer(),
@@ -574,52 +642,16 @@ class _PayWithPageState extends State<TicketPage> {
             width: 130,
             child: TextButton(
               onPressed: () {
-                TextEditingController _controller = TextEditingController();
-                showDialog(
-                  context: context,
-                  barrierColor: Colors.white10,
-                  builder: (context) => Dialog(
-                    backgroundColor: Colors.black,
-                    insetPadding: EdgeInsets.all(20),
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(height: 20),
-                          TextField(
-                            controller: _controller,
-                            decoration: InputDecoration(
-                              hintText: "Enter no of people",
-                              hintStyle: TextStyle(color: Colors.white38),
-                            ),
-                            keyboardType: TextInputType.number,
-                          ),
-                          SizedBox(height: 20),
-                          TextButton(
-                              child: Text(
-                                "Buy Ticket",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () {
-                                _ticketModel.saveData(
-                                  name: controllers[0].text,
-                                  email: controllers[1].text,
-                                  phone: controllers[2].text,
-                                  paymentType: _paymentType,
-                                  rate: _selectedTicket,
-                                  organizer: widget.organizerName,
-                                  counts: int.parse(_controller.text),
-                                );
-                                _ticketModel.bookTicket(
-                                    context, _selectedTicket.id);
-                              }),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ),
+                _ticketModel.saveData(
+                  name: controllers[0].text,
+                  email: controllers[1].text,
+                  phone: controllers[2].text,
+                  paymentType: _paymentType,
+                  rate: _selectedTicket,
+                  organizer: widget.organizerName,
+                  counts: people,
                 );
+                _ticketModel.bookTicket(context, _selectedTicket.id);
               },
               child: Text(
                 "Proceed Now",

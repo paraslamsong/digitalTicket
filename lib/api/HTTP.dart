@@ -64,17 +64,18 @@ class HTTP {
     return response;
   }
 
-  Future<Response> post({
-    BuildContext context,
-    String path,
-    Map<String, dynamic> body,
-    bool useToken = false,
-  }) async {
+  Future<Response> post(
+      {BuildContext context,
+      String path,
+      Map<String, dynamic> body,
+      bool useToken = false,
+      bool isLogin = false}) async {
     Response response;
     print(path);
     print(
       this._apiBase + path,
     );
+    print(body);
 
     try {
       if (!useToken)
@@ -92,7 +93,9 @@ class HTTP {
       }
     } on DioError catch (e) {
       response = e.response;
-      if (response.statusCode == 401) {
+      print(response.statusCode);
+      print(response.data);
+      if (!isLogin && response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this.post(
               path: path, context: context, body: body, useToken: useToken);

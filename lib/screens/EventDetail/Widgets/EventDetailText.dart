@@ -17,8 +17,7 @@ class EventDetailDescriptionState extends State<EventDetailDescription> {
           ? ListView(
               children: [
                 Text(
-                  widget.detail +
-                      " kdlsjafo dfsalkfahsdoif fdsklfhjsaodfjos fdsjafnksanb fdsa fsdafsa ",
+                  widget.detail,
                   style: GoogleFonts.openSans(
                     color: Colors.white.withOpacity(0.8),
                     fontSize: 12,

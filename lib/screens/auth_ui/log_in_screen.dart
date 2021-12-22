@@ -35,11 +35,12 @@ class _LogInScreenState extends State<LogInScreen> {
         resizeToAvoidBottomInset: false,
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/background_image.jpeg"),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
-            ),
+            color: Colors.black54,
+            // image: DecorationImage(
+            //   image: AssetImage("images/background_image.jpeg"),
+            //   fit: BoxFit.cover,
+            //   colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
+            // ),
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
