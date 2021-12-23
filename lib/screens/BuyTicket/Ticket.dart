@@ -319,7 +319,7 @@ class _PayWithPageState extends State<TicketPage> {
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(color: Colors.black54),
                               child: Text(
-                                "NRs. " + widget.tickets[index].rate.toString(),
+                                "रू " + widget.tickets[index].rate.toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -432,7 +432,7 @@ class _PayWithPageState extends State<TicketPage> {
                         ),
                         Spacer(),
                         Text(
-                          "रू ${_selectedTicket.rate.toStringAsFixed(2)}",
+                          "रू ${(people * _selectedTicket.rate).toStringAsFixed(2)}",
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.bold,
@@ -488,16 +488,19 @@ class _PayWithPageState extends State<TicketPage> {
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
-          Center(
-            child: _paymentButton(
-              context,
-              icon: "assets/icons/khalti.jpg",
-              isSelected: true,
-              onPressed: () {
-                setState(() {
-                  _paymentType = PaymentType.Khalti;
-                });
-              },
+          Visibility(
+            visible: _selectedTicket.rate > 0.0,
+            child: Center(
+              child: _paymentButton(
+                context,
+                icon: "assets/icons/khalti.jpg",
+                isSelected: true,
+                onPressed: () {
+                  setState(() {
+                    _paymentType = PaymentType.Khalti;
+                  });
+                },
+              ),
             ),
           ),
         ],
@@ -583,7 +586,7 @@ class _PayWithPageState extends State<TicketPage> {
         children: [
           SizedBox(width: 20),
           Text(
-            "NRs. " + _selectedTicket.rate.toString(),
+            "रू " + (people * _selectedTicket.rate).toString(),
             style: TextStyle(color: Colors.white, fontSize: 15),
           ),
           Spacer(),
