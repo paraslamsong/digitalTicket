@@ -60,7 +60,7 @@ class SignUp {
       Response response = await HTTP().post(path: "create-user/", body: {
         "email": this.email,
         "password": this.password,
-        "gender": this.gender,
+        "gender": this.gender.toUpperCase(),
         "otp": int.parse(otp),
         "firstName": this.firstName,
         "dob": this.dob,

@@ -29,7 +29,7 @@ class _TabViewState extends State<TabView> with SingleTickerProviderStateMixin {
 
   final _controllers = List.generate(7, (i) => TextEditingController());
 
-  String gender = "MALE";
+  String gender = "";
   bool acceptTerms = false;
 
   SignUp user = SignUp();

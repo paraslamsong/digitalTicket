@@ -130,14 +130,13 @@ class PersonalDetailsPage extends StatelessWidget {
                     ),
                     _information(
                       context,
-                      hintText: "yyyy-mm-dd",
+                      hintText: "yyyy-mm-dd (Optional)",
                       inputFormatters: [
                         DateTextFormatter(),
                       ],
                       maxLength: 10,
                       controller: controllers[4],
                       icon: AssetImage("assets/icons/dobIcon.png"),
-                      validator: validateForm,
                       onPressed: () {
                         showCupertinoModalPopup(
                             context: context,
@@ -169,9 +168,8 @@ class PersonalDetailsPage extends StatelessWidget {
                     ),
                     _information(
                       context,
-                      hintText: "Location",
+                      hintText: "Location (Optional)",
                       controller: controllers[5],
-                      validator: validateForm,
                       icon: AssetImage("assets/icons/locationIcon.png"),
                       keyboardtype: TextInputType.text,
                       done: true,
