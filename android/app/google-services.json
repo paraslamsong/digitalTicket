@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "649729848455",
+    "project_id": "meroticketapp",
+    "storage_bucket": "meroticketapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649729848455:android:d10ae96feb6220852c7422",
+        "android_client_info": {
+          "package_name": "com.yetitech.yetievents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649729848455-ku685baf8okhfq3hd7onf6cc1tn0ls3q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yetitech.yetievents",
+            "certificate_hash": "a4f6722addedb1c4044bf5a0b5ea5745cb19d715"
+          }
+        },
+        {
+          "client_id": "649729848455-3dreg66dmka3htsjgse5vdrlaprcl9pv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMBICK6E_qvoRl3v7Tt5lHeOcZSu65hVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649729848455-3dreg66dmka3htsjgse5vdrlaprcl9pv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

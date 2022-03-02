@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/screens/ArtistList/ArtistList.dart';
 import 'package:fahrenheit/screens/EventToday/Models/Artists.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -100,7 +101,7 @@ Widget popularArtist(BuildContext context) {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text(snapshot.error);
+              return kReleaseMode ? SizedBox() : Text(snapshot.error);
             } else
               return SizedBox();
           }),

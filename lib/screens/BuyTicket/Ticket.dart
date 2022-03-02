@@ -19,7 +19,6 @@ class TicketPage extends StatefulWidget {
 
 class _PayWithPageState extends State<TicketPage> {
   int people = 1;
-  String ticketType = "Regular pass (Rs. 3400)";
   List<TextEditingController> controllers =
       List<TextEditingController>.generate(
           3, (i) => TextEditingController(text: ""));
@@ -483,6 +482,8 @@ class _PayWithPageState extends State<TicketPage> {
             ),
           ),
           SizedBox(height: 20),
+          PromocodeBox(),
+          SizedBox(height: 20),
           Text(
             "Payment Method",
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -664,6 +665,39 @@ class _PayWithPageState extends State<TicketPage> {
           ),
           SizedBox(width: 20),
         ],
+      ),
+    );
+  }
+}
+
+class PromocodeBox extends StatefulWidget {
+  @override
+  State<PromocodeBox> createState() => _PromocodeBoxState();
+}
+
+class _PromocodeBoxState extends State<PromocodeBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Material(
+        elevation: 3,
+        color: Color(0xff1C1C1E),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 13, vertical: 19),
+            child: Row(
+              children: [
+                Text("Have a Promo Code ?"),
+                Spacer(),
+                TextButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.transparent)),
+                  onPressed: () {},
+                  child: Text("Add"),
+                ),
+              ],
+            )),
       ),
     );
   }

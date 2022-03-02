@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
+import 'package:fahrenheit/screens/MainScreen/MainScreen.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/Animation.dart/LoginSignUp.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/Animation.dart/Welcome.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,8 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
     });
     Future.delayed(const Duration(milliseconds: 2000), () async {
       if (await User().isSessionAvalable(context)) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => EventsTodayPage()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
       } else {
         setState(() {
           _noLogin = true;
@@ -42,6 +41,7 @@ class _LogInSignUpPageState extends State<GetStartedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       body: Container(
         decoration: BoxDecoration(
           color: Colors.black54,

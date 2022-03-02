@@ -9,6 +9,7 @@ import 'package:fahrenheit/screens/EventToday/Widgets/TodaysEvents.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:fahrenheit/screens/Profile/Profile.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,8 +88,9 @@ class EventsTodayPage extends StatelessWidget {
                       action: EventsActions.refresh, context: context));
                 },
                 child: ListView(
+                  physics: ClampingScrollPhysics(),
                   controller: _scrollController,
-                  shrinkWrap: false,
+                  shrinkWrap: true,
                   children: [
                     eventToday(context),
                     FeaturedEvents(),
@@ -100,7 +102,9 @@ class EventsTodayPage extends StatelessWidget {
                           print(snapshot.data.hasNext.toString());
                           return AllEvents(snapshot.data);
                         } else if (snapshot.hasError)
-                          return Text(snapshot.error);
+                          return kReleaseMode
+                              ? SizedBox()
+                              : Text(snapshot.error);
                         else {
                           return CupertinoActivityIndicator();
                         }

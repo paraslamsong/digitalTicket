@@ -11,6 +11,7 @@ import 'package:fahrenheit/screens/MyTickets/Model/Tickets.dart';
 import 'package:fahrenheit/screens/MyTickets/TicketDetail.dart';
 import 'package:fahrenheit/screens/utils/OverLayLoader.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -222,7 +223,9 @@ class _MyTicketState extends State<MyTicket> {
                         }),
                   );
                 } else if (snapshot.hasError) {
-                  return Text(snapshot.error.toString());
+                  return kReleaseMode
+                      ? SizedBox()
+                      : Text(snapshot.error.toString());
                 } else {
                   return Center(
                     child: loadingAnimation(context),

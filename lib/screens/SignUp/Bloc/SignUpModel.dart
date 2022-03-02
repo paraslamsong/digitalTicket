@@ -3,6 +3,7 @@ import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
+import 'package:fahrenheit/screens/MainScreen/MainScreen.dart';
 import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -77,8 +78,8 @@ class SignUp {
           User().saveToken();
 
           context.read<SessionCubit>().loggedIn();
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => EventsTodayPage()));
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainScreen()));
         } else {
           Fluttertoast.showToast(msg: response.data['message']);
         }

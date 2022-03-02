@@ -1,7 +1,11 @@
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
+import 'package:fahrenheit/screens/MainScreen/MainScreen.dart';
 import 'package:fahrenheit/screens/SignUp/TabView.dart';
+import 'package:fahrenheit/screens/auth_ui/GetStarted/Widgets/SocialLoginButton.dart';
+import 'package:fahrenheit/screens/auth_ui/Model/SocialLogin.dart';
 import 'package:fahrenheit/screens/auth_ui/log_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:khalti/khalti.dart';
 
 class LoginSignUp extends StatefulWidget {
   LoginSignUp({Key key}) : super(key: key);
@@ -86,16 +90,36 @@ class LoginSignUpState extends State<LoginSignUp>
                 ),
               ],
             ),
+            SizedBox(height: 20),
+            Visibility(
+              visible: Platform.isAndroid,
+              child: Center(
+                child: SocialLoginButton.googleButton(context),
+              ),
+            ),
+            Visibility(
+              visible: Platform.isIOS,
+              child: Row(
+                children: [
+                  SizedBox(width: 10),
+                  SocialLoginButton.googleButton(context),
+                  SizedBox(width: 10),
+                  SocialLoginButton.appleButton(context),
+                  SizedBox(width: 10),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => EventsTodayPage()));
+                    MaterialPageRoute(builder: (context) => MainScreen()));
               },
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Colors.transparent)),
               child: Text("Skip Now"),
-            )
+            ),
           ],
         ),
       ),

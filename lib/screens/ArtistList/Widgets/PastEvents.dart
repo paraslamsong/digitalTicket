@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/screens/ArtistList/Model/Events.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -38,7 +39,7 @@ class _PastEventsState extends State<PastEvents> {
                 return _featuredEvent(data[index]);
               });
         } else
-          return Text(snapshot.error);
+          return kDebugMode ? Text(snapshot.error) : SizedBox();
       },
     );
   }

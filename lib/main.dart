@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/screens/EventToday/Bloc/AllEventCubit.dart';
+import 'package:fahrenheit/screens/MainScreen/MainScreen.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +70,16 @@ void backgroundCallback(Uri data) async {
   }
 }
 
-const String khaltiKey = 'live_public_key_71b217bd2f5c48449fd95ada7bb1941c';
+String getKhaltiKey() {
+  String khaltiKey = "";
+  if (kReleaseMode) {
+    khaltiKey = 'live_public_key_71b217bd2f5c48449fd95ada7bb1941c';
+  } else {
+    khaltiKey = "test_public_key_3ccd85ac24764f9081d6b8c546724d58";
+  }
+  return khaltiKey;
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -99,7 +110,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return KhaltiScope(
-        publicKey: khaltiKey,
+        publicKey: getKhaltiKey(),
         enabledDebugging: true,
         builder: (context, navKey) {
           return MultiBlocProvider(
@@ -134,6 +145,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: mainPrimaryColor,
                 primaryColor: mainColor,
                 secondaryHeaderColor: Color(0xff2EBBA1),
+                bottomAppBarColor: Color(0xff1F1F1F),
                 textTheme: TextTheme(
                   bodyText1: TextStyle(
                       color: Colors.white, fontSize: 13, fontFamily: "Sf Pro"),

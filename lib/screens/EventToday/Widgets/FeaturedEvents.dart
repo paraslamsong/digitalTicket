@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/constraints/constants.dart';
 import 'package:fahrenheit/screens/EventDetail/EventDetailsPage.dart';
 import 'package:fahrenheit/screens/EventToday/Models/Events.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class FeaturedEvents extends StatefulWidget {
@@ -10,7 +11,7 @@ class FeaturedEvents extends StatefulWidget {
 }
 
 class _FeaturedEventsState extends State<FeaturedEvents> {
-  Events events = new Events();
+  final Events events = new Events();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class _FeaturedEventsState extends State<FeaturedEvents> {
                     }),
               );
             } else if (snapshot.hasError) {
-              return Text(snapshot.error);
+              return kReleaseMode ? SizedBox() : Text(snapshot.error);
             } else {
               return SizedBox();
             }

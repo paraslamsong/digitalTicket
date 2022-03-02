@@ -315,7 +315,7 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 20).copyWith(top: 5),
                   child: Text(
-                    "Guest Artists",
+                    "Performing Artists",
                     style: Theme.of(context).textTheme.headline2.copyWith(
                         fontFamily: GoogleFonts.openSans().fontFamily),
                   ),
