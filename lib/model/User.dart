@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:fahrenheit/bloc/BlocState.dart';
+import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
 import 'package:fahrenheit/screens/auth_ui/log_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
@@ -67,7 +68,7 @@ class User {
     context.read<SessionCubit>().loggOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LogInScreen()),
+      MaterialPageRoute(builder: (context) => GetStartedPage()),
     );
   }
 }

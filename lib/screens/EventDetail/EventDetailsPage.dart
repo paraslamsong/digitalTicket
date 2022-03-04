@@ -293,8 +293,8 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            TicketPage(event.rates, event.organizer)));
+                        builder: (context) => TicketPage(
+                            event.rates, event.organizer, event.id)));
               },
               child: Text("Buy ticket",
                   style: GoogleFonts.openSans(

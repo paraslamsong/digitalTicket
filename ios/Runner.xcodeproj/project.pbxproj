@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0862D5F1273107E900042260 /* Digital_Ticket.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0862D5EC273107E700042260 /* Digital_Ticket.intentdefinition */; };
 		089CC76827CF464B0031133E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 089CC76727CF464B0031133E /* GoogleService-Info.plist */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -44,10 +43,6 @@
 /* Begin PBXFileReference section */
 		0862D5E5273107E700042260 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		0862D5E7273107E700042260 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		0862D5EA273107E700042260 /* Digital_Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Digital_Ticket.swift; sourceTree = "<group>"; };
-		0862D5EC273107E700042260 /* Digital_Ticket.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Digital_Ticket.intentdefinition; sourceTree = "<group>"; };
-		0862D5ED273107E900042260 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0862D5EF273107E900042260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0862D5FB273108B700042260 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		089CC76727CF464B0031133E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
@@ -81,17 +76,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0862D5E9273107E700042260 /* Digital Ticket */ = {
-			isa = PBXGroup;
-			children = (
-				0862D5EA273107E700042260 /* Digital_Ticket.swift */,
-				0862D5EC273107E700042260 /* Digital_Ticket.intentdefinition */,
-				0862D5ED273107E900042260 /* Assets.xcassets */,
-				0862D5EF273107E900042260 /* Info.plist */,
-			);
-			path = "Digital Ticket";
-			sourceTree = "<group>";
-		};
 		088096C70E007B751652F45E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,7 +112,6 @@
 			children = (
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				0862D5E9273107E700042260 /* Digital Ticket */,
 				97C146EF1CF9000F007C117D /* Products */,
 				5DEE0B531E410C7DFF795500 /* Pods */,
 				088096C70E007B751652F45E /* Frameworks */,
@@ -329,7 +312,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
-				0862D5F1273107E900042260 /* Digital_Ticket.intentdefinition in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,7 +397,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 97987KA445;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -556,7 +538,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 97987KA445;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -591,7 +573,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 97987KA445;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/BuyTicket/Model/TicketModel.dart';
+import 'package:fahrenheit/screens/BuyTicket/Popups/PeopleSectionDialog.dart';
+import 'package:fahrenheit/screens/BuyTicket/Popups/PromoCodeDialog.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +14,8 @@ import 'package:google_fonts/google_fonts.dart';
 class TicketPage extends StatefulWidget {
   final List<Rate> tickets;
   final String organizerName;
-  TicketPage(this.tickets, this.organizerName);
+  final int id;
+  TicketPage(this.tickets, this.organizerName, this.id);
   @override
   _PayWithPageState createState() => _PayWithPageState();
 }
@@ -30,6 +33,9 @@ class _PayWithPageState extends State<TicketPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool isLoggedIn = (User().getAcess() != "");
+
+  PromocodeModel _promocodeModel = PromocodeModel.fromJson({}, "");
+
   @override
   void initState() {
     super.initState();
@@ -268,125 +274,100 @@ class _PayWithPageState extends State<TicketPage> {
               mainAxisSpacing: 20,
             ),
             itemBuilder: (context, index) {
-              return Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+              bool isSelected = _selectedTicket == widget.tickets[index];
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: Stack(
+                  // clipBehavior: Clip.none,
+                  alignment: Alignment.bottomLeft,
+                  // fit: StackFit.passthrough,
                   children: [
-                    Expanded(
-                      // height: 80,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(18),
-                            child: CachedNetworkImage(
-                              height: double.infinity,
-                              width: double.infinity,
-                              fit: BoxFit.fill,
-                              imageUrl: widget.tickets[index].image,
-                            ),
-                          ),
-                          Visibility(
-                            visible: _selectedTicket == widget.tickets[index],
-                            child: Positioned(
-                              top: -15,
-                              right: -15,
-                              child: Checkbox(
-                                fillColor: MaterialStateProperty.all(
-                                    Theme.of(context).primaryColor),
-                                value: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.black54),
-                              child: Text(
-                                widget.tickets[index].name,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(color: Colors.black54),
-                              child: Text(
-                                "रू " + widget.tickets[index].rate.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18))),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.transparent)),
-                            child: Container(),
-                            onPressed: () {
-                              if (_selectedTicket == widget.tickets[index])
-                                return;
-                              setState(() {
-                                _selectedTicket = widget.tickets[index];
-                                people = 1;
-                              });
-                            },
-                          ),
-                        ],
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: CachedNetworkImage(
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                        imageUrl: widget.tickets[index].image,
                       ),
                     ),
-                    SizedBox(height: 12),
-                    Center(
-                      child: Visibility(
-                        visible: _selectedTicket == widget.tickets[index],
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Color(0xff1C1C1E),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.tickets[index].name.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 11),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            "रू " + widget.tickets[index].rate.toString(),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff2FBCA1),
+                            ),
+                          ),
+                          Row(
                             children: [
-                              Material(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                                child: IconButton(
-                                    iconSize: 18,
-                                    onPressed: () {
-                                      if (people == 1) return;
-                                      setState(() {
-                                        people--;
-                                      });
-                                    },
-                                    icon: Text("-")),
+                              Image.asset(
+                                "assets/icons/people.png",
+                                height: 10,
                               ),
                               Text(
                                 people.toString(),
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.w600),
                               ),
-                              Material(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                                child: IconButton(
-                                    iconSize: 18,
-                                    onPressed: () {
-                                      setState(() {
-                                        people++;
-                                      });
-                                    },
-                                    icon: Text("+")),
+                              Spacer(),
+                              Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.red
+                                        : Colors.white.withOpacity(0.44),
+                                    borderRadius: BorderRadius.circular(100)),
                               ),
                             ],
-                          ),
-                        ),
+                          )
+                        ],
                       ),
+                    ),
+                    TextButton(
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18))),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent)),
+                      child: Container(),
+                      onPressed: () {
+                        showDialog(
+                          barrierColor: Colors.black.withOpacity(0.78),
+                          context: context,
+                          builder: (context) => PeopleSelectionDialog(
+                            adults: people,
+                            onPeopleChange: (adults) {
+                              setState(() {
+                                people = adults;
+                              });
+                            },
+                          ),
+                        );
+
+                        if (_selectedTicket == widget.tickets[index]) return;
+                        setState(() {
+                          _selectedTicket = widget.tickets[index];
+                          // people = 1;
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -419,23 +400,77 @@ class _PayWithPageState extends State<TicketPage> {
                       borderRadius: BorderRadius.circular(100),
                     ),
                     padding: EdgeInsets.all(15),
-                    child: Row(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          _selectedTicket.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              _selectedTicket.name,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              "रू ${(people * _selectedTicket.rate).toStringAsFixed(2)}",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
                         ),
-                        Spacer(),
-                        Text(
-                          "रू ${(people * _selectedTicket.rate).toStringAsFixed(2)}",
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                        Visibility(
+                          visible: _promocodeModel.id != 0,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Promo Applied",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    "रू -${_promocodeModel.off.toStringAsFixed(2)}",
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Total",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    "रू ${(_promocodeModel.grandtotal).toStringAsFixed(2)}",
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -482,7 +517,15 @@ class _PayWithPageState extends State<TicketPage> {
             ),
           ),
           SizedBox(height: 20),
-          PromocodeBox(),
+          PromocodeBox(
+            id: widget.id,
+            onCodeApply: (promo) {
+              promo.calculate(_selectedTicket.rate * people);
+              setState(() {
+                _promocodeModel = promo;
+              });
+            },
+          ),
           SizedBox(height: 20),
           Text(
             "Payment Method",
@@ -654,7 +697,9 @@ class _PayWithPageState extends State<TicketPage> {
                   rate: _selectedTicket,
                   organizer: widget.organizerName,
                   counts: people,
+                  code: _promocodeModel,
                 );
+                _ticketModel.promocode = _promocodeModel;
                 _ticketModel.bookTicket(context, _selectedTicket.id);
               },
               child: Text(
@@ -665,39 +710,6 @@ class _PayWithPageState extends State<TicketPage> {
           ),
           SizedBox(width: 20),
         ],
-      ),
-    );
-  }
-}
-
-class PromocodeBox extends StatefulWidget {
-  @override
-  State<PromocodeBox> createState() => _PromocodeBoxState();
-}
-
-class _PromocodeBoxState extends State<PromocodeBox> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Material(
-        elevation: 3,
-        color: Color(0xff1C1C1E),
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 13, vertical: 19),
-            child: Row(
-              children: [
-                Text("Have a Promo Code ?"),
-                Spacer(),
-                TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.transparent)),
-                  onPressed: () {},
-                  child: Text("Add"),
-                ),
-              ],
-            )),
       ),
     );
   }

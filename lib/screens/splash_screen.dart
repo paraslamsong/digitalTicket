@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
+import 'package:fahrenheit/screens/MainScreen/MainScreen.dart';
 import 'package:fahrenheit/screens/auth_ui/GetStarted/GetStarted.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
     } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) {
-        return EventsTodayPage();
+        return MainScreen();
       }));
     }
   }

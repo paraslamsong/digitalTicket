@@ -64,6 +64,7 @@ dependencies:
   url_launcher: ^6.0.17
   google_sign_in: ^5.2.4
   sign_in_with_apple: ^3.3.0
+  bottom_navy_bar: ^6.0.0
 
 
 dev_dependencies:

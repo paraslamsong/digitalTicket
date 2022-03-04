@@ -3,6 +3,7 @@ import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
+import 'package:fahrenheit/screens/MainScreen/MainScreen.dart';
 import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,10 +31,8 @@ class UserLogin {
         Fluttertoast.showToast(msg: "Logged in", backgroundColor: Colors.green);
         OverlayLoader(context).hide();
         context.read<SessionCubit>().loggedIn();
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => EventsTodayPage()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
       }
     } on DioError catch (e) {
       print(e.response.data);

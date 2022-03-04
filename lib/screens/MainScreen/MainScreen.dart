@@ -1,9 +1,14 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/screens/EventToday/EventsTodayPage.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:fahrenheit/screens/Profile/Profile.dart';
+import 'package:fahrenheit/screens/auth_ui/Model/UserLogin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:provider/src/provider.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -18,18 +23,67 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   int currentPage = 0;
+
+  PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: pages[currentPage],
+        child: PageView(
+          controller: _pageController,
+          children: pages,
+        ),
+
+        // pages[currentPage],
       ),
-      bottomNavigationBar: _bottomNavigationBar(context, current: currentPage,
-          onItemPressed: (page) {
-        setState(() {
-          currentPage = page;
-        });
-      }),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+        child: BottomNavyBar(
+          selectedIndex: currentPage,
+          showElevation: true,
+          animationDuration: Duration(milliseconds: 300),
+          onItemSelected: (index) {
+            if (!context.read<SessionCubit>().state) {
+              Fluttertoast.showToast(msg: "Please login");
+              return;
+            }
+            setState(() {
+              currentPage = index;
+            });
+            _pageController.animateToPage(index,
+                duration: Duration(milliseconds: 300), curve: Curves.linear);
+          },
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          itemCornerRadius: 10,
+          items: [
+            BottomNavyBarItem(
+              icon: Image.asset(
+                "assets/icons/bottomHome.png",
+                width: 29,
+              ),
+              title: Text('Home'),
+              textAlign: TextAlign.center,
+              activeColor: Colors.white,
+            ),
+            BottomNavyBarItem(
+                textAlign: TextAlign.center,
+                icon: Image.asset(
+                  "assets/icons/bottomTicket.png",
+                  width: 29,
+                ),
+                title: Text('Ticket'),
+                activeColor: Colors.white),
+            BottomNavyBarItem(
+                icon: Image.asset(
+                  "assets/icons/bottomProfile.png",
+                  width: 29,
+                ),
+                title: Text('Profile'),
+                textAlign: TextAlign.center,
+                activeColor: Colors.white),
+          ],
+        ),
+      ),
     );
   }
 }

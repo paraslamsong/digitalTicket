@@ -3,6 +3,7 @@ import 'package:fahrenheit/api/API.dart';
 import 'package:fahrenheit/api/HTTP.dart';
 import 'package:fahrenheit/bloc/BlocState.dart';
 import 'package:fahrenheit/model/User.dart';
+import 'package:fahrenheit/screens/BuyTicket/Popups/PromoCodeDialog.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:fahrenheit/screens/utils/loadingOverlay.dart';
@@ -25,7 +26,16 @@ class TicketModel {
   Rate rate;
   String organizer;
   int peopleCounts;
-  saveData({String name, email, phone, paymentType, rate, organizer, counts}) {
+  PromocodeModel promocode = PromocodeModel.fromJson({}, "");
+  saveData(
+      {String name,
+      email,
+      phone,
+      paymentType,
+      rate,
+      organizer,
+      counts,
+      PromocodeModel code}) {
     this.fullName = name;
     this.email = email;
     this.phone = phone;
@@ -33,6 +43,7 @@ class TicketModel {
     this.rate = rate;
     this.organizer = organizer;
     this.peopleCounts = counts;
+    promocode = code;
   }
 
   payNow({
@@ -47,7 +58,7 @@ class TicketModel {
 
     if (paymentType == PaymentType.Khalti) {
       final config = PaymentConfig(
-        amount: (peopleCounts * rate.rate * 100).toInt(),
+        amount: ((peopleCounts * rate.rate - promocode.off) * 100).toInt(),
         productIdentity: ticketNumber,
         productName: organizer + " - " + ticketNumber,
         productUrl: "http://www.meroticketapp.com/",
@@ -87,6 +98,7 @@ class TicketModel {
       "payment_method": getPaymentKey(paymentType),
       "eventRate": ticketId,
       "ticket_count": peopleCounts,
+      "code": promocode.promo,
     };
 
     OverlayLoader(context).show();
