@@ -20,8 +20,8 @@ class UserLogin {
       "password": this._password
     };
     try {
-      Response response = await Dio()
-          .post("https://api.meroticketapp.com/api/token/", data: body);
+      Response response = await HTTP().post(path: "token/", body: body);
+
       var result = response.data;
       if (response.statusCode == 200) {
         print(result);
@@ -35,7 +35,7 @@ class UserLogin {
             MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
       }
     } on DioError catch (e) {
-      print(e.response.data);
+      print(e.toString());
       Fluttertoast.showToast(
           msg: e.response.data['detail'], backgroundColor: Colors.red);
       OverlayLoader(context).hide();

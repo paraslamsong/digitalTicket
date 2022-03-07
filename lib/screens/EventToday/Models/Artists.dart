@@ -6,12 +6,12 @@ class Artist {
   String name, primaryContact, secondaryContact, profileImage, coverImage;
   bool isAvailable, isPopularArtist;
   fromJson(json) {
-    this.id = json['id'];
-    this.name = json['name'];
-    this.primaryContact = json['primary_contact'];
-    this.secondaryContact = json['secondary_contact'];
-    this.profileImage = json['profile_image'];
-    this.coverImage = json['cover'];
+    this.id = json['id'] ?? 0;
+    this.name = json['name'] ?? "";
+    this.primaryContact = json['primary_contact'] ?? "";
+    this.secondaryContact = json['secondary_contact'] ?? "";
+    this.profileImage = json['profile_image'] ?? "";
+    this.coverImage = json['cover'] ?? "";
     this.isAvailable = json['is_available'] ?? false;
     this.isPopularArtist = json['is_popular_artist'] ?? false;
   }

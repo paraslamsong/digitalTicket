@@ -10,10 +10,10 @@ class Artist {
   String name, image;
   bool isMain;
   fromMap(json) {
-    this.id = json['id'];
-    this.name = json['artist_name'];
-    this.isMain = json['is_main'];
-    this.image = json['image'];
+    this.id = json['id'] ?? 0;
+    this.name = json['artist_name'] ?? "";
+    this.isMain = json['is_main'] ?? false;
+    this.image = json['image'] ?? "";
   }
 }
 
@@ -21,11 +21,13 @@ class Rate {
   int id = 0;
   String name = "", image = "";
   double rate = 0.0;
-  fromMap(json) {
-    this.id = json['id'];
-    this.name = json['title'];
-    this.rate = json['rate'];
-    this.image = json['image'];
+  int eventId = 0;
+  fromMap(json, eventId) {
+    this.id = json['id'] ?? 0;
+    this.name = json['title'] ?? "";
+    this.rate = json['rate'] ?? 0.0;
+    this.image = json['image'] ?? "";
+    this.eventId = eventId;
   }
 }
 
@@ -35,7 +37,7 @@ class Schedule {
   DateTime startDate, endDate;
   fromMap(json) {
     this.id = 0;
-    this.name = json['title'];
+    this.name = json['title'] ?? "";
     this.startDate = DateTime.parse(json['start_date']).toLocal();
     this.endDate = DateTime.parse(json['end_date']).toLocal();
   }
@@ -80,16 +82,16 @@ class EventDetail {
     ); //?token=" + User().getAcess());
     if (response.statusCode == 200) {
       var json = response.data;
-      this.id = json['id'];
-      this.title = json['event_title'];
-      this.organizer = json['event_organizer'];
-      this.location = json['location'];
-      this.image = json['image'];
+      this.id = json['id'] ?? 0;
+      this.title = json['event_title'] ?? "";
+      this.organizer = json['event_organizer'] ?? "";
+      this.location = json['location'] ?? "";
+      this.image = json['image'] ?? "";
       this.startDate = DateTime.parse(json['start_date']).toLocal();
       this.endDate = DateTime.parse(json['end_date']).toLocal();
-      this.description = json['description'];
-      this.likes = json['likes'];
-      this.isLiked = json['user_liked'];
+      this.description = json['description'] ?? "";
+      this.likes = json['likes'] ?? 0;
+      this.isLiked = json['user_liked'] ?? false;
       json['event_artist'].forEach((json) {
         Artist artist = Artist();
         artist.fromMap(json);
@@ -98,7 +100,7 @@ class EventDetail {
 
       json['event_rate'].forEach((json) {
         Rate rate = Rate();
-        rate.fromMap(json);
+        rate.fromMap(json, id);
         this.rates.add(rate);
       });
       json['event_schedule'].forEach((json) {

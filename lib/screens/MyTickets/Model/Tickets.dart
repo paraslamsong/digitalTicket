@@ -6,16 +6,16 @@ class Ticket {
   DateTime date;
   int ticketId, eventId, eventRateId;
   fromJson(json) {
-    this.ticketNumber = json["ticket_number"];
-    this.userName = json['user_first_name'];
-    this.title = json['event_title'];
-    this.location = json['location'];
-    this.image = json['ticket_img'];
-    this.eventImage = json['event_image'];
+    this.ticketNumber = json["ticket_number"] ?? "";
+    this.userName = json['user_first_name'] ?? "";
+    this.title = json['event_title'] ?? "";
+    this.location = json['location'] ?? "";
+    this.image = json['ticket_img'] ?? "";
+    this.eventImage = json['event_image'] ?? "";
     this.date = DateTime.parse(json['start_date']).toLocal();
-    this.ticketId = json['id'];
-    this.eventId = json['event_id'];
-    this.eventRateId = json['event_rate_id'];
+    this.ticketId = json['id'] ?? 0;
+    this.eventId = json['event_id'] ?? 0;
+    this.eventRateId = json['event_rate_id'] ?? 0;
   }
 }
 

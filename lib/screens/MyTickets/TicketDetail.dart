@@ -70,12 +70,12 @@ class _YourTicketPageState extends State<TicketDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.ticket.title,
+                              widget.ticket.title ?? "",
                               style: Theme.of(context).textTheme.headline2,
                             ),
                             SizedBox(height: 5.0),
                             Text(
-                              "${DateFormat('EEEE').format(widget.ticket.date)}, ${DateFormat('hh:mmaa').format(widget.ticket.date).toLowerCase()}",
+                              "", // "${DateFormat('EEEE').format(widget.ticket.date)}, ${DateFormat('hh:mmaa').format(widget.ticket.date).toLowerCase()}",
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                             SizedBox(height: 3.0),

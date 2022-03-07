@@ -12,13 +12,13 @@ class UserModel {
     if (response.statusCode == 200) {
       var result = response.data;
       print(result);
-      this.id = result['id'];
+      this.id = result['id'] ?? 0;
       this.firstName = result['full_name'] ?? "";
       this.email = result['email'] ?? "";
-      this.phone = result['phone'];
+      this.phone = result['phone'] ?? "";
       this.dob = result['dob'].toString();
       this.gender = result['gender'] ?? "";
-      this.location = result['location'];
+      this.location = result['location'] ?? "";
     }
     return this;
   }

@@ -101,7 +101,7 @@ class TicketModel {
       "payment_method": getPaymentKey(paymentType),
       "eventRate": ticketId,
       "ticket_count": peopleCounts,
-      "code": promocode.promo,
+      "promocode": promocode.promo,
       "ticket_date": [package.toJson()]
     };
 
@@ -129,13 +129,20 @@ class TicketModel {
           paymentType: this.paymentType,
           ticketNumber: response.data['ticket_number'],
           onSuccess: (idx, token, amount, ticketNumber) async {
-            Response response = await HTTP()
-                .post(context: context, path: "verify-khalti/", body: {
-              "idx": idx,
-              "token": token,
-              "amount": amount,
-              "ticketNumber": ticketNumber,
-            });
+            Response response = await HTTP().post(
+              context: context,
+              path: "verify-khalti/",
+              body: {
+                "idx": idx,
+                "token": token,
+                "amount": amount,
+                "ticketNumber": ticketNumber,
+                "event": rate.eventId,
+                "promocode": promocode.promo,
+                "frequency": peopleCounts
+              },
+              useToken: true,
+            );
             print(response.statusCode);
             if (response.statusCode == 200) {
               OverlayLoader(context).hide();

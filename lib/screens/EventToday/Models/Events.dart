@@ -11,7 +11,7 @@ class Event {
   String club;
   var likes;
   fromAllMap(dynamic json) {
-    id = json['id'];
+    id = json['id'] ?? 0;
     eventTitle = json['event_title'] ?? "";
     description = json['description'] ?? "";
     location = json['location'] ?? "";
@@ -24,7 +24,7 @@ class Event {
   }
 
   fromTodayMap(dynamic json) {
-    id = json['id'];
+    id = json['id'] ?? 0;
     eventTitle = json['event_title'] ?? "";
     description = json['description'] ?? "";
     location = json['location'] ?? "";
@@ -32,18 +32,18 @@ class Event {
     endDate = DateTime.parse(json['end_date']).toLocal();
     image = json['image'] ?? "";
     user = 0;
-    club = json['club'];
+    club = json['club'] ?? "";
     likes = 0;
   }
 
   fromFeaturedMap(json) {
-    this.id = json['event_id'];
-    this.eventTitle = json['featured_title'];
-    this.description = json['event_title'];
-    this.location = json['location'];
+    this.id = json['event_id'] ?? 0;
+    this.eventTitle = json['featured_title'] ?? "";
+    this.description = json['event_title'] ?? "";
+    this.location = json['location'] ?? "";
     this.startDate = DateTime.now();
     this.endDate = DateTime.now();
-    this.image = json['picture'];
+    this.image = json['picture'] ?? "";
     this.user = null;
     this.club = "";
     this.likes = 0;

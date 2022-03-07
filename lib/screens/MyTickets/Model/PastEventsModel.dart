@@ -7,11 +7,11 @@ class PastEvent {
   String eventTitle, eventDescription, eventImage, location;
   DateTime dateTime;
   fromJson(json) {
-    this.id = json['event_id'];
-    this.eventTitle = json['event_title'];
+    this.id = json['event_id'] ?? 0;
+    this.eventTitle = json['event_title'] ?? "";
     this.eventDescription = "";
-    this.eventImage = json['event_image'];
-    this.location = json['location'];
+    this.eventImage = json['event_image'] ?? "";
+    this.location = json['location'] ?? "";
     this.dateTime = DateTime.parse(json['start_date']).toLocal();
   }
 }
