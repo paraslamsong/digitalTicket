@@ -50,7 +50,9 @@ class _FeaturedEventsState extends State<FeaturedEvents> {
                     }),
               );
             } else if (snapshot.hasError) {
-              return kReleaseMode ? SizedBox() : Text(snapshot.error);
+              return kReleaseMode
+                  ? SizedBox()
+                  : Text(snapshot.error.toString());
             } else {
               return SizedBox();
             }

@@ -3,19 +3,19 @@ import 'package:fahrenheit/model/User.dart';
 import 'package:fahrenheit/screens/BuyTicket/Model/TicketModel.dart';
 import 'package:fahrenheit/screens/BuyTicket/Popups/PeopleSectionDialog.dart';
 import 'package:fahrenheit/screens/BuyTicket/Popups/PromoCodeDialog.dart';
+import 'package:fahrenheit/screens/BuyTicket/Widgets/DateSelection.dart';
 import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
-import 'package:fahrenheit/screens/MyTickets/MyTicket.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fahrenheit/screens/WalletPage.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TicketPage extends StatefulWidget {
+  final List<Package> packages;
   final List<Rate> tickets;
   final String organizerName;
   final int id;
-  TicketPage(this.tickets, this.organizerName, this.id);
+  TicketPage({this.tickets, this.organizerName, this.packages, this.id});
   @override
   _PayWithPageState createState() => _PayWithPageState();
 }
@@ -35,6 +35,8 @@ class _PayWithPageState extends State<TicketPage> {
   bool isLoggedIn = (User().getAcess() != "");
 
   PromocodeModel _promocodeModel = PromocodeModel.fromJson({}, "");
+
+  Package _package = Package();
 
   @override
   void initState() {
@@ -254,6 +256,15 @@ class _PayWithPageState extends State<TicketPage> {
               ],
             ),
           ),
+          DateSelectionWidget(
+            packages: widget.packages,
+            selected: _package,
+            onSelect: (package) {
+              setState(() {
+                _package = package;
+              });
+            },
+          ),
           Text(
             "Select Ticket",
             style: TextStyle(
@@ -269,7 +280,7 @@ class _PayWithPageState extends State<TicketPage> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 167 / 180,
+              childAspectRatio: 4 / 4.5,
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
             ),
@@ -278,67 +289,80 @@ class _PayWithPageState extends State<TicketPage> {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(18),
                 child: Stack(
-                  // clipBehavior: Clip.none,
-                  alignment: Alignment.bottomLeft,
-                  // fit: StackFit.passthrough,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(18),
-                      child: CachedNetworkImage(
-                        height: double.infinity,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                        imageUrl: widget.tickets[index].image,
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Color(0xff1C1C1E),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            widget.tickets[index].name.toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 11),
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            "रू " + widget.tickets[index].rate.toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff2FBCA1),
+                    Column(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(18)),
+                            child: CachedNetworkImage(
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.fill,
+                              imageUrl: widget.tickets[index].image,
                             ),
                           ),
-                          Row(
+                        ),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Color(0xff1C1C1E),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Image.asset(
-                                "assets/icons/people.png",
-                                height: 10,
-                              ),
                               Text(
-                                people.toString(),
+                                widget.tickets[index].name.toString(),
                                 style: TextStyle(
-                                    fontSize: 10, fontWeight: FontWeight.w600),
+                                    fontWeight: FontWeight.bold, fontSize: 11),
                               ),
-                              Spacer(),
+                              SizedBox(height: 2),
+                              Text(
+                                "रू " + widget.tickets[index].rate.toString(),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff2FBCA1),
+                                ),
+                              ),
                               Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? Colors.red
-                                        : Colors.white.withOpacity(0.44),
-                                    borderRadius: BorderRadius.circular(100)),
-                              ),
+                                height: 20,
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/icons/people.png",
+                                      height: 10,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Visibility(
+                                      visible: isSelected,
+                                      child: Text(
+                                        people.toString(),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                      width: 10,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? Colors.red
+                                              : Colors.white.withOpacity(0.44),
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                      ],
                     ),
                     TextButton(
                       style: ButtonStyle(
@@ -641,6 +665,12 @@ class _PayWithPageState extends State<TicketPage> {
                 if (!isLoggedIn) {
                   if (!_formKey.currentState.validate()) return;
                 }
+                if (_package.id == 0) {
+                  final snackBar =
+                      SnackBar(content: Text("Select date please"));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  return;
+                }
                 if (_selectedTicket.id == 0) {
                   final snackBar =
                       SnackBar(content: Text("Select ticket please"));
@@ -698,6 +728,7 @@ class _PayWithPageState extends State<TicketPage> {
                   organizer: widget.organizerName,
                   counts: people,
                   code: _promocodeModel,
+                  pack: _package,
                 );
                 _ticketModel.promocode = _promocodeModel;
                 _ticketModel.bookTicket(context, _selectedTicket.id);

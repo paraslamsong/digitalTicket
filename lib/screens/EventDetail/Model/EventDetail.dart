@@ -41,6 +41,26 @@ class Schedule {
   }
 }
 
+class Package {
+  int id = 0, eventId = 0;
+  DateTime startDate, endDate;
+  Package() {}
+  Package.fromJson(json) {
+    this.id = json["id"] ?? 0;
+    this.eventId = json['event'] ?? 0;
+    this.startDate = DateTime.parse(json['start_date']).toLocal();
+    this.endDate = DateTime.parse(json['end_date']).toLocal();
+  }
+  Map<dynamic, dynamic> toJson() {
+    return {
+      "id": this.id,
+      "start_date": this.startDate.toIso8601String(),
+      "end_date": this.endDate.toIso8601String(),
+      "event": this.eventId
+    };
+  }
+}
+
 class EventDetail {
   int id, likes;
   String title, organizer, description, location, image;
@@ -49,6 +69,7 @@ class EventDetail {
   List<Rate> rates = [];
   List<Schedule> schedules = [];
   List<String> gallery = [];
+  List<Package> packages = [];
   bool isLiked = false;
 
   fetchData(BuildContext context, {@required int id}) async {
@@ -85,6 +106,11 @@ class EventDetail {
         schedule.fromMap(json);
         this.schedules.add(schedule);
       });
+
+      json['package'].forEach((json) {
+        this.packages.add(Package.fromJson(json));
+      });
+
       json['gallery'].forEach((json) {
         this.gallery.add(json['image']);
       });

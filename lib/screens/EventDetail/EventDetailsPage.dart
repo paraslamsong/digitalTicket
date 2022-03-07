@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -291,10 +292,16 @@ class _ArtistDetailsPageState extends State<EventDetailsPage> {
           TextButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TicketPage(
-                            event.rates, event.organizer, event.id)));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TicketPage(
+                      packages: event.packages,
+                      tickets: event.rates,
+                      organizerName: event.organizer,
+                      id: event.id,
+                    ),
+                  ),
+                );
               },
               child: Text("Buy ticket",
                   style: GoogleFonts.openSans(

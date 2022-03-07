@@ -26,6 +26,7 @@ class TicketModel {
   Rate rate;
   String organizer;
   int peopleCounts;
+  Package package;
   PromocodeModel promocode = PromocodeModel.fromJson({}, "");
   saveData(
       {String name,
@@ -35,6 +36,7 @@ class TicketModel {
       rate,
       organizer,
       counts,
+      Package pack,
       PromocodeModel code}) {
     this.fullName = name;
     this.email = email;
@@ -44,6 +46,7 @@ class TicketModel {
     this.organizer = organizer;
     this.peopleCounts = counts;
     promocode = code;
+    this.package = pack;
   }
 
   payNow({
@@ -99,6 +102,7 @@ class TicketModel {
       "eventRate": ticketId,
       "ticket_count": peopleCounts,
       "code": promocode.promo,
+      "ticket_date": [package.toJson()]
     };
 
     OverlayLoader(context).show();

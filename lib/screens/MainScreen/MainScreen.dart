@@ -30,11 +30,17 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Container(
         child: PageView(
+          physics: !context.read<SessionCubit>().state
+              ? NeverScrollableScrollPhysics()
+              : BouncingScrollPhysics(),
+          onPageChanged: (page) {
+            setState(() {
+              currentPage = page;
+            });
+          },
           controller: _pageController,
           children: pages,
         ),
-
-        // pages[currentPage],
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),

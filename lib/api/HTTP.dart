@@ -13,8 +13,7 @@ class HTTP {
     return _instance;
   }
 
-  String _apiBase =
-      "http://192.168.1.71:2000/api/"; // "https://api.meroticketapp.com/api/";
+  String _apiBase = "https://api.meroticketapp.com/api/";
 
   Future<Response<dynamic>> refreshToken({onCallback}) async {
     Response response;

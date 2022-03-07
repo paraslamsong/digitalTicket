@@ -101,7 +101,9 @@ Widget popularArtist(BuildContext context) {
                 ),
               );
             } else if (snapshot.hasError) {
-              return kReleaseMode ? SizedBox() : Text(snapshot.error);
+              return kReleaseMode
+                  ? SizedBox()
+                  : Text(snapshot.error.toString());
             } else
               return SizedBox();
           }),
