@@ -20,11 +20,11 @@ class HTTP {
     Response response;
     String path = "token/refresh/";
     print(this._apiBase + path);
-    response = await Dio().post(this._apiBase + path,
-        data: {"refreshtoken": User().getRefresh()});
+    response = await Dio()
+        .post(this._apiBase + path, data: {"refresh": User().getRefresh()});
     if (response.statusCode == 200) {
       await User().setTokens(
-          refresh: User().getRefresh(), access: response.data['access']);
+          refresh: response.data['refresh'], access: response.data['access']);
       User().saveToken();
     }
     final responseCompleter = new Completer<Response>();
