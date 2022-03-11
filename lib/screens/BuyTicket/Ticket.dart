@@ -378,6 +378,7 @@ class _PayWithPageState extends State<TicketPage> {
                           context: context,
                           builder: (context) => PeopleSelectionDialog(
                             adults: people,
+                            inclusions: widget.tickets[index].ticketInclusions,
                             onPeopleChange: (adults) {
                               setState(() {
                                 people = adults;

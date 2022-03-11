@@ -5,6 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/src/provider.dart';
 
+class TicketInclusion {
+  int id;
+  String included;
+  TicketInclusion.fromJson(json) {
+    this.id = json['id'] ?? 0;
+    this.included = json['inclusion'] ?? "";
+  }
+}
+
 class Artist {
   int id;
   String name, image;
@@ -22,11 +31,16 @@ class Rate {
   String name = "", image = "";
   double rate = 0.0;
   int eventId = 0;
+  List<TicketInclusion> ticketInclusions = [];
   fromMap(json, eventId) {
     this.id = json['id'] ?? 0;
     this.name = json['title'] ?? "";
     this.rate = json['rate'] ?? 0.0;
     this.image = json['image'] ?? "";
+    json['rate_package'] ??
+        [].forEach((json) {
+          this.ticketInclusions.add(TicketInclusion.fromJson(json));
+        });
     this.eventId = eventId;
   }
 }

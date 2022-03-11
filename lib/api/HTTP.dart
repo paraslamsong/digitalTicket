@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:fahrenheit/model/User.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HTTP {
   HTTP._privateConstructor();
@@ -53,8 +54,9 @@ class HTTP {
         );
     } on DioError catch (e) {
       response = e.response;
-
-      if (response.statusCode == 401) {
+      if (response.statusCode == null) {
+        response = await get(context: context, path: path, useToken: useToken);
+      } else if (response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this
               .get(path: path, context: context, useToken: useToken);
@@ -93,9 +95,15 @@ class HTTP {
       }
     } on DioError catch (e) {
       response = e.response;
-      print(response.statusCode);
-      print(response.data);
-      if (!isLogin && response.statusCode == 401) {
+
+      if (response.statusCode == null) {
+        response = await post(
+            context: context,
+            path: path,
+            body: body,
+            useToken: useToken,
+            isLogin: isLogin);
+      } else if (!isLogin && response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this.post(
               path: path, context: context, body: body, useToken: useToken);
@@ -132,7 +140,10 @@ class HTTP {
       }
     } on DioError catch (e) {
       response = e.response;
-      if (response.statusCode == 401) {
+      if (response.statusCode == null) {
+        response = await put(
+            context: context, path: path, body: body, useToken: useToken);
+      } else if (response.statusCode == 401) {
         response = await refreshToken(onCallback: () async {
           return await this.put(
               path: path, context: context, body: body, useToken: useToken);

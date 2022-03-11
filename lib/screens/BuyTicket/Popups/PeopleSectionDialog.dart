@@ -1,10 +1,13 @@
+import 'package:fahrenheit/screens/EventDetail/Model/EventDetail.dart';
 import 'package:flutter/material.dart';
 
 class PeopleSelectionDialog extends StatefulWidget {
   final Function(int) onPeopleChange;
+  final List<TicketInclusion> inclusions;
   final int adults;
 
-  const PeopleSelectionDialog({Key key, this.onPeopleChange, this.adults})
+  const PeopleSelectionDialog(
+      {Key key, this.onPeopleChange, this.adults, this.inclusions})
       : super(key: key);
   @override
   State<PeopleSelectionDialog> createState() => _PeopleSelectionDialogState();
@@ -24,15 +27,18 @@ class _PeopleSelectionDialogState extends State<PeopleSelectionDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: Color(0xff1C1C1E),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 40),
+        padding: EdgeInsets.symmetric(vertical: 40, horizontal: 30),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Number of Ticket",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                "Number of People(Tickets)",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(height: 15),
@@ -94,7 +100,42 @@ class _PeopleSelectionDialogState extends State<PeopleSelectionDialog> {
                   ),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: 10),
+            Visibility(
+              visible: widget.inclusions.length > 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Included",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                  Divider(),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.inclusions.length,
+                    itemBuilder: (context, index) => Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Color(0xffEA2D31)),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          widget.inclusions[index].included,
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
