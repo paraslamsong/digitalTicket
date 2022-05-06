@@ -15,6 +15,7 @@ class HTTP {
   }
 
   String _apiBase = "https://api.meroticketapp.com/api/";
+  // "http://192.168.1.71:2000/api/"; //"https://api.meroticketapp.com/api/";
 
   Future<Response<dynamic>> refreshToken({onCallback}) async {
     Response response;
@@ -24,7 +25,7 @@ class HTTP {
         .post(this._apiBase + path, data: {"refresh": User().getRefresh()});
     if (response.statusCode == 200) {
       await User().setTokens(
-          refresh: response.data['refresh'], access: response.data['access']);
+          refresh: User().getRefresh(), access: response.data['access']);
       User().saveToken();
     }
     final responseCompleter = new Completer<Response>();

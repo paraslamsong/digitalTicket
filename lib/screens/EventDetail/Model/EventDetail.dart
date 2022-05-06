@@ -37,10 +37,9 @@ class Rate {
     this.name = json['title'] ?? "";
     this.rate = json['rate'] ?? 0.0;
     this.image = json['image'] ?? "";
-    json['rate_package'] ??
-        [].forEach((json) {
-          this.ticketInclusions.add(TicketInclusion.fromJson(json));
-        });
+    json['rate_package'].forEach((json) {
+      this.ticketInclusions.add(TicketInclusion.fromJson(json));
+    });
     this.eventId = eventId;
   }
 }
